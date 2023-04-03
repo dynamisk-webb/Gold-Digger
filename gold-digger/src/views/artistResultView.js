@@ -1,9 +1,9 @@
 function artistResultView(props){
     return (<div class="scrollable">
-        {props.artistResults.map(getArtistInfoACB)}
+        {props.artistResults.map(getArtistACB)}
     </div>);
 
-    getArtistACB(result){
+    function getArtistACB(result){
         // TODO: add buttons to include/exclude artists
         return (
             <div> 
@@ -12,3 +12,5 @@ function artistResultView(props){
         ) 
     }
 }
+
+export default artistResultView;

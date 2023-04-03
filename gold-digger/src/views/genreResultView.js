@@ -1,10 +1,10 @@
 function genreResultView(props){
     return (<div class="scrollable">
-        {props.artistResults.map(getArtistInfoACB)}
+        {props.genreResults.map(getGenreACB)}
     </div>);
 
-    getGenreACB(result){
-        // TODO: add buttons to include/exclude artists
+    function getGenreACB(result){
+        // TODO: add buttons to include genre
         return (
             <div> 
                 <p>result.title</p>
@@ -12,3 +12,5 @@ function genreResultView(props){
         ) 
     }
 }
+
+export default genreResultView;
