@@ -40,10 +40,12 @@ import sourceView from "../views/sourceView";
 function Source (props) {
     return (/* TODO */);
 
-    function setPlaylistIDACB(){
+    function setPlaylistIDACB(evt){
+
+        // if onInput
         props.model.setPlaylistID();
-    }
-    function continueToArtistsACB(){
+   
+        // if onClick
         props.model.goToArtists();
     }
 
