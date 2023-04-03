@@ -1,3 +1,6 @@
 function genreResultView(props){
-    return (<div></div>);
+    return (
+        <div class="scrollable">
+            
+        </div>);
 }
