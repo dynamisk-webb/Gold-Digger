@@ -44,7 +44,10 @@ class DiggerModel{
         this.prevPlaylists = [...playlists];
     }
     setTempo(min, max) {
-
+        // TODO: Handle if the same
+        if(tempo.min !== min || tempo.max !== max) {
+            this.tempo = {min: min, max: max};
+        }
     }
     setLoudness(min, max) {
 
@@ -62,4 +65,9 @@ class DiggerModel{
             this.prevPlaylists= [...this.prevPlaylists, playlist];
         }
     }
+
+    // Observers
+
 }
+
+export default DiggerModel;

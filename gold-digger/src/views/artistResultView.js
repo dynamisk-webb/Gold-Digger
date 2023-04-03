@@ -3,7 +3,7 @@ function artistResultView(props){
         {props.artistResults.map(getArtistInfoACB)}
     </div>);
 
-    getArtistInfoACB(result){
+    getArtistACB(result){
         // TODO: add buttons to include/exclude artists
         return (
             <div> 
