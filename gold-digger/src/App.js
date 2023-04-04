@@ -1,22 +1,34 @@
+// Import here 
+import {BrowserRouter, Routes, Route} from "react-router-dom";
 import './static/App.css';
+import DiggerModel from "./DiggerModel.js";
+import Layout from "./views/layoutView.js";
+import Test from "./test/testPresenter.js";
+//import Home from "./views/homePresenter.js";
+//import Login from "./views/loginPresenter.js";
+
+/**
+ *  
+ */
 
 function App() {
+  const model = new DiggerModel();
+  
+  // Routes 
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" > {/* element={<Layout/>} */}
+          {/* Default route for / path 
+          <Route index element={<Home/>}/>
+          <Route path="login" element={<Login/>}/>
+          <Route path="*" element={<NoPage/>}/>          
+          */
+          }
+          <Route path="test" element={<Test/>}/>
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 

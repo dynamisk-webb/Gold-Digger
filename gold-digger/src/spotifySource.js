@@ -1,3 +1,5 @@
+import {BASE_URL} from "./apiConfig.js";
+// export
 
 /* 
 EXAMPLE FUNCTION FROM SPOTIFYS TUTORIAL
