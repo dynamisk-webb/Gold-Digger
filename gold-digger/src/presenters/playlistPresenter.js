@@ -10,3 +10,12 @@ Event: onClick set audio player song
 Event: onClick return to Home
 
 */
+
+import playlistView from "../views/playlistView.js";
+
+
+function Playlist (props) {
+
+}
+
+return default Playlist;
