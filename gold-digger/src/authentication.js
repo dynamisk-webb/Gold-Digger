@@ -1,9 +1,11 @@
 /* 
 authentication.js
-A collection of functions used in the verification process
+A collection of functions used in the verification process.
+Based on code from Spotify's tutorial at https://developer.spotify.com/documentation/web-api/tutorials/code-pkce-flow
 */
 
 import {CLIENT_ID, REDIRECT_URI} from "./apiConfig";
+export {generateRandomString, generateCodeChallenge, redirectToSpotifyLogIn, requestAccessToken, refreshAccessToken};
 
 // Generate a code verifier (in PKCE standard a code verifier is a high-entropy cryptographic random string with a length between 43 and 128 characters
 function generateRandomString(length) {
@@ -44,6 +46,7 @@ function redirectToSpotifyLogIn() {
     let scope = 'user-read-private user-read-email';
 
     localStorage.setItem('code-verifier', codeVerifier);
+    localStorage.setItem('test-item', 'i am a test item');
 
     let args = new URLSearchParams({
         response_type: 'code',
@@ -54,8 +57,8 @@ function redirectToSpotifyLogIn() {
         code_challenge_method: 'S256',
         code_challenge: codeChallenge
     });
-
-    window.location = REDIRECT_URI + args;
+    
+    window.location = 'https://accounts.spotify.com/authorize?' + args;
     });
 }
 
@@ -67,13 +70,13 @@ function requestAccessToken() {
     const urlParams = new URLSearchParams(window.location.search);
     let code = urlParams.get('code');
 
-    let codeVerifier = localStorage.getItem('code_verifier');
+    let codeVerifier = localStorage.getItem('code-verifier');
 
     let body = new URLSearchParams({
         grant_type: 'authorization_code',
         code: code,
-        redirect_uri: redirectUri,
-        client_id: clientId,
+        redirect_uri: REDIRECT_URI,
+        client_id: CLIENT_ID,
         code_verifier: codeVerifier
     });
 
@@ -92,7 +95,55 @@ function requestAccessToken() {
         return response.json();
     })
     .then(data => {
+        // set access token
         localStorage.setItem('access-token', data.access_token);
+        console.log("first access token: " +  data.access_token);
+
+        // set expire time
+        //const expire_time = new Date(new Date().getTime() + data.expires_in*1000);
+        const expire_time = new Date().getTime() + 10*1000;
+        localStorage.setItem('expire-time', expire_time);
+
+        // set refresh token
+        localStorage.setItem('refresh-token', data.refresh_token);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
+
+/* Refresh! */
+function refreshAccessToken() {
+    let body = new URLSearchParams({
+        grant_type: 'refresh_token',
+        client_id: CLIENT_ID,
+        refresh_token: localStorage.getItem('refresh-token')
+      });
+
+    const response = fetch('https://accounts.spotify.com/api/token', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    body: body
+    })
+    .then(response => {
+        if (!response.ok) {
+        throw new Error('HTTP status ' + response.status);
+        }
+        return response.json();
+    })
+    .then(data => {
+        localStorage.setItem('access-token', data.access_token);
+        console.log("new access token: " +  data.access_token);
+       
+        // set expire time
+        const expire_time = new Date(new Date().getTime() + data.expires_in*1000);
+        localStorage.setItem('expire-time', expire_time);
+
+        // set refresh token
+        localStorage.setItem('refresh-token', data.refresh_token);
     })
     .catch(error => {
         console.error('Error:', error);

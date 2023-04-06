@@ -1,6 +1,8 @@
 // Imports
 import resolvePromise from "./resolvePromise.js"
 // import {} from "./spotifySource.js";
+import {redirectToSpotifyLogIn, requestAccessToken} from "./authentication";
+import { getProfile } from "./spotifySource.js";
 
 /**
  * Model keeps abstract data
@@ -94,6 +96,23 @@ class DiggerModel{
             }
         }
         this.observers.forEach(invokeCB);
+    }
+
+
+    // Login functions
+    login() {
+        redirectToSpotifyLogIn();
+    }
+    
+    requestToken() {
+        console.log("Request access token");
+        requestAccessToken();
+    }
+
+
+    // API calls
+    requestGetProfile() {
+        getProfile();
     }
 }
 
