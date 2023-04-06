@@ -29,12 +29,15 @@ function Artists() {
         </div>
     );
 
+    /* Event: onClick go to next page */
     function goForwardACB () {
-        window.location = ""; // TODO: get url for this
+        return redirect("/");  // TODO: get url for this
     }
     
+    /* Event: onClick go back to previous page */
     function goBackACB () {
-        window.location = ""; // TODO: get url for this
+        // return redirect("/login");
+        return redirect("/"); // TODO: get url for this
     }
 }
 

@@ -16,15 +16,23 @@ function Home() {
       <HomeView></HomeView>  
     );
 
+    /* Lifecycle */
+    function onMountedACB () {
+
+        function onUnMountedACB () {
+            return;
+        }
+        return;
+    }
+
     function connectSpotifyACB() {
-        // login()
-        // requestToken()
+        // login();
+        // requestToken();
     }
 
     function generatePlaylist() {
         // go to next window, ie Source Presenter
-        //  window.location = "/source";  
-        // TODO: router
+        return redirect("/source"); 
     }
 
 }
