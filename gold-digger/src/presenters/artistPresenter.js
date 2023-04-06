@@ -24,6 +24,7 @@ import redirect from "react-router-dom";
 
 function Artists(props) {
 
+    // TODO: add parameter setIncludeExclude 
     return (
         <div>
             <FilterView goBack={goBackACB} goForward={goForwardACB}></FilterView>
