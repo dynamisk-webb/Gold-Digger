@@ -1,5 +1,5 @@
 
-function homeView(props){
+function HomeView(props){
     return (
     <div>
         <h1>Gold Digger</h1>
@@ -19,4 +19,4 @@ function homeView(props){
     }
 };
 
-export default homeView;
+export default HomeView;

@@ -1,4 +1,4 @@
-function playlistView(props){
+function PlaylistView(props){
     return (<div class>
         <p>Playlist added to your spotify!</p>
         <h1>Generic Playlist Name uwu #1</h1>
@@ -21,4 +21,4 @@ function playlistView(props){
     }
 }
 
-export default playlistView;
+export default PlaylistView;

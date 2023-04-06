@@ -1,4 +1,4 @@
-function genreResultView(props){
+function GenreResultView(props){
     return (<div class="scrollable">
         {props.genreResults.map(getGenreACB)}
     </div>);
@@ -13,4 +13,4 @@ function genreResultView(props){
     }
 }
 
-export default genreResultView;
+export default GenreResultView;

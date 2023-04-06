@@ -1,4 +1,4 @@
-function prevlistView(props){
+function PrevlistView(props){
     return (<div class="scrollable">
         {props.prevPlaylist.map(songInfoACB)}
     </div>);
@@ -11,4 +11,4 @@ function prevlistView(props){
     }
 }
 
-export default prevlistView;
+export default PrevlistView;

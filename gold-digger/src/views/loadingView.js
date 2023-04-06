@@ -1,4 +1,4 @@
-function loadingView(props){
+function LoadingView(props){
     return (<div>
         <h1>Wait a moment</h1>
         <p>Processing your request</p>
@@ -6,3 +6,5 @@ function loadingView(props){
 
     //TODO: add loading thing
 }
+
+export default LoadingView;

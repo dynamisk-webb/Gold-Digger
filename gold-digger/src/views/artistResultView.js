@@ -1,4 +1,4 @@
-function artistResultView(props){
+function ArtistResultView(props){
     return (<div class="scrollable">
         {props.artistResults.map(getArtistACB)}
     </div>);
@@ -13,4 +13,4 @@ function artistResultView(props){
     }
 }
 
-export default artistResultView;
+export default ArtistResultView;

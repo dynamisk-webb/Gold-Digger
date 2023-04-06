@@ -1,4 +1,4 @@
-function filterView(props){
+function FilterView(props){
     return(
         <div>
             <button onClick={returnACB}></button>
@@ -16,4 +16,4 @@ function filterView(props){
     }
 }
 
-export default filterView;
+export default FilterView;

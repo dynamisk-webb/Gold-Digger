@@ -1,7 +1,7 @@
 import Slider from '@mui/material/Slider';
 import Switch from '@mui/material/Switch';
 
-function parameterView(props){
+function ParameterView(props){
     return (<div>
         {getSlider()}
         {getSlider()}
@@ -41,4 +41,4 @@ function parameterView(props){
     
 }
 
-export default parameterView;
+export default ParameterView;

@@ -1,4 +1,4 @@
-function searchView(props){
+function SearchView(props){
     return (
         <div>
             <input onChange={changeInputACB}>
@@ -20,4 +20,4 @@ function searchView(props){
         }
 }
 
-export default searchView;
+export default SearchView;

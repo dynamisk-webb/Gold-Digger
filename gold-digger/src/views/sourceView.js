@@ -1,4 +1,4 @@
-function sourceView(props){
+function SourceView(props){
 
     //TODO: make the playlist button into some form of input box
     return (<div>
@@ -15,4 +15,4 @@ function sourceView(props){
     }
 }
 
-export default sourceView;
+export default SourceView;
