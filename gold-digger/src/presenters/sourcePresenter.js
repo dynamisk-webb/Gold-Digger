@@ -38,7 +38,7 @@ export default Sidebar;
 import sourceView from "../views/sourceView";
 
 function Source (props) {
-    return (/* TODO */);
+    return (<div></div>);
 
     function setPlaylistIDACB(evt){
 
