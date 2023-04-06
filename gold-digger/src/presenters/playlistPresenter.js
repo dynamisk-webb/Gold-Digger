@@ -1,16 +1,13 @@
 /*
 TODO
 
-Lifecycle: GET the playlist
-Event: onInput PUT /playlist/{playlist_id}
-Set name to new input name
+
 
 
 
 */
 
 import PlaylistView from "../views/playlistView.js";
-
 import { redirect } from "react-router-dom";
 
 
@@ -25,6 +22,7 @@ function Playlist (props) {
     // lifecycle
     function onMount(){
 
+        // Lifecycle: GET the playlist. Set name to new input name
         tracks = getTracks(props.playlistID);
         // list of tracks will contain:
                     // title
@@ -39,9 +37,8 @@ function Playlist (props) {
         return;
     }
 
-
     return (
-        <playlistView generatedTracks={tracks} removeTrack={removeTrackACB} getPlaylistURL={getPlaylistURLACB} setAudioPlayerSong={setAudioPlayerSongACB} returnHome={returnHomeACB}></playlistView>
+        <PlaylistView generatedTracks={tracks} removeTrack={removeTrackACB} getPlaylistURL={getPlaylistURLACB} setAudioPlayerSong={setAudioPlayerSongACB} returnHome={returnHomeACB}></PlaylistView>
     );
 
     
@@ -61,10 +58,12 @@ function Playlist (props) {
     }
     /* Event: onClick return to Home */
     function returnHomeACB() {
-        // TODO prio, 
-
+        return redirect("/home");
     }
-
+    // Event: onInput PUT /playlist/{playlist_id}
+    function putPlaylistACB () {
+        //TODO
+    }
 }
 
 export default Playlist;

@@ -10,8 +10,12 @@ Event: onCheck set/unset genres
 Event: onClick window.location to Parameters
 
 */
+import FilterView from "../views/filterView.js";
+import SearchView from "../views/searchView.js";
+import GenreResultView from "../views/genreResultView.js";
+import redirect from "react-router-dom";
 
-function Genres() {
+function Genres(props) {
 
     return (
         <div>
@@ -23,13 +27,12 @@ function Genres() {
     
     /* Event: onClick go to next page */
     function goForwardACB () {
-        return redirect("/");  // TODO: get url for this
+        return redirect("/parameters");  // TODO: get url for this
     }
     
     /* Event: onClick go back to previous page */
     function goBackACB () {
-        // return redirect("/login");
-        return redirect("/"); // TODO: get url for this
+        return redirect("/source"); // TODO: get url for this
     }
 }
 

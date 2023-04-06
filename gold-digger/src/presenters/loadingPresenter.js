@@ -31,9 +31,10 @@ TODO
 
 
 */
+import LoadingView from "../views/loadingView";
 
 function Loading(props) {
-    return <div></div>;
+    return <LoadingView></LoadingView>;
 }
 
 export default Loading;

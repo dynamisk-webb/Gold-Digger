@@ -25,6 +25,10 @@ Event: onClick window.location to Loading
 
 */
 
+import FilterView from "../views/filterView";
+import ParameterView from "../views/parameterView";
+import redirect from "react-router-dom";
+
 function Parameters (props) {
 
     return (
@@ -36,13 +40,13 @@ function Parameters (props) {
 
     /* Event: onClick go to next page */
     function goForwardACB () {
-        return redirect("/");  // TODO: get url for this
+        return redirect("/artists");  // TODO: get url for this
     }
     
     /* Event: onClick go back to previous page */
     function goBackACB () {
         // return redirect("/login");
-        return redirect("/"); // TODO: get url for this
+        return redirect("/genres"); // TODO: get url for this
     }
 }
 

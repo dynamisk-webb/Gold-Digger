@@ -32,40 +32,39 @@ export default Sidebar;
 
 */
 
-import sourceView from "../views/sourceView";
+import SourceView from "../views/sourceView";
+import redirect from "react-router-dom";
+
 
 function Source (props) {
     return (
-        <sourceView onInput={setPlaylistIDACB} onClick={goToArtistACB}></sourceView>
+        <SourceView setSourcePlaylist={setPlaylistIDACB} setSourceSaved={setSourceACB} goForwardACB={goToArtistsACB} returnHome={returnHomeACB}></SourceView>
     );
 
-    /* Event: onInput set playlist ID */    
-    function setPlaylistIDACB(){
+    /* Event: onInput set playlist ID 
+    User chooses to generate playlist based on a playlist on Spotify
+    */    
+    function setPlaylistIDACB (playlistID) {
         props.model.setPlaylistID();
     }
     
+    /* Event: onClick set source to saved songs
+    User chooses to generate playlist based on their saved songs on Spotify
+    */
+    function setSourceACB() {
+        // TODO, call function made by Julia
+    }
+
     /*  Event: onClick continue to artists
         playlist ID is blank when using saved tracks
     */
-    function goToArtistACB () {
-        // router thing?
-        // TODO
+    function goToArtistsACB () {
+        return redirect("/artists");
     }
 
-    // TODO, router 
-    /* Event: Set window.location to Home */
-
-    /* */
-    const loader = async () => {
-        const user = await getUser();
-        if (!user) {
+    /* Event: Set window location to Home */
+    function returnHomeACB () {
         return redirect("/home");
-        }
-        return null;
-    };
-    
-
-
-
+    }
 }
 export default Source;

@@ -6,17 +6,22 @@ Redirect to Home
 
 
 */
+import LoginView from "../views/loginView.js";
+import redirect from "react-router-dom";
 
-function Login() {
+function Login(props) {
     return (
-        <loginView onClick={authorizePKCE_ACB}></loginView>
+        <LoginView authorize={authorizePKCEACB} goHome={returnHomeACB}></LoginView>
     );
 
-    function authorizePKCE_ACB() {
-
+    function authorizePKCEACB () {
+        //TODO
+        return;
     }
-
-    // Redirect to home (?) router thingy
+    /* Event: Set window location to Home */
+    function returnHomeACB () {
+        return redirect("/home");
+    }
 }
 
 export default Login;

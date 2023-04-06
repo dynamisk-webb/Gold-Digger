@@ -4,16 +4,17 @@ TODO
 
 Lifecycle: GET prev playlists from Firebase
 For each previous playlist Event: onClick inspect playlist
-Event: Set window.location to Source
+
 
 */
+import HomeView from "../views/homeView.js";
+import redirect from "react-router-dom";
 
 
 function Home() {
 
-    
     return (
-      <HomeView></HomeView>  
+      <HomeView connectSpotify={connectSpotifyACB} generatePlaylist={generatePlaylistACB}></HomeView>  
     );
 
     /* Lifecycle */
@@ -29,8 +30,9 @@ function Home() {
         // login();
         // requestToken();
     }
-
-    function generatePlaylist() {
+    
+    /* Event: Set window location to Source */
+    function generatePlaylistACB() {
         // go to next window, ie Source Presenter
         return redirect("/source"); 
     }
