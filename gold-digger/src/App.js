@@ -9,7 +9,7 @@ import Loading from "./presenters/loadingPresenter.js"
 import Parameter from "./presenters/parameterPresenter.js"
 import Playlist from "./presenters/playlistPresenter.js"
 import Source from "./presenters/sourcePresenter.js"
-import Layout from "./views/Layout.js"
+import Layout from "./views/layoutView.js"
 import NoPage from "./views/NoPage.js"
 
 /**
