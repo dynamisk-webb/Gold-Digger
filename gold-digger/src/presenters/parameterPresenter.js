@@ -24,3 +24,24 @@ Event: onClick window.location to Loading
 
 
 */
+
+function Parameters (props) {
+
+    return (
+        <div>
+            <FilterView goBack={goBackACB} goForward={goForwardACB}></FilterView>
+            <ParameterView></ParameterView>
+        </div>
+    );
+
+    function goForwardACB () {
+        window.location = ""; // TODO: get url for this
+    }
+    
+    function goBackACB () {
+        window.location = ""; // TODO: get url for this
+    }
+
+}
+
+export default Parameters;

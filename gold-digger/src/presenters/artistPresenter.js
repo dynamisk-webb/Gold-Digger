@@ -18,3 +18,24 @@ Event: onClick window.location to Genres
 
 
 */
+
+function Artists() {
+
+    return (
+        <div>
+            <FilterView goBack={goBackACB} goForward={goForwardACB}></FilterView>
+            <SearchView></SearchView>
+            <ParameterView></ParameterView>
+        </div>
+    );
+
+    function goForwardACB () {
+        window.location = ""; // TODO: get url for this
+    }
+    
+    function goBackACB () {
+        window.location = ""; // TODO: get url for this
+    }
+}
+
+export default Artists;

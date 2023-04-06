@@ -11,3 +11,24 @@ Event: onCheck set/unset genres
 Event: onClick window.location to Parameters
 
 */
+
+function Genres() {
+
+    return (
+        <div>
+            <FilterView goBack={goBackACB} goForward={goForwardACB}></FilterView>
+            <SearchView></SearchView>
+            <GenreResultView></GenreResultView>
+        </div>
+    );
+
+    function goForwardACB () {
+        window.location = ""; // TODO: get url for this
+    }
+    
+    function goBackACB () {
+        window.location = ""; // TODO: get url for this
+    }
+}
+
+export default Genres;
