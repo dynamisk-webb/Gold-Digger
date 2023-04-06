@@ -7,7 +7,16 @@ Redirect to Home
 
 */
 
-function Login(props) {
-    return <div></div>;
+function Login() {
+    return (
+        <loginView onClick={authorizePKCE_ACB}></loginView>
+    );
+
+    function authorizePKCE_ACB() {
+
+    }
+
+    // Redirect to home (?) router thingy
 }
+
 export default Login;

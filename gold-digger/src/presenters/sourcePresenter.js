@@ -2,12 +2,9 @@
 
 TODO
 
-Event: Set window.location to Home
 
-Event: onInput set playlist ID
     or
-Event: onClick continue to artists
-playlist ID is blank when using saved tracks
+
 ____________________________________________________________________________________________
 
 
@@ -38,16 +35,35 @@ export default Sidebar;
 import sourceView from "../views/sourceView";
 
 function Source (props) {
-    return (<div></div>);
+    return (
+        <sourceView onInput={setPlaylistIDACB} onClick={goToArtistACB}></sourceView>
+    );
 
-    function setPlaylistIDACB(evt){
-
-        // if onInput
+    /* Event: onInput set playlist ID */    
+    function setPlaylistIDACB(){
         props.model.setPlaylistID();
-   
-        // if onClick
-        props.model.goToArtists();
     }
+    
+    /*  Event: onClick continue to artists
+        playlist ID is blank when using saved tracks
+    */
+    function goToArtistACB () {
+        // router thing?
+        // TODO
+    }
+
+    // TODO, router 
+    /* Event: Set window.location to Home */
+
+    /* */
+    const loader = async () => {
+        const user = await getUser();
+        if (!user) {
+        return redirect("/home");
+        }
+        return null;
+    };
+    
 
 
 
