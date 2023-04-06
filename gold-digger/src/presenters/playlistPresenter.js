@@ -18,4 +18,4 @@ function Playlist (props) {
 
 }
 
-return default Playlist;
+export default Playlist;
