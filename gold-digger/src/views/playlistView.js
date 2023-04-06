@@ -5,7 +5,7 @@ function PlaylistView(props){
         <button onClick={copyLinkACB()}></button>
         <button onClick={returnHomeACB()}></button>
         <div class="scrollable">
-            props.tracks.map(getSongInfoACB)
+            {props.generatedTracks.map(getSongInfoACB)}
         </div>
     </div>);
 

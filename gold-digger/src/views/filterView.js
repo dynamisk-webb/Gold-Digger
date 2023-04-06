@@ -8,11 +8,11 @@ function FilterView(props){
     );
 
     function returnACB(){
-        //TODO: return 
+        props.goBack(); 
     }
 
     function continueACB(){
-        //TODO: continue
+        props.goForward();
     }
 }
 
