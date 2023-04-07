@@ -6,23 +6,19 @@ function LoggedInTestView(props) {
     return (
         <div>
             <h1>
-                This is a test view to test buttons and backend
+                This is a test view to redirect back to after login
             </h1>
-            <div>
-                Current value: {props.state.toString()}
-            </div>
             <div>    
-                <button type="button" onClick={onClickACB}>Click!</button>
                 <button type="button" onClick={onRequestTokenACB}>Reqeust access token</button>
-                <button type="button" onClick={onRequestGetProfileACB}>API-call</button>
-                <input onInput={onInputACB}/>
+            </div>
+            <div>Needed in order to make API-calls. Can (and should) only be used once.</div>
+            <div>---</div>
+            <div>    
+                <button type="button" onClick={onRequestGetProfileACB}>Example API-call</button>
+                <div>Response prints to console</div>
             </div>
         </div>
     )
-
-    function onClickACB() {
-        props.onChange("Click!");
-    }
 
     function onRequestGetProfileACB() {
         props.onRequestGetProfile()
@@ -31,10 +27,7 @@ function LoggedInTestView(props) {
     function onRequestTokenACB() {
         props.onRequestToken();
     }
-    
-    function onInputACB(evt) {
-        props.onChange(evt.target.value);
-    }
+
 }
 
 export default LoggedInTestView;
