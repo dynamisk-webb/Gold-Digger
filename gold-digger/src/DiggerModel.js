@@ -1,7 +1,7 @@
 // Imports
 import resolvePromise from "./resolvePromise.js"
 // import {} from "./spotifySource.js";
-import {redirectToSpotifyLogIn, requestAccessToken} from "./authentication";
+import { redirectToSpotifyLogIn, requestAccessToken } from "./authentication";
 import { getProfile } from "./spotifySource.js";
 
 /**
@@ -32,15 +32,19 @@ class DiggerModel{
           throw new Error("User ID is null");  
         }
 
-        if(id !== this.userid)
+        if(id !== this.userid) {  
             this.userid = id;
+            this.notifyObservers("user");
+        }
     }
     setSource(id) {
         if(id === null) {
             throw new Error("Source playlist is null, invalid")
         }
-        if(id !== this.source) 
+        if(id !== this.source) {
             this.source = id;
+            this.notifyObservers("source");
+        }
     }
     setPrevPlaylists(playlists) {
         this.prevPlaylists = [...playlists];
@@ -49,21 +53,33 @@ class DiggerModel{
         // TODO: Handle if the same
         if(this.tempo.min !== min || this.tempo.max !== max) {
             this.tempo = {min: min, max: max};
+            this.notifyObservers("tempo");
         }
     }
     setLoudness(min, max) {
         if(this.loudness.min !== min || this.loudness.max !== max) {
             this.loudness = {min: min, max: max};
+            this.notifyObservers("loud");
         }
     }
     setInstrumentalness(min, max) {
         if(this.instrumentalness.min !== min || this.instrumentalness.max !== max) {
             this.instrumentalness = {min: min, max: max};
+            this.notifyObservers("instr");
         }
     }
+    // TODO: Additional checks
     setGenerated(generate) {
-        // TODO: Additional checks
-        this.genereated = generate;
+        this.generated = generate;
+        this.notifyObservers("user");
+    }
+    setDanceable(bool) {
+        this.danceable = bool;
+        this.notifyObservers("acoustic");
+    }
+    setAcoustic(bool) {
+        this.acoustic = bool;
+        this.notifyObservers("acoustic");
     }
 
     addToPrevPlaylists(newPlaylist) {
@@ -75,7 +91,7 @@ class DiggerModel{
         }
     }
 
-    //TODO: Add setters and API-calls
+    //TODO: API-calls
 
     // Observers
     addObserver(callback) {
@@ -98,7 +114,6 @@ class DiggerModel{
         this.observers.forEach(invokeCB);
     }
 
-
     // Login functions
     login() {
         redirectToSpotifyLogIn();
@@ -108,7 +123,6 @@ class DiggerModel{
         console.log("Request access token");
         requestAccessToken();
     }
-
 
     // API calls
     requestGetProfile() {
