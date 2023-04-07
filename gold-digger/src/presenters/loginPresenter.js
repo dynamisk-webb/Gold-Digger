@@ -7,7 +7,7 @@ Redirect to Home
 
 */
 import LoginView from "../views/loginView.js";
-import redirect from "react-router-dom";
+import {redirect} from "react-router-dom";
 
 function Login(props) {
     return (

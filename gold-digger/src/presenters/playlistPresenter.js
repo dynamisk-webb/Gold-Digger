@@ -1,7 +1,9 @@
 /*
 TODO
 
-
+Lifecycle: GET the playlist
+Event: onInput PUT /playlist/{playlist_id}
+Set name to new input name
 
 
 
@@ -37,8 +39,9 @@ function Playlist (props) {
         return;
     }
 
+
     return (
-        <PlaylistView generatedTracks={tracks} removeTrack={removeTrackACB} getPlaylistURL={getPlaylistURLACB} setAudioPlayerSong={setAudioPlayerSongACB} returnHome={returnHomeACB}></PlaylistView>
+        <playlistView generatedTracks={tracks} removeTrack={removeTrackACB} getPlaylistURL={getPlaylistURLACB} setAudioPlayerSong={setAudioPlayerSongACB} returnHome={returnHomeACB}></playlistView>
     );
 
     

@@ -13,7 +13,7 @@ Event: onClick window.location to Parameters
 import FilterView from "../views/filterView.js";
 import SearchView from "../views/searchView.js";
 import GenreResultView from "../views/genreResultView.js";
-import redirect from "react-router-dom";
+import {redirect} from "react-router-dom";
 
 function Genres(props) {
 

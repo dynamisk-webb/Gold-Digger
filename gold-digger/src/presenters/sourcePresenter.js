@@ -5,6 +5,7 @@ TODO
 
     or
 
+
 ____________________________________________________________________________________________
 
 
@@ -33,7 +34,7 @@ export default Sidebar;
 */
 
 import SourceView from "../views/sourceView";
-import redirect from "react-router-dom";
+import {redirect} from "react-router-dom";
 
 
 function Source (props) {

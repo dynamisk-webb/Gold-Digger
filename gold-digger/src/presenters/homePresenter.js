@@ -8,7 +8,7 @@ For each previous playlist Event: onClick inspect playlist
 
 */
 import HomeView from "../views/homeView.js";
-import redirect from "react-router-dom";
+import {redirect} from "react-router-dom";
 
 
 function Home() {

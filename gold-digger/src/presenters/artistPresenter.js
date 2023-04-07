@@ -20,7 +20,7 @@ Disabled
 import FilterView from "../views/filterView.js";
 import SearchView from "../views/searchView.js";
 import ParameterView from "../views/parameterView.js";
-import redirect from "react-router-dom";
+import {redirect} from "react-router-dom";
 
 function Artists(props) {
 

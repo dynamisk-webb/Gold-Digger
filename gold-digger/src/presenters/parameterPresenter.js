@@ -27,7 +27,7 @@ Event: onClick window.location to Loading
 
 import FilterView from "../views/filterView";
 import ParameterView from "../views/parameterView";
-import redirect from "react-router-dom";
+import {redirect} from "react-router-dom";
 
 function Parameters (props) {
 
