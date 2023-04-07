@@ -5,7 +5,10 @@ TODO
 
     or
 
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 ____________________________________________________________________________________________
 
 
@@ -39,6 +42,7 @@ import {redirect} from "react-router-dom";
 
 function Source (props) {
     return (
+<<<<<<< Updated upstream
         <SourceView setSourcePlaylist={setPlaylistIDACB} setSourceSaved={setSourceACB} goForwardACB={goToArtistsACB} returnHome={returnHomeACB}></SourceView>
     );
 
@@ -54,7 +58,36 @@ function Source (props) {
     */
     function setSourceACB() {
         // TODO, call function made by Julia
+=======
+        <sourceView onInput={setPlaylistIDACB} onClick={goToArtistACB}></sourceView>
+    );
+
+    /* Event: onInput set playlist ID */    
+    function setPlaylistIDACB(){
+        props.model.setPlaylistID();
+>>>>>>> Stashed changes
     }
+    
+    /*  Event: onClick continue to artists
+        playlist ID is blank when using saved tracks
+    */
+    function goToArtistACB () {
+        // router thing?
+        // TODO
+    }
+
+    // TODO, router 
+    /* Event: Set window.location to Home */
+
+    /* */
+    const loader = async () => {
+        const user = await getUser();
+        if (!user) {
+        return redirect("/home");
+        }
+        return null;
+    };
+    
 
     /*  Event: onClick continue to artists
         playlist ID is blank when using saved tracks
