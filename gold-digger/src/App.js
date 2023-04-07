@@ -4,6 +4,7 @@ import './static/App.css';
 import DiggerModel from "./DiggerModel.js";
 import Test from "./test/testPresenter.js";
 import Artist from "./presenters/artistPresenter.js"
+import Genre from "./presenters/genrePresenter.js"
 import Home from "./presenters/homePresenter.js"
 import Loading from "./presenters/loadingPresenter.js"
 import Parameter from "./presenters/parameterPresenter.js"
@@ -17,7 +18,7 @@ import NoPage from "./views/NoPage.js"
  */
 
 function App() {
-  const model = new DiggerModel();
+  const dModel = new DiggerModel();
   
   // Routes 
   return (
@@ -29,10 +30,11 @@ function App() {
           <Route index element={<Home/>}/>
           <Route path="*" element={<NoPage/>}/>
           <Route path="test" element={<Test/>}/>
-          <Route path="artist" element={<Artist/>}/>
-          <Route path="parameter" element={<Parameter/>}/>
-          <Route path="playlist" element={<Playlist/>}/>
-          <Route path="source" element={<Source/>}/>
+          <Route path="artist" element={<Artist model={dModel}/>}/>
+          <Route path="genre" element={<Artist model={dModel}/>}/>
+          <Route path="parameter" element={<Parameter model={dModel}/>}/>
+          <Route path="playlist" element={<Playlist model={dModel}/>}/>
+          <Route path="source" element={<Source model={dModel}/>}/>
         </Route>
       </Routes>
     </BrowserRouter>
