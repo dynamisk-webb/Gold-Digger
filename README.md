@@ -4,7 +4,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/dynamisk-webb/Gold-Digger">
-    <img src="graphics/piano.png" height="120">
+    <img src="graphics/piano.png" height="200">
   </a>
 
   <h3 align="center">Gold Digger - A iprogd Project</h3>
@@ -46,29 +46,12 @@
 
 ## **Description**
 <div >
-  <img src="graphics/frontPage.png" height="240">
+  <img src="graphics/frontPage.png" height="350">
 </div>
 
-Our web app will help Spotify users generate new playlists from sections of their pre-existing playlists or saved tracks. The user gets to first either select a playlist or their saved tracks and then their preferences in the app according to their current mood/feel.
+Our web app will help Spotify users generate new playlists from sections of their pre-existing playlists or saved tracks. The user gets to first either select a playlist or their saved tracks and then their preferences in the app according to their current ~mood or ~feel.
 
-The target audience is Spotify Premium users, specifically those with long playlists and many saved tracks. 
-
-The main feature that we will implement into the project:
-- Make a playlist from your saved tracks/a playlist by filtering
-  - Parameters to filter from:
-    - Genre
-    - Artists (Include/Exclude)
-    - Tempo (BPM)
-    - Loudness (Noise)
-    - Danceability
-    - Instrumentality ()
-    - Acoustic ()
-  - Not all filters have to be selected
-
-Tracks are selected from the specific filters.
-
-<p align="right">(<a href="readme-top">back to top</a>)</p>
-
+Go to <a href="progress">Progress</a> amd <a href="plan">Plan</a> to see detailed description of functionality.
 
 ### Built with
 * [![Node.js][node-shield]][node-url]
@@ -86,14 +69,37 @@ This project depends on Spotify's API to run.
   Dummy Account Email: test.iprogd@gmail.com
   Password: testare_iprogd
 ```
-3. Click through and **Peer-review!**
+3. Click through and `Peer-review`
+
+<p align="right">(<a href="readme-top">back to top</a>)</p>
 
 ## **Progress**
 What we have done
 
+The main feature that we will implement into the project:
+- Create a playlist from your saved tracks/a playlist by filtering
+  - Parameters to filter from:
+    - Genre
+    - Artists (Include/Exclude)
+    - Tempo (BPM)
+    - Loudness (Noise)
+    - Danceability
+    - Instrumentality
+    - Acoustic
+  - Not all filters have to be selected
+
+Tracks are selected from the specific filters.
+
 Fully clickable digital prototype
 
+```javascript
+  function example() {
+
+  }
+```
 Fixed playlist, pre-generated, code/ui examples?
+
+<p align="right">(<a href="readme-top">back to top</a>)</p>
 
 ## **Plan**
 What we plan to do
@@ -102,6 +108,7 @@ There’ll be an audio player on the side
 Suspense: Plays standby music when loading in tracks.
 Edit final playlist (remove songs).
 
+<p align="right">(<a href="readme-top">back to top</a>)</p>
 
 ## **Project File Structure**
 
@@ -111,11 +118,28 @@ Source files for the projects are within `/gold-digger/src/`. The files are divi
 
 ### Spotify API
 
+Uses oauth to authorize
+
+```
+```
+
 ### Presenters
 
 ### Views
 
 ### Persistence
+
+## **Contact**
+Jessica Gorwat – jgorwat@kth.se
+
+Julia Wang – julwan@kth.se
+
+Maria Moliteus – 
+
+Isak Karlander – 
+
+
+<p align="right">(<a href="readme-top">back to top</a>)</p>
 
 <!-- Links & Images -->
 [spotify-shield]:https://camo.githubusercontent.com/f63f025c4f4797f4e0cf1904d1c87d02179a369b11948d5023af396d30dcad7b/68747470733a2f2f696d672e736869656c64732e696f2f7374617469632f76313f7374796c653d666f722d7468652d6261646765266d6573736167653d53706f7469667926636f6c6f723d314442393534266c6f676f3d53706f74696679266c6f676f436f6c6f723d464646464646266c6162656c3d
