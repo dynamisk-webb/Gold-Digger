@@ -71,11 +71,11 @@ class DiggerModel{
     // TODO: Additional checks
     setGenerated(generate) {
         this.generated = generate;
-        this.notifyObservers("user");
+        this.notifyObservers("generate");
     }
     setDanceable(bool) {
         this.danceable = bool;
-        this.notifyObservers("acoustic");
+        this.notifyObservers("danceable");
     }
     setAcoustic(bool) {
         this.acoustic = bool;
