@@ -41,6 +41,7 @@
         <li><a href="persistence">Persistence</a></li>
       </ul>
     </li>
+     <li><a href="#contact">Contact</a></li>
   </ol>
 </details>
 
@@ -51,7 +52,7 @@
 
 Our web app will help Spotify users generate new playlists from sections of their pre-existing playlists or saved tracks. The user gets to first either select a playlist or their saved tracks and then their preferences in the app according to their current ~mood or ~feel.
 
-Go to <a href="progress">Progress</a> amd <a href="plan">Plan</a> to see detailed description of functionality.
+*Go to <a href="progress">Progress</a> amd <a href="plan">Plan</a> to see detailed description of functionality.*
 
 ### Built with
 * [![Node.js][node-shield]][node-url]
@@ -63,7 +64,7 @@ Go to <a href="progress">Progress</a> amd <a href="plan">Plan</a> to see detaile
 
 This project depends on Spotify's API to run.
 
-1. Go to the deployed <a href="https://github.com/dynamisk-webb/Gold-Digger">site</a>
+1. Go to the deployed <a href="https://gold-digger-be2ef.web.app/">site</a>
 2. You need Spotify to connect to and Spotify API needs to register the username before using in Develop-mode. **Log-in with this dummy account to test the app:**
 ```
   Dummy Account Email: test.iprogd@gmail.com
@@ -74,7 +75,7 @@ This project depends on Spotify's API to run.
 <p align="right">(<a href="readme-top">back to top</a>)</p>
 
 ## **Progress**
-What we have done
+### What we have done
 
 The main feature that we will implement into the project:
 - Create a playlist from your saved tracks/a playlist by filtering
@@ -90,23 +91,31 @@ The main feature that we will implement into the project:
 
 Tracks are selected from the specific filters.
 
-Fully clickable digital prototype
+### Code 
+
+Something
 
 ```javascript
   function example() {
 
   }
 ```
+
+Fully clickable digital prototype
 Fixed playlist, pre-generated, code/ui examples?
 
 <p align="right">(<a href="readme-top">back to top</a>)</p>
 
 ## **Plan**
-What we plan to do
+### What we plan to do
 
 There’ll be an audio player on the side
+
 Suspense: Plays standby music when loading in tracks.
+
 Edit final playlist (remove songs).
+
+Add issues
 
 <p align="right">(<a href="readme-top">back to top</a>)</p>
 
@@ -129,15 +138,16 @@ Uses oauth to authorize
 
 ### Persistence
 
+<p align="right">(<a href="readme-top">back to top</a>)</p>
+
 ## **Contact**
 Jessica Gorwat – jgorwat@kth.se
 
 Julia Wang – julwan@kth.se
 
-Maria Moliteus – 
+Maria Moliteus – moliteus@kth.se
 
-Isak Karlander – 
-
+Rej Karlander – isakkar@kth.se
 
 <p align="right">(<a href="readme-top">back to top</a>)</p>
 
