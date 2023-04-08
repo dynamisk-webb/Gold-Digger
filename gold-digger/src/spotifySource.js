@@ -1,4 +1,3 @@
-import {BASE_URL} from "./apiConfig.js";
 import {refreshAccessToken} from "./authentication.js";
 
 /* 
@@ -7,14 +6,17 @@ https://developer.spotify.com/documentation/web-api/tutorials/code-pkce-flow
 
 Current access token is available in localStorage
 */
-
 async function getProfile() {
-    let response = await generalAPI('v1/me');
+    let response = await generalAPI('v1/me', "GET");
     console.log("Response: " + response.id);
   }
 
+/* Getter */
+async function getSavedTracks() {
+  
+}
 
-async function generalAPI(endpoint) {
+async function generalAPI(endpoint, method, body=null) {
 
   // TODO: if null, redirect to home
   if (localStorage.getItem('expire-time') != null) {
@@ -30,7 +32,8 @@ async function generalAPI(endpoint) {
     let accessToken = localStorage.getItem('access-token');
 
     const response = await fetch('https://api.spotify.com/' + endpoint, {
-        headers: {
+      method:method,  
+      headers: {
           Authorization: 'Bearer ' + accessToken
         }
       });

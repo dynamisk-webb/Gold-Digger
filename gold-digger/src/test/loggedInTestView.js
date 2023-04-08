@@ -8,6 +8,9 @@ function LoggedInTestView(props) {
     const [loggedIn, setLoggedIn] = useState(true);
 
     function checkLogIn() {
+        // Can make an access token check somewhere here also
+        // constant access_token = localStorage.getItem("access-token");
+
         if(!loggedIn) {
             navigate("/login");
         }
