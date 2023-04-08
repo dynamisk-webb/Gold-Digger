@@ -10,6 +10,16 @@ function ArtistResultView(props){
     </div>);
 
     function getArtistACB(result){
+
+        function handleChange(evt){
+            if(evt.target.value == "include")
+                props.setExcludeInclude(result.id, 1);
+            if(evt.target.value == "neutral")
+                props.setExcludeInclude(result.id, 0);
+            if(evt.target.value == "exclude")
+                props.setExcludeInclude(result.id, -1);
+        }
+
         // TODO: add buttons to include/exclude artists
         return (
             <div> 
@@ -27,15 +37,6 @@ function ArtistResultView(props){
                 </FormControl>
             </div>
         );
-    }
-
-    function handleChange(evt){
-        if(evt.target.value == "include")
-            props.setExcludeInclude(1);
-        if(evt.target.value == "neutral")
-            props.setExcludeInclude(0);
-        if(evt.target.value == "exclude")
-            props.setExcludeInclude(-1);
     }
 
     // TODO: create functions for pushing buttons
