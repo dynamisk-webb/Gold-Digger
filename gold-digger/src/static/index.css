@@ -1,10 +1,11 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  font-family: "Lexend", -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-weight: 700;
 }
 
 code {
@@ -12,9 +13,136 @@ code {
     monospace;
 }
 
+h1{
+  color: whitesmoke;
+  font-weight: bold;
+  font-size: 60px;
+}
+
+h2{
+  color: gray;
+}
+
+p{
+  color: whitesmoke;
+  font-size:20px;
+}
+
+button{
+  cursor: pointer;
+  outline: 0;
+  color: whitesmoke;
+  background-color: #FF6B35;
+  border-color: #0d6efd;
+  display: inline-block;
+  font-weight: 600;
+  line-height: 1.5;
+  text-align: center;
+  border: 1px solid transparent;
+  padding: 6px 12px;
+  font-size: 16px;
+  border-radius: .6rem;
+  font-family: "Lexend", -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  
+}
+
 
 /* GENERIC CLASSES */
 
 .scrollable{
   overflow: scroll;
+}
+
+.clickable{
+  background-color: #FF6B35;
+}
+
+/* ------------------- IDs ------------------- */
+
+/*  H O M E */
+
+#homeGrid{
+  position:fixed;
+  top:0;
+  left:0;
+
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 0.3fr 1fr 1fr 0.3fr;
+  grid-template-rows: 1.5fr 1fr 1fr 1fr 2.4fr;
+}
+
+#homeTitle{
+  grid-row: 2 / span 1;
+  grid-column: 2 / span 1;
+  position: relative;
+  top:0;
+  left: 0;
+  align-self: start;
+  margin: 0 0 0 0;
+}
+
+#homeSubTitle{
+  grid-row: 2 / span 1;
+  grid-column: 2 / span 1;
+  align-self: end;
+  align-items: flex-end;
+  margin: 0 0 2% 0;
+}
+
+#homeText{
+  grid-row: 3 / span 1;
+  grid-column: 2 / span 1;
+  
+}
+
+#connectSpotify{
+  grid-row: 4 / span 1;
+  grid-column: 2 / span 1;
+  position: relative;
+  left:0;
+  margin: 4% 18% 4% 0;
+  font-size: 25px;
+}
+
+#generatePlaylist{
+  grid-row: 4 / span 1;
+  grid-column: 3 / span 1;
+  position: relative;
+  right:0;
+  margin: 4% 0 4% 18%;
+  font-size: 25px;
+}
+
+
+#layout{
+  position:fixed;
+  padding:0;
+  margin:0;
+
+  top:0;
+  left:0;
+
+  width: 100%;
+  height: 100%;
+  background-color: black;
+}
+
+#pianoImage{
+  z-index: -5; /* pushes it to the back */
+  position: absolute;
+  opacity: 60%;
+  right: 0px;
+  bottom: 0px;
+  height: 70%;
+}
+
+#spotifyLogo{
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  height: 40px;
 }
