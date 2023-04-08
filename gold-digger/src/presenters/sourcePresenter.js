@@ -38,7 +38,7 @@ import {redirect} from "react-router-dom";
 
 function Source (props) {
     return (
-        <sourceView onInput={setPlaylistIDACB} onClick={goToArtistACB}></sourceView>
+        <SourceView onInput={setPlaylistIDACB} onClick={goToArtistACB}></SourceView>
     );
 
     /* Event: onInput set playlist ID */    

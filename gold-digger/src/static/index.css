@@ -134,7 +134,7 @@ button{
 #pianoImage{
   z-index: -5; /* pushes it to the back */
   position: absolute;
-  opacity: 60%;
+  opacity: 40%;
   right: 0px;
   bottom: 0px;
   height: 70%;

@@ -2,8 +2,8 @@ function PlaylistView(props){
     return (<div class>
         <p>Playlist added to your spotify!</p>
         <h1>Generic Playlist Name uwu #1</h1>
-        <button onClick={copyLinkACB()}></button>
-        <button onClick={returnHomeACB()}></button>
+        <button onClick={copyLinkACB()}>copy link</button>
+        <button onClick={returnHomeACB()}>return home</button>
         <div class="scrollable">
             {props.generatedTracks.map(getSongInfoACB)}
         </div>
@@ -14,7 +14,7 @@ function PlaylistView(props){
     }
 
     function returnHomeACB(){
-        
+
     }
 
     

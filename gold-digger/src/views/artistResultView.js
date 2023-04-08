@@ -1,5 +1,8 @@
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
 
 function ArtistResultView(props){
     return (<div class="scrollable">
@@ -10,16 +13,18 @@ function ArtistResultView(props){
         // TODO: add buttons to include/exclude artists
         return (
             <div> 
-                <p>result.title</p>
-                <RadioGroup
-                aria-labelledby="demo-controlled-radio-buttons-group"
-                name="controlled-radio-buttons-group"
-                value={value}
-                onChange={handleChange}>
-                <FormControlLabel value="include" control={<Radio />} label="include" />
-                <FormControlLabel value="neutral" control={<Radio />} label="neutral" />
-                <FormControlLabel value="exclude" control={<Radio />} label="exclude" />
-                </RadioGroup>
+                <FormControl>
+                <FormLabel id="demo-radio-buttons-group-label">result.title</FormLabel>
+                    <RadioGroup
+                    aria-labelledby="demo-controlled-radio-buttons-group"
+                    name="controlled-radio-buttons-group"
+                    value={props.value}
+                    onChange={handleChange}>
+                        <FormControlLabel value="include" control={<Radio />} label="include" />
+                        <FormControlLabel value="neutral" control={<Radio />} label="neutral" />
+                        <FormControlLabel value="exclude" control={<Radio />} label="exclude" />
+                    </RadioGroup>
+                </FormControl>
             </div>
         );
     }

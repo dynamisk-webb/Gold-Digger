@@ -19,7 +19,7 @@ Disabled
 
 import FilterView from "../views/filterView.js";
 import SearchView from "../views/searchView.js";
-import ParameterView from "../views/parameterView.js";
+import ArtistResultView from "../views/artistResultView.js";
 import {redirect} from "react-router-dom";
 
 function Artists(props) {
@@ -29,7 +29,7 @@ function Artists(props) {
         <div>
             <FilterView goBack={goBackACB} goForward={goForwardACB}></FilterView>
             <SearchView></SearchView>
-            <ParameterView></ParameterView>
+            <ArtistResultView></ArtistResultView>
         </div>
     );
 
