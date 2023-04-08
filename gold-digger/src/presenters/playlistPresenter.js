@@ -10,10 +10,6 @@ Set name to new input name
 */
 
 import PlaylistView from "../views/playlistView.js";
-<<<<<<< Updated upstream
-=======
-
->>>>>>> Stashed changes
 import { redirect } from "react-router-dom";
 
 
@@ -28,11 +24,7 @@ function Playlist (props) {
     // lifecycle
     function onMount(){
 
-<<<<<<< Updated upstream
-        // Lifecycle: GET the playlist. Set name to new input name
-=======
->>>>>>> Stashed changes
-        tracks = getTracks(props.playlistID);
+        //tracks = getTracks(props.playlistID);
         // list of tracks will contain:
                     // title
                     // artist
@@ -68,19 +60,10 @@ function Playlist (props) {
     }
     /* Event: onClick return to Home */
     function returnHomeACB() {
-<<<<<<< Updated upstream
-        return redirect("/home");
-    }
-    // Event: onInput PUT /playlist/{playlist_id}
-    function putPlaylistACB () {
-        //TODO
-    }
-=======
         // TODO prio, 
 
     }
 
->>>>>>> Stashed changes
 }
 
 export default Playlist;

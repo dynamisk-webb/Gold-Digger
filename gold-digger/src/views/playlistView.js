@@ -9,6 +9,14 @@ function PlaylistView(props){
         </div>
     </div>);
 
+    function copyLinkACB(){
+
+    }
+
+    function returnHomeACB(){
+        
+    }
+
     
     function getSongInfoACB(track){
         return (<div>
