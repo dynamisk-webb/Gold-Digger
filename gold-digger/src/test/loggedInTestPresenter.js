@@ -1,12 +1,13 @@
 import { useState } from "react";
 import LoggedInTestView from "./loggedInTestView.js";
+import {} from "../spotifySource.js";
 
 function LoggedInTest(props) {
     let [state, setState] = useState("Test2");
 
     return (
         <div>
-            <LoggedInTestView state={state} onChange={onChangeACB} onRequestToken={onRequestTokenACB} onRequestGetProfile={onRequestGetProfileACB}/>
+            <LoggedInTestView state={state} onAPICall={onAPICallACB} onChange={onChangeACB} onRequestToken={onRequestTokenACB} onRequestGetProfile={onRequestGetProfileACB}/>
         </div>
     )
 
@@ -23,6 +24,10 @@ function LoggedInTest(props) {
 
     function onRequestTokenACB() {
         props.model.requestToken();
+    }
+
+    function onAPICallACB() {
+        console.log("Result: ");
     }
 }
 
