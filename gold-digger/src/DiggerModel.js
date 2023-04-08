@@ -124,8 +124,8 @@ class DiggerModel{
 
         }
     }
-    excludeArtist(genre) {    // Exclude artists, always ignored in generated list
-        if(!this.excludedArtists.includes(genre)) {
+    excludeArtist(artist) {    // Exclude artists, always ignored in generated list
+        if(!this.excludedArtists.includes(artist)) {
             this.removeArtist(artist);
             this.excludedArtists = [...this.excludedArtists, artist];
             this.notifyObservers("artist excluded");
