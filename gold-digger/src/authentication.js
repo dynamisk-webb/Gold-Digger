@@ -43,7 +43,7 @@ function redirectToSpotifyLogIn() {
 
     generateCodeChallenge(codeVerifier).then(codeChallenge => {
     let state = generateRandomString(16);
-    let scope = 'user-read-private user-read-email';
+    let scope = 'user-read-private user-read-email playlist-read-private user-library-read playlist-modify-public playlist-modify-private';
 
     localStorage.setItem('code-verifier', codeVerifier);
     localStorage.setItem('test-item', 'i am a test item');

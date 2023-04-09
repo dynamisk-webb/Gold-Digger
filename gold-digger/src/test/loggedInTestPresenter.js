@@ -1,9 +1,19 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import LoggedInTestView from "./loggedInTestView.js";
-import {} from "../spotifySource.js";
+import { createPlaylist, getSavedTracks } from "../spotifySource.js";
+import resolvePromise from "../resolvePromise.js";
 
 function LoggedInTest(props) {
     let [state, setState] = useState("Test2");
+    const [promiseState, setPromiseState] = useState({});
+
+    useEffect(() => {
+        const getTrack = async () => {
+            debugger;
+            console.log("Result: " + promiseState.data);
+        };
+      getTrack();
+    }, [promiseState]);
 
     return (
         <div>
@@ -11,7 +21,7 @@ function LoggedInTest(props) {
         </div>
     )
 
-    
+
     function onChangeACB(value) {
         console.log("Example value sent: " + value.toString());
         setState(value);
@@ -26,8 +36,8 @@ function LoggedInTest(props) {
         props.model.requestToken();
     }
 
-    function onAPICallACB() {
-        console.log("Result: ");
+    async function onAPICallACB() {
+        resolvePromise(getSavedTracks(), promiseState, setPromiseState);
     }
 }
 
