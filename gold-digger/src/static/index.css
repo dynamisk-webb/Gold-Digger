@@ -114,6 +114,19 @@ button{
   font-size: 25px;
 }
 
+#logOut{
+
+  background-image: url("./../img/logOut.png"); /* 16px x 16px */
+  background-color:transparent;
+  background-repeat: no-repeat;  /* make the background image appear only once */
+  background-position: center; 
+  background-size: contain;
+
+  grid-row: 1 / span 1;
+  grid-column: 4 /span 1;
+  margin: 38% 38% 38% 38%;
+}
+
 /* S O U R C E */
 
 #sourceGrid{

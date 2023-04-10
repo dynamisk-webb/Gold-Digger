@@ -16,7 +16,7 @@ function Home(props) {
     useEffect(onMountedACB, []);
 
     return (
-      <HomeView connectSpotify={connectSpotifyACB} generatePlaylist={generatePlaylistACB}></HomeView>  
+      <HomeView connectSpotify={connectSpotifyACB} generatePlaylist={generatePlaylistACB} logOut={logOutACB}></HomeView>  
     );
 
     /* Lifecycle */
@@ -35,6 +35,9 @@ function Home(props) {
         }
     }
     
+    function logOutACB(){
+        props.model.setLogin(false);
+    }
 
     function connectSpotifyACB() {
         // login();
