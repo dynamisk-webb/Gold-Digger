@@ -1,4 +1,4 @@
-const fixedList = [
+const fixedPlaylist = [
   {
     "track": {
       "album": {
