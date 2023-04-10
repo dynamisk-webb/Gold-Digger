@@ -2,6 +2,7 @@
 import HomeView from "../views/homeView.js";
 import {redirect} from "react-router-dom";
 import { useEffect } from "react";
+import PrevlistView from "../views/prevListView.js";
 
 
 function Home(props) {

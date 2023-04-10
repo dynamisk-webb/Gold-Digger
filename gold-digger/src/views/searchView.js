@@ -1,6 +1,6 @@
 function SearchView(props){
     return (
-        <div>
+        <div id="search">
             <input onChange={changeInputACB}>
             </input>
             <button onClick={searchClickACB}>

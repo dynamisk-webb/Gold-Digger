@@ -18,7 +18,7 @@ function FilterView(props){
     }
 
     function continueACB(){
-        if(props.filterType == "genres")
+        if(props.filterType == "genre")
             navigate("/artist");
         else if(props.filterType == "artist")
             navigate("/parameter");

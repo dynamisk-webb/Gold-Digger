@@ -113,6 +113,15 @@ button{
   
 }
 
+#prevList{
+  grid-row: 4 / span 1;
+  grid-column: 2 / span 1;
+  position: relative;
+  left:0;
+  border-radius: .6rem;
+  background-color: gray;
+}
+
 #connectSpotify{
   grid-row: 4 / span 1;
   grid-column: 2 / span 1;
@@ -195,6 +204,23 @@ button{
   font-size: 25px;
 }
 
+/* ARTIST & GENRE PRESENTER */
+
+#genreMainGrid{
+  grid-template-columns: 1fr 4fr 1fr;
+  grid-template-rows: 1fr 4fr 1fr;
+}
+
+#search{
+  grid-row: 2 / span 1;
+  grid-column: 2 / span 1;
+  margin: 10% 50% 60% 41%;
+}
+
+#artistMainGrid{
+
+}
+
 /* PARAMETER PRESENTER */
 
 #parameterMainGrid{
@@ -270,6 +296,18 @@ button{
   
 }
 
+/*  PLAYLIST VIEW */
+
+#homeButton{
+  background-image: url("./../img/home.png"); /* 16px x 16px */
+  background-color:transparent;
+  background-repeat: no-repeat;  /* make the background image appear only once */
+  width: 50px;
+  height: 50px;
+  background-size: contain;
+  
+  margin: 0px 0px 0px 0px; 
+}
 
 #layout{
   position:fixed;
