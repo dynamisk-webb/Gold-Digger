@@ -52,7 +52,7 @@ button{
 /* GENERIC CLASSES */
 
 .scrollable{
-  overflow: scroll;
+  overflow: hidden;
 }
 
 .clickable{
