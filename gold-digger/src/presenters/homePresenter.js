@@ -13,7 +13,6 @@ import { useEffect } from "react";
 
 
 function Home(props) {
-
     useEffect(onMountedACB, []);
 
     return (
