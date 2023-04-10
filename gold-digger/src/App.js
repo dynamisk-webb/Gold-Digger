@@ -22,27 +22,17 @@ import Source from "./presenters/sourcePresenter.js"
 
 function App() {
   const navigate = useNavigate();
-  const [isLoggedIn, setLoggedIn] = useState(false);
+  const [isLoggedIn, setLoggedIn] = useState(localStorage.getItem("log-in"));
   const dModel = new DiggerModel(setLoggedIn);
   dModel.setGenerated(fixedPlaylist);
-
-  /*
+  
   useEffect(() => {
-    console.log("This is happening" + isLoggedIn);
-    debugger;
     if(!isLoggedIn) {
       navigate("/login");
     } else {
       navigate("/");
     }
-  }, [isLoggedIn]);
-
-  function isLoggedInACB() {
-    console.log("LOGIN");
-    setLoggedIn(isLoggedIn => !isLoggedIn);
-    debugger;
-  }
-  */
+  }, [navigate, isLoggedIn]);
 
   // Routes 
   return (
@@ -50,7 +40,7 @@ function App() {
       <Route path="/" element={<Layout/>}>
         {/* Default route for / path */}
         <Route index element={<Home model={dModel}/>}/>
-        <Route path="login" element={<Login model={dModel} isLoggedIn={isLoggedInACB}/>}/>
+        <Route path="login" element={<Login model={dModel}/>}/>
         <Route path="artist" element={<Artist model={dModel}/>}/>
         <Route path="genre" element={<Genres model={dModel}/>}/>
         <Route path="parameter" element={<Parameter model={dModel}/>}/>

@@ -8,7 +8,7 @@ import { getProfile } from "./spotifySource.js";
  */
 class DiggerModel{
 
-    constructor(userid=null, prevPlaylists=[], acoustic=false, danceable=false) {
+    constructor(setState, userid=null, prevPlaylists=[], acoustic=false, danceable=false) {
         this.userid = userid;
         this.source = null;
         this.generated = {playlist: null, tracks: []};
@@ -23,6 +23,7 @@ class DiggerModel{
         this.acoustic = acoustic;
 
         this.observers = [];
+        this.setLogin = setState;
     }
 
     /**
@@ -170,6 +171,7 @@ class DiggerModel{
     // Login functions
     login() {
         try {
+            localStorage.setItem("log-in", true);
             redirectToSpotifyLogIn();
         } catch (error) {
             alert("Error logging in.");
