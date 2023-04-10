@@ -3,97 +3,97 @@ const fixedPlaylist = {
   playlistid: "7j3dDab7O8OPEs7I346ZP3",
   tracks: [
     {
-      "track": {
-        "album": {
-          "name": "American Beauty/American Psycho"
+      track: {
+        album: {
+          name: "American Beauty/American Psycho"
         },
-        "artists": [
+        artists: [
           {
-            "id": "4UXqAaa6dQYAk18Lv7PEgX",
-            "name": "Fall Out Boy"
+            id: "4UXqAaa6dQYAk18Lv7PEgX",
+            name: "Fall Out Boy"
           }
         ],
-        "id": "5PUawWFG1oIS2NwEcyHaCr",
-        "name": "Uma Thurman"
+        id: "5PUawWFG1oIS2NwEcyHaCr",
+        name: "Uma Thurman"
       }
     },
     {
-      "track": {
-        "album": {
-          "name": "Whenever You Need Somebody"
+      track: {
+        album: {
+          name: "Whenever You Need Somebody"
         },
-        "artists": [
+        artists: [
           {
-            "id": "0gxyHStUsqpMadRV0Di1Qt",
-            "name": "Rick Astley"
+            id: "0gxyHStUsqpMadRV0Di1Qt",
+            name: "Rick Astley"
           }
         ],
-        "id": "4cOdK2wGLETKBW3PvgPWqT",
-        "name": "Never Gonna Give You Up"
+        id: "4cOdK2wGLETKBW3PvgPWqT",
+        name: "Never Gonna Give You Up"
       }
     },
     {
-      "track": {
-        "album": {
-          "name": "Pokemon - 2.b.a. Master - Music From The Hit Tv Series"
+      track: {
+        album: {
+          name: "Pokemon - 2.b.a. Master - Music From The Hit Tv Series"
         },
-        "artists": [
+        artists: [
           {
-            "id": "6goK4KMSdP4A8lw8jk4ADk",
-            "name": "Pokémon"
+            id: "6goK4KMSdP4A8lw8jk4ADk",
+            name: "Pokémon"
           }
         ],
-        "id": "3OIHgTyQdiAGMmpjQaNxp3",
-        "name": "Pokémon Theme"
+        id: "3OIHgTyQdiAGMmpjQaNxp3",
+        name: "Pokémon Theme"
       }
     },
     {
-      "track": {
-        "album": {
-          "name": "Overexposed (Deluxe)"
+      track: {
+        album: {
+          name: "Overexposed (Deluxe)"
         },
-        "artists": [
+        artists: [
           {
-            "id": "04gDigrS5kc9YWfZHwBETP",
-            "name": "Maroon 5"
+            id: "04gDigrS5kc9YWfZHwBETP",
+            name: "Maroon 5"
           },
           {
-            "id": "137W8MRPWKqSmrBGDBFSop",
-            "name": "Wiz Khalifa"
+            id: "137W8MRPWKqSmrBGDBFSop",
+            name: "Wiz Khalifa"
           }
         ],
-        "id": "7wO4T9v1edGUisLOzAC3tX",
-        "name": "Payphone"
+        id: "7wO4T9v1edGUisLOzAC3tX",
+        name: "Payphone"
       }
     },
     {
-      "track": {
-        "album": {
-          "name": "1"
+      track: {
+        album: {
+          name: "1"
         },
-        "artists": [
+        artists: [
           {
-            "id": "5HZsYhRCMH3zR0yndRcLVw",
-            "name": "MOB CHOIR"
+            id: "5HZsYhRCMH3zR0yndRcLVw",
+            name: "MOB CHOIR"
           }
         ],
-        "id": "56TEOXpkSgIRsTqXJTC3PG",
-        "name": "Exist"
+        id: "56TEOXpkSgIRsTqXJTC3PG",
+        name: "Exist"
       }
     },
     {
-      "track": {
-        "album": {
-          "name": "Paramore"
+      track: {
+        album: {
+          name: "Paramore"
         },
-        "artists": [
+        artists: [
           {
-            "id": "74XFHRwlV6OrjEM0A2NCMF",
-            "name": "Paramore"
+            id: "74XFHRwlV6OrjEM0A2NCMF",
+            name: "Paramore"
           }
         ],
-        "id": "2GBjsCkCpR5w8Zri9aE49H",
-        "name": "Interlude: I'm Not Angry Anymore"
+        id: "2GBjsCkCpR5w8Zri9aE49H",
+        name: "Interlude: I'm Not Angry Anymore"
       }
     }
   ]
