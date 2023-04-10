@@ -110,7 +110,7 @@ Our main functionality and playlist generation logic is in progress. What we sti
 - [ ] Restrict access to routes
 - [ ] Edit final playlist (remove songs)
 - [ ] Spotify-compatible audio player. Plays standby music when loading for suspense
-- [ ] Persistence
+- [ ] Persistence with ``Firebase``
 
 If we have time, we'd also like to add a third-party component.
 

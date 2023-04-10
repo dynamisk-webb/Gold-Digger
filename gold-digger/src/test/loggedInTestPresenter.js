@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import LoggedInTestView from "./loggedInTestView.js";
-import { createPlaylist, getSavedTracks } from "../spotifySource.js";
+import { getSavedTracks } from "../spotifySource.js";
 import resolvePromise from "../resolvePromise.js";
 
 function LoggedInTest(props) {

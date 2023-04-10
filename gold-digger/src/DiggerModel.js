@@ -7,10 +7,10 @@ import { getProfile } from "./spotifySource.js";
  * Model keeps abstract data
  */
 class DiggerModel{
-    constructor(userid=null, prevPlaylists=[], acoustic=false, danceable=false) {
+    constructor(setState, userid=null, prevPlaylists=[], acoustic=false, danceable=false) {
         this.userid = userid;
         this.source = null;
-        this.generated = null;
+        this.generated = {playlist: null, tracks: []};
         this.genres = [];   // String values
         this.includedArtists = [];  // Spotify ID
         this.excludedArtists = [];
@@ -22,6 +22,7 @@ class DiggerModel{
         this.acoustic = acoustic;
 
         this.observers = [];
+        this.setLogin = setState;
     }
 
     /**
@@ -168,7 +169,12 @@ class DiggerModel{
 
     // Login functions
     login() {
-        redirectToSpotifyLogIn();
+        try {
+            redirectToSpotifyLogIn();
+            this.setLogin(true);
+        } catch (error) {
+            
+        }
     }
     
     requestToken() {
