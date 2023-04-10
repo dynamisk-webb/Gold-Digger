@@ -14,7 +14,7 @@ class DiggerModel{
         this.genres = [];   // String values
         this.includedArtists = [];  // Spotify ID
         this.excludedArtists = [];
-        this.prevPlaylists = prevPlaylists; // [{id:, name: }, ...]
+        this.prevPlaylists = prevPlaylists; // [{playlist:, tracks: }, ...]
         this.tempo = {min: 0, max: 300}; // {min:, max}, set to default or limits
         this.loudness = {min: -60, max: 0};
         this.instrumentalness = {min: 0, max: 1};
@@ -71,15 +71,8 @@ class DiggerModel{
     }
     setGenerated(generate) {    // Sets generated playlist and adds to prev playlists
         this.generated = generate;
-        addToPrevPlaylists(generate); // Add to previously generated playlists
+        this.addToPrevPlaylists(generate); // Add to previously generated playlists
         this.notifyObservers("generate");
-
-        function addToPrevPlaylists(newPlaylist) {   // Adds a playlist to previous playlists
-            if(!this.prevPlaylists.includes(newPlaylist)) {
-                const prev = [...this.prevPlaylists, newPlaylist];
-                this.setPrevPlaylists(prev);   
-            }
-        }
     }
     setDanceable(bool) {    // Sets danceability (how suitable it is for dancing) from 0.0 to 1.0
         this.danceable = bool;
@@ -91,6 +84,12 @@ class DiggerModel{
     }
 
     // Add to lists, could be more general
+    addToPrevPlaylists(newPlaylist) {   // Adds a playlist to previous playlists
+        if(!this.prevPlaylists.includes(newPlaylist)) {
+            const prev = [...this.prevPlaylists, newPlaylist];
+            this.setPrevPlaylists(prev);   
+        }
+    }
     removePrevPlaylist(playlist) {  // Removes a previous playlist id 
         if(this.prevPlaylists.includes(playlist)) {
             this.prevPlaylists.filter(filterPlaylistCB);
