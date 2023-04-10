@@ -5,6 +5,7 @@ import DiggerModel from "./DiggerModel.js";
 import Test from "./test/testPresenter.js";
 import Artist from "./presenters/artistPresenter.js"
 import Genres from "./presenters/genrePresenter.js"
+import Login from "./presenters/loginPresenter.js"
 import Home from "./presenters/homePresenter.js"
 import Loading from "./presenters/loadingPresenter.js"
 import Parameter from "./presenters/parameterPresenter.js"
@@ -28,9 +29,10 @@ function App() {
         <Route exact path="/loading" element={<Loading/>}/>
         <Route path="/" element={<Layout/>}>
           {/* Default route for / path */}
-          <Route index element={<Home/>}/>
+          <Route index element={<Login model={dModel}/>}/>
+          <Route path="home" element={<Home model={dModel}/>}/>
           <Route path="*" element={<NoPage/>}/>
-          <Route path="test" element={<Test/>}/>
+          <Route path="test" element={<Test model={dModel}/>}/>
           <Route path="artist" element={<Artist model={dModel}/>}/>
           <Route path="genre" element={<Genres model={dModel}/>}/>
           <Route path="parameter" element={<Parameter model={dModel}/>}/>

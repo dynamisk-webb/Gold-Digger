@@ -11,7 +11,7 @@ import HomeView from "../views/homeView.js";
 import {redirect} from "react-router-dom";
 
 
-function Home() {
+function Home(props) {
 
     return (
       <HomeView connectSpotify={connectSpotifyACB} generatePlaylist={generatePlaylistACB}></HomeView>  

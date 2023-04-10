@@ -1,44 +1,25 @@
-/*
-TODO 
 
-Event: onClick PKCE Authorization
-Redirect to Home
-
-
-*/
-<<<<<<< Updated upstream
 import LoginView from "../views/loginView.js";
 import {redirect} from "react-router-dom";
 
+
 function Login(props) {
+
     return (
-        <LoginView authorize={authorizePKCEACB} goHome={returnHomeACB}></LoginView>
+      <LoginView connectSpotify={connectSpotifyACB}></LoginView>  
     );
 
-    function authorizePKCEACB () {
-        //TODO
+    /* Lifecycle */
+    function onMountedACB () {
+
+        function onUnMountedACB () {
+            return;
+        }
         return;
     }
-    /* Event: Set window location to Home */
-    function returnHomeACB () {
-        return redirect("/home");
+
+    function connectSpotifyACB() {
+        props.model.login();
     }
 }
-
 export default Login;
-=======
-
-function Login() {
-    return (
-        <loginView onClick={authorizePKCE_ACB}></loginView>
-    );
-
-    function authorizePKCE_ACB() {
-
-    }
-
-    // Redirect to home (?) router thingy
-}
-
-export default Login;
->>>>>>> Stashed changes
