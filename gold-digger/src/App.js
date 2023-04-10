@@ -1,17 +1,16 @@
 // Import here 
-import {BrowserRouter, Routes, Route, Navigate} from "react-router-dom";
+import {Routes, Route, Navigate, useNavigate} from "react-router-dom";
+import {useEffect, useState} from "react";
 import './static/App.css';
 import DiggerModel from "./DiggerModel.js";
 
-import LoginTest from "./test/loginTestPresenter.js"
-import LoggedInTest from "./test/loggedInTestPresenter.js"
-import Test from "./test/testPresenter.js";
-import Artist from "./presenters/artistPresenter.js"
-import Genres from "./presenters/genrePresenter.js"
+import LoggedInTest from "./test/loggedInTestPresenter";
+import LoginTest from "./test/loginTestPresenter";
+
 // import Layout from "./views/layoutView.js"
 import Login from "./presenters/loginPresenter.js"
 import Home from "./presenters/homePresenter.js"
-import Loading from "./presenters/loadingPresenter.js"
+// import Loading from "./presenters/loadingPresenter.js"
 import Artist from "./presenters/artistPresenter.js"
 import Genres from "./presenters/genrePresenter.js"
 import Parameter from "./presenters/parameterPresenter.js"
@@ -23,30 +22,36 @@ import Source from "./presenters/sourcePresenter.js"
  */
 
 function App() {
-  const dModel = new DiggerModel();
+  const navigate = useNavigate();
+  const [isLoggedIn, setLoggedIn] = useState(false);
+  const dModel = new DiggerModel(setLoggedIn);
   
+  useEffect(() => {
+    if(!isLoggedIn) {
+      navigate("/login");
+    } else {
+      navigate("/");
+    }
+  }, [navigate, isLoggedIn]);
+
   // Routes 
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/"> {/*element={<Layout/>}*/}
-          {/* Default route for / path */}
-          <Route index element={<Login model={dModel}/>}/>
-          <Route path="home" element={<Home model={dModel}/>}/>
-          <Route path="*" element={<NoPage/>}/>
-          <Route path="test" element={<Test model={dModel}/>}/>
-          <Route path="test" element={<Test/>}/>
-          <Route path="login" element={<LoginTest model={dModel}/>}/>
-          <Route path="loggedin" element={<LoggedInTest model={dModel}/>}/>
-          <Route path="artist" element={<Artist model={dModel}/>}/>
-          <Route path="genre" element={<Genres model={dModel}/>}/>
-          <Route path="parameter" element={<Parameter model={dModel}/>}/>
-          <Route path="playlist" element={<Playlist model={dModel}/>}/>
-          <Route path="source" element={<Source model={dModel}/>}/>
-        </Route>
-        <Route path="*" element={<Navigate to="/"/>}/>
-      </Routes>
-    </BrowserRouter>
+    <Routes>
+      <Route path="/"> {/*element={<Layout/>}*/}
+        {/* Default route for / path */}
+        <Route index element={<Home model={dModel}/>}/>
+        <Route path="logine" element={<Login model={dModel} isLoggedIn={isLoggedIn}/>}/>
+        <Route path="login" element={<LoginTest model={dModel}/>}/>
+        <Route path="loggedin" element={<LoggedInTest model={dModel}/>}/>
+        <Route path="home" element={<Home />}/>
+        <Route path="artist" element={<Artist model={dModel}/>}/>
+        <Route path="genre" element={<Genres model={dModel}/>}/>
+        <Route path="parameter" element={<Parameter model={dModel}/>}/>
+        <Route path="playlist" element={<Playlist model={dModel}/>}/>
+        <Route path="source" element={<Source model={dModel}/>}/>
+      </Route>
+      <Route path="*" element={<Navigate to="/"/>}/>
+    </Routes>
   );
 }
 
