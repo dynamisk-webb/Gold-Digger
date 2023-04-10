@@ -4,7 +4,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/dynamisk-webb/Gold-Digger">
-    <img src="graphics/piano.png" height="200">
+    <img src="images/piano.png" height="200">
   </a>
 
   <h3 align="center">Gold Digger - A iprogd Project</h3>
@@ -47,7 +47,7 @@
 
 ## **Description**
 <div >
-  <img src="graphics/frontPage.png" height="350">
+  <img src="images/frontPage.png" height="350">
 </div>
 
 Our web app will help Spotify users generate new playlists from sections of their pre-existing playlists or saved tracks. The user gets to first either select a playlist or their saved tracks and then their preferences in the app according to their current ~mood or ~feel.
@@ -70,14 +70,14 @@ This project depends on Spotify's API to run.
   Dummy Account Email: test.iprogd@gmail.com
   Password: testare_iprogd
 ```
-3. Click through and `Peer-review`
+1. `Peer-review!`
 
 <p align="right">(<a href="readme-top">back to top</a>)</p>
 
 ## **Progress**
-### What we have done
+### Application
 
-The main feature that we will implement into the project:
+The main feature that we implemented into the project:
 - Create a playlist from your saved tracks/a playlist by filtering
   - Parameters to filter from:
     - Genre
@@ -91,9 +91,40 @@ The main feature that we will implement into the project:
 
 Tracks are selected from the specific filters.
 
-### Code 
+We have planned a layout, added functions for API calls and Spotify log-in. The model is also complete and our site is deployed on firebase. The buttons should be functional and simulate the intended user experience although the current playlist is fixed and pre-generated.
 
-Something
+&nbsp;   
+
+### User Experience
+
+We have a clickable <a href="https://www.figma.com/file/3TpeoyPVti5l0aqRASbQL3/Gold-Digger-mock-up?node-id=0%3A1&t=UOCqxbzFzoUMvWx5-1">digital prototype</a> made in Figma that we have used for user testing.
+
+<p align="right">(<a href="readme-top">back to top</a>)</p>
+
+## **Plan**
+### What we plan to do
+
+Our main functionality and playlist generation logic is in progress. What we still have to do:
+- [ ] Playlist generation logic
+- [ ] Complete CSS
+- [ ] Restrict access to routes
+- [ ] Edit final playlist (remove songs)
+- [ ] Spotify-compatible audio player. Plays standby music when loading for suspense
+- [ ] Persistence
+
+If we have time, we'd also like to add a third-party component.
+
+<p align="right">(<a href="readme-top">back to top</a>)</p>
+
+## **Project File Structure**
+
+Project files for the app are under `/gold-digger/`. The code is mainly divided into the folders:
+- `src`
+- `src/presenters/`
+- `src/static/`
+- `src/views/`
+
+### Model
 
 ```javascript
   function example() {
@@ -101,42 +132,39 @@ Something
   }
 ```
 
-Fully clickable digital prototype
-Fixed playlist, pre-generated, code/ui examples?
-
-<p align="right">(<a href="readme-top">back to top</a>)</p>
-
-## **Plan**
-### What we plan to do
-
-There’ll be an audio player on the side
-
-Suspense: Plays standby music when loading in tracks.
-
-Edit final playlist (remove songs).
-
-Add issues
-
-<p align="right">(<a href="readme-top">back to top</a>)</p>
-
-## **Project File Structure**
-
-Source files for the projects are within `/gold-digger/src/`. The files are divided into: `src`, `src/presenters/`, `src/static/`, `src/test/` and `src/views/` folders.
-
-### Model
-
 ### Spotify API
 
 Uses oauth to authorize
 
-```
+```javascript
+  function example() {
+
+  }
 ```
 
 ### Presenters
 
+```javascript
+  function example() {
+
+  }
+```
+
 ### Views
 
+```javascript
+  function example() {
+
+  }
+```
+
 ### Persistence
+
+```javascript
+  function example() {
+
+  }
+```
 
 <p align="right">(<a href="readme-top">back to top</a>)</p>
 

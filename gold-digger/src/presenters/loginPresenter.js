@@ -1,4 +1,3 @@
-
 import LoginView from "../views/loginView.js";
 import {redirect} from "react-router-dom";
 import { useEffect } from "react";
@@ -27,3 +26,5 @@ function Login(props) {
     }
 }
 export default Login;
+
+
