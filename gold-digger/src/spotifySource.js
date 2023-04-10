@@ -9,15 +9,16 @@ Current access token is available in localStorage
 async function getProfile() {
     let response = await generalAPI('/me');
     console.log("Response: " + response.id);
-  }
+}
 
-// TODO: Forbidden authentication, add scopes in authentication
 // TODO: Set limits
-
 /* Getter */
 async function getSavedTracks() { 
   // Add limit and offset to pick out parts or limit amount of tracks
-  return await generalAPI('/me/tracks');
+  const response = await generalAPI('/me/tracks');
+  while(response.next) {
+
+  }
 }
 async function getTracksPlaylist(playlist) {  // Get from playlist
   const fields = "?fields=items(track(name, id))"; // Adjust what is retrieved here

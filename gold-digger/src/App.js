@@ -26,6 +26,7 @@ function App() {
   const [isLoggedIn, setLoggedIn] = useState(false);
   const dModel = new DiggerModel(setLoggedIn);
   
+  /*
   useEffect(() => {
     if(!isLoggedIn) {
       navigate("/login");
@@ -33,6 +34,7 @@ function App() {
       navigate("/");
     }
   }, [navigate, isLoggedIn]);
+  */
 
   // Routes 
   return (
