@@ -19,7 +19,10 @@ import { redirect } from "react-router-dom";
  */
 function Playlist (props) {
 
-    let tracks = [];
+    //let tracks = [{title: "hej", artists: "test", album: "no", time:"yes"}];
+    let tracks = props.model.generated.tracks;
+    let playlistName = props.model.generated.playlist;
+    console.log(props.model.generated.playlist);
 
     // lifecycle
     function onMount(){
@@ -31,6 +34,11 @@ function Playlist (props) {
                     // album
                     // time
 
+                    /*<h2>{track.title}</h2>
+            <p>{track.artists}</p>
+            <p>{track.album}</p>
+            <p>{track.time}</p> */
+
         function onMounted() {
             // do stuff
             return;
@@ -40,7 +48,7 @@ function Playlist (props) {
 
 
     return (
-        <PlaylistView generatedTracks={tracks} removeTrack={removeTrackACB} getPlaylistURL={getPlaylistURLACB} setAudioPlayerSong={setAudioPlayerSongACB} returnHome={returnHomeACB}></PlaylistView>
+        <PlaylistView generatedTracks={tracks} generatedName={playlistName} removeTrack={removeTrackACB} getPlaylistURL={getPlaylistURLACB} setAudioPlayerSong={setAudioPlayerSongACB} returnHome={returnHomeACB}></PlaylistView>
     );
 
     
