@@ -173,7 +173,7 @@ class DiggerModel{
             redirectToSpotifyLogIn();
             this.setLogin(true);
         } catch (error) {
-            
+            alert("Error logging in.");
         }
     }
     

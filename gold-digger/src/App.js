@@ -7,7 +7,7 @@ import DiggerModel from "./DiggerModel.js";
 import LoggedInTest from "./test/loggedInTestPresenter";
 import LoginTest from "./test/loginTestPresenter";
 
-// import Layout from "./views/layoutView.js"
+import Layout from "./views/layoutView.js"
 import Login from "./presenters/loginPresenter.js"
 import Home from "./presenters/homePresenter.js"
 // import Loading from "./presenters/loadingPresenter.js"
@@ -39,7 +39,7 @@ function App() {
   // Routes 
   return (
     <Routes>
-      <Route path="/"> {/*element={<Layout/>}*/}
+      <Route path="/" element={<Layout/>}>
         {/* Default route for / path */}
         <Route index element={<Home model={dModel}/>}/>
         <Route path="logine" element={<Login model={dModel} isLoggedIn={isLoggedIn}/>}/>

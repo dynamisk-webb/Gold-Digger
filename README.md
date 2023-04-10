@@ -7,10 +7,10 @@
     <img src="images/piano.png" height="200">
   </a>
 
-  <h3 align="center">Gold Digger - A iprogd Project</h3>
+  <h3 align="center">Gold Digger</h3>
 
   <p align="center">
-    Web site that generates a Spotify playlist based on selected parameters and your own library.
+    A iprogd Project Web site that generates a Spotify playlist based on selected parameters and your own library.
     <br />
     <br />
     <a href="https://gold-digger-be2ef.web.app/">Deployed Site</a>
@@ -72,7 +72,7 @@ This project depends on Spotify's API to run.
 ```
 1. `Peer-review!`
 
-<p align="right">(<a href="readme-top">back to top</a>)</p>
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## **Progress**
 ### Application
@@ -99,7 +99,7 @@ We have planned a layout, added functions for API calls and Spotify log-in. The 
 
 We have a clickable <a href="https://www.figma.com/file/3TpeoyPVti5l0aqRASbQL3/Gold-Digger-mock-up?node-id=0%3A1&t=UOCqxbzFzoUMvWx5-1">digital prototype</a> made in Figma that we have used for user testing.
 
-<p align="right">(<a href="readme-top">back to top</a>)</p>
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## **Plan**
 ### What we plan to do
@@ -114,7 +114,7 @@ Our main functionality and playlist generation logic is in progress. What we sti
 
 If we have time, we'd also like to add a third-party component.
 
-<p align="right">(<a href="readme-top">back to top</a>)</p>
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## **Project File Structure**
 
@@ -166,7 +166,7 @@ Uses oauth to authorize
   }
 ```
 
-<p align="right">(<a href="readme-top">back to top</a>)</p>
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## **Contact**
 Jessica Gorwat – jgorwat@kth.se
@@ -177,7 +177,7 @@ Maria Moliteus – moliteus@kth.se
 
 Rej Karlander – isakkar@kth.se
 
-<p align="right">(<a href="readme-top">back to top</a>)</p>
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- Links & Images -->
 [spotify-shield]:https://camo.githubusercontent.com/f63f025c4f4797f4e0cf1904d1c87d02179a369b11948d5023af396d30dcad7b/68747470733a2f2f696d672e736869656c64732e696f2f7374617469632f76313f7374796c653d666f722d7468652d6261646765266d6573736167653d53706f7469667926636f6c6f723d314442393534266c6f676f3d53706f74696679266c6f676f436f6c6f723d464646464646266c6162656c3d

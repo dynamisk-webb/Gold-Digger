@@ -7,7 +7,7 @@ https://developer.spotify.com/documentation/web-api/tutorials/code-pkce-flow
 Current access token is available in localStorage
 */
 async function getProfile() {
-    let response = await generalAPI('/me');
+    let response = await generalAPI('v1/me');
     console.log("Response: " + response.id);
 }
 
@@ -15,10 +15,18 @@ async function getProfile() {
 /* Getter */
 async function getSavedTracks() { 
   // Add limit and offset to pick out parts or limit amount of tracks
-  const response = await generalAPI('/me/tracks');
-  while(response.next) {
+  let response = await generalAPI('/me/tracks');
+  const list =  [...response.items]; 
 
+  /* TODO: test
+  while(response.next) {
+    const next = response.next.replace('https://api.spotify.com/v1', '');
+    response = await generalAPI(next);
+    list.push(...response.items);
   }
+  */
+
+  return list;
 }
 async function getTracksPlaylist(playlist) {  // Get from playlist
   const fields = "?fields=items(track(name, id))"; // Adjust what is retrieved here
