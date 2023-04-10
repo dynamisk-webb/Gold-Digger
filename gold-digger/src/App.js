@@ -30,7 +30,6 @@ function App() {
     if(!isLoggedIn) {
       navigate("/login");
     } else {
-      navigate("/");
     }
   }, [navigate, isLoggedIn]);
 
