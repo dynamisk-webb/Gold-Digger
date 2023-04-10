@@ -9,22 +9,33 @@ For each previous playlist Event: onClick inspect playlist
 */
 import HomeView from "../views/homeView.js";
 import {redirect} from "react-router-dom";
+import { useEffect } from "react";
 
 
-function Home() {
+function Home(props) {
+
+    useEffect(onMountedACB, []);
 
     return (
       <HomeView connectSpotify={connectSpotifyACB} generatePlaylist={generatePlaylistACB}></HomeView>  
     );
 
     /* Lifecycle */
-    function onMountedACB () {
+    function onMountedACB() {
+        console.log("Lifecycle!");
+        console.log("access: " + localStorage.getItem("access-token"));
 
-        function onUnMountedACB () {
-            return;
+        if (localStorage.getItem("access-token") === null) {
+            localStorage.setItem("access-token", "in progress")
+            props.model.requestToken();
         }
-        return;
+
+        // ACB to run at the end
+        return function onUnmountedACB() {
+            console.log("Cleanup!");
+        }
     }
+    
 
     function connectSpotifyACB() {
         // login();

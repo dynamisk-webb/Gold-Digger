@@ -172,7 +172,6 @@ class DiggerModel{
     }
     
     requestToken() {
-        console.log("Request access token");
         requestAccessToken();
     }
 
