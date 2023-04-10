@@ -181,6 +181,8 @@ button{
   margin: 3% 0 3% 0;
   width: 60%;
   font-size: 25px;
+  background-color: #2b2b2b;
+  color: gray;
 }
 
 #sourceSaved{
