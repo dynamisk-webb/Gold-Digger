@@ -7,7 +7,8 @@ import { getProfile } from "./spotifySource.js";
  * Model keeps abstract data
  */
 class DiggerModel{
-    constructor(setState, userid=null, prevPlaylists=[], acoustic=false, danceable=false) {
+
+    constructor(userid=null, prevPlaylists=[], acoustic=false, danceable=false) {
         this.userid = userid;
         this.source = null;
         this.generated = {playlist: null, tracks: []};
@@ -22,7 +23,6 @@ class DiggerModel{
         this.acoustic = acoustic;
 
         this.observers = [];
-        this.setLogin = setState;
     }
 
     /**
@@ -54,6 +54,7 @@ class DiggerModel{
     setTempo(min, max) {    // Sets min and max tempo (in bpm)
         if(this.tempo.min !== min || this.tempo.max !== max) {
             this.tempo = {min: min, max: max};
+            console.log("Min: " + min + " Min: " + min);
             this.notifyObservers("tempo");
         }
     }
@@ -170,7 +171,6 @@ class DiggerModel{
     login() {
         try {
             redirectToSpotifyLogIn();
-            this.setLogin(true);
         } catch (error) {
             alert("Error logging in.");
         }

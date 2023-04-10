@@ -1,52 +1,29 @@
-/*
-
-TODO
-
-Props: Parameters (tempo, loudness, instrumentalness, danceable, acoustic)
-
-Event: onClick go back to previous page
-Event: Set tempo min/max
-Set limits
-Tool tip bpm
-Event: Set loudness min/max
-Set limits
-Tool tip about db
-Event: Set instrumentalness min/max
-Set limits
-Tool tip about instrumentalness
-Event: onSwitch set/unset danceable
-Set limits
-Tool tip about WTF IT IS?
-Event: onSwitch set/unset acoustic
-Set limits
-Tool tip about acousticness
-Event: onClick window.location to Loading
-
-
-*/
-
 import FilterView from "../views/filterView";
 import ParameterView from "../views/parameterView";
-import {redirect} from "react-router-dom";
 
 function Parameters (props) {
 
     return (
         <div>
             <FilterView filterType="parameter" title="Additional Parameters" nextTitle="Generate"></FilterView>
-            <ParameterView></ParameterView>
+            <ParameterView changeTempo={changeTempoACB} changeLoudness={changeLoudnessACB} changeInstrumentalness={changeInstrumentalnessACB} changeDanceable={changeDanceableACB} changeAcoustic={changeAcousticACB}></ParameterView>
         </div>
     );
-
-    /* Event: onClick go to next page */
-    function goForwardACB () {
-        return redirect("/artists");  // TODO: get url for this
-    }
     
-    /* Event: onClick go back to previous page */
-    function goBackACB () {
-        // return redirect("/login");
-        return redirect("/genres"); // TODO: get url for this
+    function changeTempoACB(arr) {
+        props.model.setTempo(arr[0], arr[1]);
+    }
+    function changeLoudnessACB(arr) {
+        props.model.setLoudness(arr[0], arr[1]);
+    }
+    function changeInstrumentalnessACB(arr) {
+        props.model.setInstrumentalness(arr[0], arr[1]);
+    }
+    function changeDanceableACB(value) {
+        props.model.setDanceable(value);
+    }
+    function changeAcousticACB(value) {
+        props.model.setAcoustic(value);
     }
 }
 

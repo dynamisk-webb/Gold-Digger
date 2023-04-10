@@ -22,6 +22,7 @@ function Login(props) {
     }
 
     function connectSpotifyACB() {
+        props.isLoggedIn(true);
         props.model.login();
     }
 }
