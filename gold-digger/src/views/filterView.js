@@ -6,10 +6,10 @@ function FilterView(props){
     const navigate = useNavigate(); // So React doesn't complain about React components
 
     return(
-        <div>
-            <button onClick={returnACB}></button>
-            <h1>{props.title}</h1>
-            <button onClick={continueACB}>{props.nextTitle}</button>
+        <div id="filterGrid">
+            <button id="filterReturnButton" onClick={returnACB}></button>
+            <h1 id="filterTitle">{props.title}</h1>
+            <button id="filterForwardButton" onClick={continueACB}>{props.nextTitle}</button>
         </div>
     );
 
