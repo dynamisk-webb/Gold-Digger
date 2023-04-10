@@ -1,38 +1,32 @@
-/*
-TODO
-
-Props: Genres want/unwanted
-Component state members: Search term
-Lifecycle: GET /recommendations/available-genre-seeds (only available genres from the library/playlist)
-Event: Set search term in component state
-GET /search type:genre
-Event: onCheck set/unset genres
-Event: onClick window.location to Parameters
-
-*/
 import FilterView from "../views/filterView.js";
 import SearchView from "../views/searchView.js";
 import GenreResultView from "../views/genreResultView.js";
-import {redirect} from "react-router-dom";
+import {getGenres } from "../spotifySource.js";
+import promiseNoData from "../views/promiseNoData.js";
+import { useEffect, useState } from "react";
+import resolvePromise from "../resolvePromise.js";
 
 function Genres(props) {
+    const [promiseState, setPromise] = useState({});
+    useEffect(onMountACB, []);
 
-    return (
+    return promiseNoData(promiseState) || (
         <div>
-            <FilterView filterType="genre" title="Select Genres" nextTitle="Next"></FilterView>
+            <FilterView filterType="genre" title="Select Genres" nextTitle="Next" genreResults={} setSelectDeselect={setSelectDeselectACB}></FilterView>
             <SearchView></SearchView>
             <GenreResultView></GenreResultView>
         </div>
-    );
-    
-    /* Event: onClick go to next page */
-    function goForwardACB () {
-        return redirect("/parameters");  // TODO: get url for this
+        );
+
+    function setSelectDeselectACB(genre , mode) {
+        if(mode === 1) {
+            props.model.addGenre(genre);
+        } else if(mode === -1) {
+            props.model.removeGenre(genre);
+        }
     }
-    
-    /* Event: onClick go back to previous page */
-    function goBackACB () {
-        return redirect("/source"); // TODO: get url for this
+    function onMountACB() {
+        resolvePromise(getGenres, promiseState, setPromise);
     }
 }
 

@@ -1,12 +1,4 @@
-/*
 
-TODO
-
-Lifecycle: GET prev playlists from Firebase
-For each previous playlist Event: onClick inspect playlist
-
-
-*/
 import HomeView from "../views/homeView.js";
 import {redirect} from "react-router-dom";
 import { useEffect } from "react";
@@ -16,10 +8,15 @@ function Home(props) {
     useEffect(onMountedACB, []);
 
     return (
-      <HomeView connectSpotify={connectSpotifyACB} generatePlaylist={generatePlaylistACB} logOut={logOutACB}></HomeView>  
+      <HomeView generatePlaylist={generatePlaylistACB} logOut={logOutACB}></HomeView>  
     );
 
-    /* Lifecycle */
+    /*
+
+    Lifecycle: GET prev playlists from Firebase
+    For each previous playlist Event: onClick inspect playlist
+
+    */
     function onMountedACB() {
         console.log("Lifecycle!");
         console.log("access: " + localStorage.getItem("access-token"));
@@ -37,11 +34,6 @@ function Home(props) {
     
     function logOutACB(){
         props.model.setLogin(false);
-    }
-
-    function connectSpotifyACB() {
-        // login();
-        // requestToken();
     }
     
     /* Event: Set window location to Source */

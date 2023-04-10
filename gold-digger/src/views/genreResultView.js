@@ -19,7 +19,7 @@ function GenreResultView(props){
         return (
             <div> 
                 <p>result.title</p>
-                <Checkbox id="genreCheck" onclick={selectDeselectGenreACB}></Checkbox>
+                <Checkbox id="genreCheck" onClick={selectDeselectGenreACB}></Checkbox>
             </div>
         ) 
     }

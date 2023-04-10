@@ -17,11 +17,6 @@ function HomeView(props){
 
     //https://www.w3schools.com/howto/howto_js_toggle_hide_show.asp <-- TO HIDE BUTTONS
 
-    /*
-    function connectSpotifyACB(evt){
-        props.connectSpotify();
-    } 
-    */
    function logOutACB(evt){
         props.logOut();
    }
