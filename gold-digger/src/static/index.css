@@ -59,6 +59,23 @@ button{
   background-color: #FF6B35;
 }
 
+.parameterSlider{
+  grid-column: 3 / span 1;
+  color:#FF6B35;
+  width:50%;
+  margin-left: 20%;
+}
+
+.parameterSwitch{
+  grid-column: 3 / span 1;
+  color:#FF6B35;;
+  margin-left: 20%;
+}
+
+.parameterSubTitle{
+  grid-column: 2 / span 1;
+}
+
 /* ------------------- IDs ------------------- */
 
 /*  H O M E */
@@ -176,9 +193,25 @@ button{
   font-size: 25px;
 }
 
-/* F I L T E R */
+/* PARAMETER PRESENTER */
+
+#parameterMainGrid{
+  position:fixed;
+  top:0;
+  left:0;
+
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr 3fr 1fr;
+  grid-template-rows: 1fr 3fr 1fr;
+}
+
+/* FILTERVIEW */
 
 #filterGrid{
+  grid-row: 1 /span 3;
+  grid-column: 1/span 3;
   position:fixed;
   top:0;
   left:0;
@@ -217,6 +250,24 @@ button{
   justify-self: center;
   align-self: center;
 }
+
+/* PARAMETER VIEW*/
+#parameterGridPlacement{
+  grid-row: 2 /span 1;
+  grid-column: 1/span 3;
+}
+
+#parameterGrid{
+  grid-row: 2 /span 1;
+  grid-column: 1/span 3;
+  grid-template-columns: 50px 1fr 2fr 2fr;
+  grid-template-rows: 1fr 2fr 0.5fr;
+}
+
+#tempoSlider{
+  
+}
+
 
 #layout{
   position:fixed;

@@ -4,9 +4,9 @@ import ParameterView from "../views/parameterView";
 function Parameters (props) {
 
     return (
-        <div>
+        <div id="parameterMainGrid">
             <FilterView filterType="parameter" title="Additional Parameters" nextTitle="Generate"></FilterView>
-            <ParameterView changeTempo={changeTempoACB} changeLoudness={changeLoudnessACB} changeInstrumentalness={changeInstrumentalnessACB} changeDanceable={changeDanceableACB} changeAcoustic={changeAcousticACB}></ParameterView>
+            <ParameterView id="parameterGridPlacement" model={props.model} changeTempo={changeTempoACB} changeLoudness={changeLoudnessACB} changeInstrumentalness={changeInstrumentalnessACB} changeDanceable={changeDanceableACB} changeAcoustic={changeAcousticACB}></ParameterView>
         </div>
     );
     
