@@ -91,13 +91,15 @@ The main feature that we implemented into the project:
 
 Tracks are selected from the specific filters.
 
-We have planned a layout, added functions for API calls and Spotify log-in. The model is also complete and our site is deployed on firebase. The buttons should be functional and simulate the intended user experience although the current playlist is fixed and pre-generated.
+We have planned our layout, added functions for API calls and Spotify log-in (through `OAuth 2.0`). The model is also complete and our site is deployed on firebase. The buttons should be functional and simulate the intended user experience but the current playlist, artists and genres are fixed so it most buttons don't run any API calls.
+
+We have also implemented routing with the use of React's router system and restricts access to specific routes.
 
 &nbsp;   
 
 ### User Experience
 
-We have a clickable <a href="https://www.figma.com/file/3TpeoyPVti5l0aqRASbQL3/Gold-Digger-mock-up?node-id=0%3A1&t=UOCqxbzFzoUMvWx5-1">digital prototype</a> made in Figma that we have used for user testing.
+We have a clickable <a href="https://www.figma.com/file/3TpeoyPVti5l0aqRASbQL3/Gold-Digger-mock-up?node-id=0%3A1&t=UOCqxbzFzoUMvWx5-1">digital prototype</a> made in Figma that we have used for the first user testing which represents our vision.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -106,65 +108,39 @@ We have a clickable <a href="https://www.figma.com/file/3TpeoyPVti5l0aqRASbQL3/G
 
 Our main functionality and playlist generation logic is in progress. What we still have to do:
 - [ ] Playlist generation logic
-- [ ] Complete CSS
-- [ ] Restrict access to routes
-- [ ] Edit final playlist (remove songs)
-- [ ] Spotify-compatible audio player. Plays standby music when loading for suspense
+- [ ] Complete appearance
+  - [ ] Better CSS
+  - [ ] Functional search bar
+  - [ ] Proper display of playlists
+- [ ] Edit final playlist (remove songs) and saving it to Spotify
+- [ ] Implement API calls
+- [ ] Suspense
+  - [ ] Spotify-compatible audio player that plays standby music when loading for suspense
 - [ ] Persistence with ``Firebase``
 
-If we have time, we'd also like to add a third-party component.
+If we have time, we'd like to add a third-party component.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## **Project File Structure**
 
+We're following the MVP-architecture for the project.
+
 Project files for the app are under `/gold-digger/`. The code is mainly divided into the folders:
-- `src`
-- `src/presenters/`
-- `src/static/`
-- `src/views/`
-
-### Model
-
-```javascript
-  function example() {
-
-  }
-```
+- `src` contains DiggerModel.js, App.js, index.js that renders the app and source-files with authentication and api calls
+- `src/presenters/` contains our presenters 
+- `src/static/` contains CSS files
+- `src/views/`contains our views 
+- `src/test/` contains test files for API calls and log in
 
 ### Spotify API
 
-Uses oauth to authorize
+We use Spotify's own API to implement our app. It requires authorize `OAuth 2.0` and redirects to Spotify's log in page. Our authentication implementation is defined in `authentication.js` 
 
-```javascript
-  function example() {
+The API calls we run currently:
+- Fetch access token with ``requestAccessToken()`` in `authentication.js`
 
-  }
-```
-
-### Presenters
-
-```javascript
-  function example() {
-
-  }
-```
-
-### Views
-
-```javascript
-  function example() {
-
-  }
-```
-
-### Persistence
-
-```javascript
-  function example() {
-
-  }
-```
+The others are defined but not yet tested in `spotifySource.js`. 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
