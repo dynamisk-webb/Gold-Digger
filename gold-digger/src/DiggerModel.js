@@ -7,7 +7,6 @@ import { getProfile } from "./spotifySource.js";
  * Model keeps abstract data
  */
 class DiggerModel{
-
     constructor(setState, userid=null, prevPlaylists=[], acoustic=false, danceable=false) {
         this.userid = userid;
         this.source = null;
@@ -73,7 +72,6 @@ class DiggerModel{
     }
     setGenerated(generate) {    // Sets generated playlist and adds to prev playlists
         this.generated = generate;
-        this.addToPrevPlaylists(generate); // Add to previously generated playlists
         this.notifyObservers("generate");
     }
     setDanceable(bool) {    // Sets danceability (how suitable it is for dancing) from 0.0 to 1.0

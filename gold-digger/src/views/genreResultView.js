@@ -10,15 +10,15 @@ function GenreResultView(props){
             // TODO: Evaluate if this work, getElementById could be an issue
             const checkBox = document.getElementById("genreCheck");
             if (checkBox.checked){
-                props.setSelectDeselect(result.genre, 1);
+                props.setSelectDeselect(result, 1);
               } else {
-                props.setSelectDeselect(result.genre, -1);
+                props.setSelectDeselect(result, -1);
               }
         }
 
         return (
             <div> 
-                <p>result.title</p>
+                <p>result</p>
                 <Checkbox id="genreCheck" onClick={selectDeselectGenreACB}></Checkbox>
             </div>
         ) 

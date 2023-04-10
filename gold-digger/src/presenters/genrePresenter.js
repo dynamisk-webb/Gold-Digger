@@ -10,13 +10,13 @@ function Genres(props) {
     const [promiseState, setPromise] = useState({});
     useEffect(onMountACB, []);
 
-    return promiseNoData(promiseState) || (
+    return (
         <div>
-            <FilterView filterType="genre" title="Select Genres" nextTitle="Next" genreResults={} setSelectDeselect={setSelectDeselectACB}></FilterView>
+            <FilterView filterType="genre" title="Select Genres" nextTitle="Next" ></FilterView>
             <SearchView></SearchView>
-            <GenreResultView></GenreResultView>
+            {promiseNoData(promiseState) || <GenreResultView genreResults={promiseState.data} setSelectDeselect={setSelectDeselectACB}></GenreResultView>}
         </div>
-        );
+    );
 
     function setSelectDeselectACB(genre , mode) {
         if(mode === 1) {
@@ -26,7 +26,8 @@ function Genres(props) {
         }
     }
     function onMountACB() {
-        resolvePromise(getGenres, promiseState, setPromise);
+        resolvePromise(getGenres(), promiseState, setPromise);
+
     }
 }
 
