@@ -100,8 +100,7 @@ function requestAccessToken() {
         console.log("access token: " +  data.access_token);
 
         // set expire time
-        //const expire_time = new Date(new Date().getTime() + data.expires_in*1000);
-        const expire_time = new Date().getTime() + 10*1000;
+        const expire_time = new Date(new Date().getTime() + data.expires_in*1000);
         localStorage.setItem('expire-time', expire_time);
 
         // set refresh token

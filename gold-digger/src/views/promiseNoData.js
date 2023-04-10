@@ -3,7 +3,6 @@
 */
 
 function promiseNoData(searchPromiseState) {
-    
     if(searchPromiseState.promise) {
         if (!searchPromiseState.data) {
             if (!searchPromiseState.error) {
