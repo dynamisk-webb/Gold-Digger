@@ -1,8 +1,22 @@
 import "../static/App.css"
+import {useEffect, useState} from "react"
+import {useNavigate} from "react-router-dom"
 
 function LoggedInTestView(props) {
-    //console.log("testView rendered!");
-    
+    // Example of log out and how to use useEffect()
+    const navigate = useNavigate();
+    const [loggedIn, setLoggedIn] = useState(true);
+
+    function checkLogIn() {
+        // Can make an access token check somewhere here also
+        // constant access_token = localStorage.getItem("access-token");
+
+        if(!loggedIn) {
+            navigate("/login");
+        }
+    }
+    useEffect(checkLogIn, [navigate, loggedIn]); // Checks for loggedIn and navigate and runs checkLogin
+
     return (
         <div>
             <h1>
@@ -17,6 +31,10 @@ function LoggedInTestView(props) {
                 <button type="button" onClick={onRequestGetProfileACB}>Example API-call</button>
                 <div>Response prints to console</div>
             </div>
+            <div>
+                <button type="button" onClick={onCallACB}>Test function</button>
+                <button type="button" onClick={redirectCB}>Redirect to login</button>
+            </div>
         </div>
     )
 
@@ -26,6 +44,14 @@ function LoggedInTestView(props) {
 
     function onRequestTokenACB() {
         props.onRequestToken();
+    }
+
+    function onCallACB() {
+        props.onAPICall();
+    }
+
+    function redirectCB() {
+        setLoggedIn(false); // Set loggedIn to false to initiate checkLogIn
     }
 
 }

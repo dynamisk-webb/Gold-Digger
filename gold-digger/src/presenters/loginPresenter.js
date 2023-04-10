@@ -6,7 +6,6 @@ Redirect to Home
 
 
 */
-<<<<<<< Updated upstream
 import LoginView from "../views/loginView.js";
 import {redirect} from "react-router-dom";
 
@@ -26,19 +25,3 @@ function Login(props) {
 }
 
 export default Login;
-=======
-
-function Login() {
-    return (
-        <loginView onClick={authorizePKCE_ACB}></loginView>
-    );
-
-    function authorizePKCE_ACB() {
-
-    }
-
-    // Redirect to home (?) router thingy
-}
-
-export default Login;
->>>>>>> Stashed changes
