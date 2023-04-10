@@ -1,18 +1,29 @@
+import {useNavigate} from "react-router-dom"
+
+
 function FilterView(props){
+
+    const navigate = useNavigate(); // So React doesn't complain about React components
+
     return(
         <div>
             <button onClick={returnACB}></button>
             <h1>{props.title}</h1>
-            <button onClick={continueACB}>Next</button>
+            <button onClick={continueACB}>{props.nextTitle}</button>
         </div>
     );
 
     function returnACB(){
-        props.goBack(); 
+        navigate(-1);
     }
 
     function continueACB(){
-        props.goForward();
+        if(props.filterType == "genres")
+            navigate("/artist");
+        else if(props.filterType == "artist")
+            navigate("/parameter");
+        else if(props.filterType == "parameter")
+            navigate("/playlist");
     }
 }
 

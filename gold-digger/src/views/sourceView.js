@@ -1,6 +1,8 @@
 import piano from "./../img/piano.png";
+import {useNavigate} from "react-router-dom"
 
 function SourceView(props){
+    const navigate = useNavigate(); // So React doesn't complain about React components
 
     //TODO: make the playlist button into some form of input box
     return (<div id="sourceGrid">
@@ -13,6 +15,7 @@ function SourceView(props){
 
     //TODO: make this work (depending on the solution provided for the playlist)
     function setSourceACB(evt){
+        navigate("/genre");
         props.setSource(evt.target.value);
     }
 }

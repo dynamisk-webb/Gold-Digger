@@ -19,7 +19,7 @@ function Genres(props) {
 
     return (
         <div>
-            <FilterView goBack={goBackACB} goForward={goForwardACB}></FilterView>
+            <FilterView filterType="genre" title="Select Genres" nextTitle="Next"></FilterView>
             <SearchView></SearchView>
             <GenreResultView></GenreResultView>
         </div>

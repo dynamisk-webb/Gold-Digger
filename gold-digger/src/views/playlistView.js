@@ -1,5 +1,9 @@
+import {useNavigate} from "react-router-dom"
 function PlaylistView(props){
-    return (<div class>
+
+    const navigate = useNavigate(); // So React doesn't complain about React components
+
+    return (<div>
         <p>Playlist added to your spotify!</p>
         <h1>Generic Playlist Name uwu #1</h1>
         <button onClick={copyLinkACB()}>copy link</button>
@@ -14,7 +18,7 @@ function PlaylistView(props){
     }
 
     function returnHomeACB(){
-
+        navigate("/home");
     }
 
     

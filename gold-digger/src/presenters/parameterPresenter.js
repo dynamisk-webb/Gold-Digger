@@ -33,7 +33,7 @@ function Parameters (props) {
 
     return (
         <div>
-            <FilterView goBack={goBackACB} goForward={goForwardACB}></FilterView>
+            <FilterView filterType="parameter" title="Additional Parameters" nextTitle="Generate"></FilterView>
             <ParameterView></ParameterView>
         </div>
     );

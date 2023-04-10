@@ -27,7 +27,7 @@ function Artists(props) {
     // TODO: add parameter setIncludeExclude 
     return (
         <div>
-            <FilterView goBack={goBackACB} goForward={goForwardACB}></FilterView>
+            <FilterView filterType="artist" title="Include or Exclude Artists" nextTitle="Next"></FilterView>
             <SearchView></SearchView>
             <ArtistResultView></ArtistResultView>
         </div>

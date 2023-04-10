@@ -1,7 +1,10 @@
 
 import piano from "./../img/piano.png";
+import {useNavigate} from "react-router-dom"
 
 function HomeView(props){
+    const navigate = useNavigate(); // So React doesn't complain about React components
+    
     return (
     <div id="homeGrid">
         <h1 id="homeTitle">Gold Digger</h1>
@@ -24,6 +27,7 @@ function HomeView(props){
    }
 
     function generatePlaylistACB(evt){
+        navigate("/source");
         props.generatePlaylist();
     }
 };
