@@ -1,9 +1,12 @@
 
 import LoginView from "../views/loginView.js";
 import {redirect} from "react-router-dom";
+import { useEffect } from "react";
 
 
 function Login(props) {
+
+    useEffect(onMountedACB, []);
 
     return (
       <LoginView connectSpotify={connectSpotifyACB}></LoginView>  
@@ -11,6 +14,7 @@ function Login(props) {
 
     /* Lifecycle */
     function onMountedACB () {
+        localStorage.removeItem("access-token");
 
         function onUnMountedACB () {
             return;
