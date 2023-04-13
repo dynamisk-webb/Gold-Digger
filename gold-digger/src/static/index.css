@@ -221,6 +221,12 @@ button{
 
 }
 
+#genreResults{
+  position: fixed;
+  top:0;
+  left:0;
+}
+
 /* PARAMETER PRESENTER */
 
 #parameterMainGrid{

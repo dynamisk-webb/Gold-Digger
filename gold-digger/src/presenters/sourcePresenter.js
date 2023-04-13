@@ -7,7 +7,7 @@ function Source (props) {
 
     /* Event: onInput set playlist ID */    
     function setPlaylistIDACB(value){
-        props.model.setGenerated(value);
+        props.model.setSource(value);
     }
 }
 export default Source;

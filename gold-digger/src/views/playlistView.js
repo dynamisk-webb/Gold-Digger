@@ -6,16 +6,15 @@ function PlaylistView(props){
     return (<div>
         <p>Playlist added to your spotify!</p>
         <h1>{props.generatedName}</h1>
-        <button onClick={copyLinkACB}>add list to your account</button>
-        <button onClick={copyLinkACB}>copy link</button>
+        <button onClick={savePlaylistToSpotifyACB}>add list to your account</button>
         <button id="homeButton" onClick={returnHomeACB}></button>
         <div class="scrollable">
             {props.generatedTracks.map(getSongInfoACB)}
         </div>
     </div>);
 
-    function copyLinkACB(){
-
+    function savePlaylistToSpotifyACB(){
+        props.savePlaylistToSpotify();
     }
 
     function returnHomeACB(){
@@ -23,11 +22,11 @@ function PlaylistView(props){
     }
 
     
-    function getSongInfoACB(track){
+    function getSongInfoACB(item){
         return (<div>
             <img></img>
             {/*Should display more info in the future*/}
-            <h2>{track.track.name}</h2>
+            <h2>{item.track.name}</h2>
         </div>);
     }
 }
