@@ -145,7 +145,9 @@ class DiggerModel{
         }
     }
 
-    // Observers
+    /**
+     * Observers
+     */
     addObserver(callback) {
         this.observers = [...this.observers, callback];
     }
@@ -166,22 +168,42 @@ class DiggerModel{
         this.observers.forEach(invokeCB);
     }
 
-    // Login functions
+
+    /**
+     * Login/Logout
+     */
+
+    // Redirects to Spotify's login page
     login() {
         try {
-            localStorage.setItem("log-in", true);
             redirectToSpotifyLogIn();
+            localStorage.setItem("log-in", "true");
         } catch (error) {
             alert("Error logging in.");
         }
     }
     
+    // Should be run after we have been redirected back from Spotify's login page
     requestToken() {
-        requestAccessToken();
+        try {
+            requestAccessToken();
+        } catch (error) {
+            alert("Error logging in.");
+        }
     }
 
-    // API calls
-    requestGetProfile() {   // Example
+    // Logout current user
+    logout() {
+        localStorage.setItem("log-in", "false");
+        localStorage.removeItem("access-token");
+        console.log("LOGOUT");
+    }
+
+
+    /**
+     * Example API-call
+     */
+    requestGetProfile() { 
         getProfile();
     }
 }

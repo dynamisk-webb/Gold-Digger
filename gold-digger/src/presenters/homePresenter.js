@@ -6,7 +6,7 @@ import PrevlistView from "../views/prevListView.js";
 
 
 function Home(props) {
-    useEffect(onMountedACB, []);
+    useEffect(onMountedACB, [props.model]);
 
     return (
       <HomeView generatePlaylist={generatePlaylistACB} logOut={logOutACB}></HomeView>  
@@ -22,9 +22,11 @@ function Home(props) {
         console.log("Lifecycle!");
         console.log("access: " + localStorage.getItem("access-token"));
 
-        if (localStorage.getItem("access-token") === null) {
-            localStorage.setItem("access-token", "in progress")
+        if (localStorage.getItem("access-token") === null && localStorage.getItem("log-in") === "true") {
+            localStorage.setItem("access-token", "in progress");
             props.model.requestToken();
+        } else {
+            props.model.logout();
         }
 
         // ACB to run at the end
@@ -34,7 +36,9 @@ function Home(props) {
     }
     
     function logOutACB(){
-        props.model.setLogin(false);
+        props.model.setLogin("false");
+        props.model.logout();
+        console.log("set isloggedin to false");
     }
     
     /* Event: Set window location to Source */

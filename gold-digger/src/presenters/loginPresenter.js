@@ -14,6 +14,7 @@ function Login(props) {
     /* Lifecycle */
     function onMountedACB () {
         localStorage.removeItem("access-token");
+        localStorage.setItem("log-in", "false"); // should be moved to when we navigate to login
 
         function onUnMountedACB () {
             return;

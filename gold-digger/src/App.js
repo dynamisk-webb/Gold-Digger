@@ -22,15 +22,18 @@ import Source from "./presenters/sourcePresenter.js"
 
 function App() {
   const navigate = useNavigate();
-  const [isLoggedIn, setLoggedIn] = useState(localStorage.getItem("log-in"));
-  const dModel = new DiggerModel(setLoggedIn);
+  const [isLoggedIn, setLoggedIn] = useState("false");
+  const dModel = new DiggerModel(isLoggedIn, setLoggedIn);
   dModel.setGenerated(fixedPlaylist);
   
   useEffect(() => {
-    if(!isLoggedIn) {
+    if(localStorage.getItem("log-in") === "true") {
+      console.log("you are somehow logged in (log-in: " + localStorage.getItem("log-in") + ")");
+    } else {
       navigate("/login");
+      console.log("you are not logged in (log-in: " + localStorage.getItem("log-in") + ")");
     }
-  }, [navigate, isLoggedIn]);
+  }, [navigate]);
 
   // Routes 
   return (
@@ -38,6 +41,7 @@ function App() {
       <Route path="/" element={<Layout/>}>
         {/* Default route for / path */}
         <Route index element={<Home model={dModel}/>}/>
+        <Route path="home" element={<Home model={dModel}/>}/>
         <Route path="login" element={<Login model={dModel}/>}/>
         <Route path="artist" element={<Artist model={dModel}/>}/>
         <Route path="genre" element={<Genres model={dModel}/>}/>
