@@ -19,6 +19,7 @@ function HomeView(props){
 
    function logOutACB(evt){
         props.logOut();
+        navigate("/login");
    }
 
     function generatePlaylistACB(evt){

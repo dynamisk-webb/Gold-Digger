@@ -7,7 +7,7 @@ import { getProfile } from "./spotifySource.js";
  * Model keeps abstract data
  */
 class DiggerModel{
-    constructor(setState, userid=null, prevPlaylists=[], acoustic=false, danceable=false) {
+    constructor(state, setState, userid=null, prevPlaylists=[], acoustic=false, danceable=false) {
         this.userid = userid;
         this.source = null;
         this.generated = {playlist: null, tracks: []};
@@ -196,7 +196,6 @@ class DiggerModel{
     logout() {
         localStorage.setItem("log-in", "false");
         localStorage.removeItem("access-token");
-        console.log("LOGOUT");
     }
 
 

@@ -28,10 +28,10 @@ function App() {
   
   useEffect(() => {
     if(localStorage.getItem("log-in") === "true") {
-      console.log("you are somehow logged in (log-in: " + localStorage.getItem("log-in") + ")");
+      console.log("you are logged in");
     } else {
       navigate("/login");
-      console.log("you are not logged in (log-in: " + localStorage.getItem("log-in") + ")");
+      console.log("you are not logged in");
     }
   }, [navigate]);
 

@@ -19,26 +19,23 @@ function Home(props) {
 
     */
     function onMountedACB() {
-        console.log("Lifecycle!");
         console.log("access: " + localStorage.getItem("access-token"));
 
         if (localStorage.getItem("access-token") === null && localStorage.getItem("log-in") === "true") {
             localStorage.setItem("access-token", "in progress");
             props.model.requestToken();
         } else {
-            props.model.logout();
+            //props.model.logout();
         }
 
         // ACB to run at the end
         return function onUnmountedACB() {
-            console.log("Cleanup!");
         }
     }
     
     function logOutACB(){
         props.model.setLogin("false");
         props.model.logout();
-        console.log("set isloggedin to false");
     }
     
     /* Event: Set window location to Source */
