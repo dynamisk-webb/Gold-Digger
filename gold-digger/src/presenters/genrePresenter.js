@@ -13,7 +13,7 @@ function Genres(props) {
     useEffect(getGenreACB, [searchTerm]);
 
     function getGenreACB() {
-        if(undefined) {
+        if(searchTerm == undefined) {
             resolvePromise(getGenres(), promiseState, setPromise);
         }
         // TODO: resolve promise with sort function, promiseState and setPromise

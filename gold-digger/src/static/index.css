@@ -48,11 +48,17 @@ button{
   
 }
 
+input:focus { 
+  outline: none !important;
+  border-color: #FF6B35;
+  box-shadow: 0 0 10px #FF6B35;
+}
 
 /* GENERIC CLASSES */
 
 .scrollable{
-  overflow: hidden;
+  cursor: grab;
+  overflow: auto;
 }
 
 .clickable{
@@ -183,16 +189,28 @@ button{
   margin: 0 0 0 0;
 }
 
-#sourcePlaylist{
+#sourceButtonPlaylist{
   grid-row: 3 / span 1;
   grid-column: 2 / span 1;
   justify-self: center;
   margin: 3% 0 3% 0;
   width: 60%;
   font-size: 25px;
+}
+
+#sourceInputPlaylist{
+  grid-row: 3 / span 1;
+  grid-column: 2 / span 1;
+  justify-self: center;
+  margin: 3% 0 3% 0;
+  width: 60%;
+  font-size: 25px;
+  border-radius: .6rem;
+  border-width: 0;
   background-color: #2b2b2b;
   color: gray;
 }
+
 
 #sourceSaved{
   grid-row: 4 / span 1;
