@@ -4,10 +4,10 @@ const { getDatabase, ref, get, set, onValue } = require("firebase/database");
 const { initializeApp}= require( "firebase/app");
 
 // Initialise firebase app, database, ref
+console.log("Firebase init");
 const app= initializeApp(firebaseConfig)
 const db= getDatabase(app)
 const PATH= "diggerModel";
-
 
 // ===================
 // ======TEST=========
@@ -78,7 +78,7 @@ function firebaseModelPromise(model) {
         userPATH = "/"+model.userid;
     }
     // 1) retrieves data from firebase using firebase get()
-    return get(ref(db, PATH+userPATH)).then(toModelACB).then(addObserverACB); // return promise chain
+    return get(ref(db, PATH+userPATH+"_SESSION")).then(toModelACB).then(addObserverACB); // return promise chain
 
     // 2) saves the data into the model (received as parameter)
     function toModelACB(dataFromFirebase) {
@@ -88,7 +88,7 @@ function firebaseModelPromise(model) {
     function addObserverACB() {
         model.addObserver(obsACB);
         //model.addObserver(signOutACB);
-        onValue(ref(db, PATH+userPATH), changeModelACB);
+        onValue(ref(db, PATH+"_SESSION"), changeModelACB);
         return model;
     }
 
@@ -96,7 +96,7 @@ function firebaseModelPromise(model) {
     function obsACB(payload){
         // Check payload to skip the set
         if(payload !== "some payload" && !payload.key) {
-            set(ref(db, PATH+userPATH), modelToPersistence(model));
+            set(ref(db, PATH+userPATH+"_SESSION"), modelToPersistence(model));
         }
     }
 

@@ -16,6 +16,8 @@ import Parameter from "./presenters/parameterPresenter.js"
 import Playlist from "./presenters/playlistPresenter.js"
 import Source from "./presenters/sourcePresenter.js"
 
+import  "./firebaseModel.js";
+
 /**
  *  Main App rendering all components
  */
