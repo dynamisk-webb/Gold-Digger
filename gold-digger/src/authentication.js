@@ -97,7 +97,7 @@ function requestAccessToken() {
     .then(data => {
         // set access token
         localStorage.setItem('access-token', data.access_token);
-        //console.log("AUTH access token set: " +  data.access_token);
+        console.log("AUTH access token set: " +  data.access_token);
 
         // Set expire time
         const expire_time = new Date().getTime() + data.expires_in*1000;
@@ -109,6 +109,8 @@ function requestAccessToken() {
     .catch(error => {
         console.error('Error:', error);
     });
+
+    return response;
 }
 
 

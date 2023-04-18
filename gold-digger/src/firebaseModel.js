@@ -59,13 +59,17 @@ function modelToPersistence(model){
 
 
 function persistenceToModel(persistedData, model) {
-     // TODO: update to correspond to what needs to be persisted
+    // TODO: update to correspond to what needs to be persisted
+
     if(persistedData !== null) {
+        console.log("We have persisted data!");
         if (persistedData.userid) {
             model.setUserID(persistedData.userid);  
         } else {
             model.setUserID(null);
         }
+    } else {
+        console.log("No persisted data!");
     }
     
     return model;
@@ -74,9 +78,11 @@ function persistenceToModel(persistedData, model) {
 
 function firebaseModelPromise(model) {
     let userPATH="";
-    if(model.user) {
+    if(model.userid) {
         userPATH = "/"+model.userid;
     }
+
+    console.log("FIREBASE userpath set to: " + userPATH);
     // 1) retrieves data from firebase using firebase get()
     return get(ref(db, PATH+userPATH+"_SESSION")).then(toModelACB).then(addObserverACB); // return promise chain
 

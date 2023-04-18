@@ -17,6 +17,7 @@ import Playlist from "./presenters/playlistPresenter.js"
 import Source from "./presenters/sourcePresenter.js"
 
 import  "./firebaseModel.js";
+import LoggedInTest from "./test/loggedInTestPresenter";
 
 /**
  *  Main App rendering all components
@@ -35,7 +36,7 @@ function App() {
       console.log("LOGIN You are not logged in");    
       navigate("/login");
     } else if (isLoggedIn === "pending") {
-      console.log("LOGIN Pending login request");
+      console.log("LOGINPending login request");
     }
   }, [navigate, isLoggedIn, setLoggedIn]);
 
@@ -52,6 +53,7 @@ function App() {
         <Route path="parameter" element={<Parameter model={dModel}/>}/>
         <Route path="playlist" element={<Playlist model={dModel}/>}/>
         <Route path="source" element={<Source model={dModel}/>}/>
+        <Route path="tezt" element={<LoggedInTest model={dModel}/>}/>
       </Route>
       <Route path="*" element={<Navigate to="/"/>}/>
     </Routes>

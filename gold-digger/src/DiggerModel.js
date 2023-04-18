@@ -180,7 +180,6 @@ class DiggerModel{
             redirectToSpotifyLogIn();
             this.setLogin("pending");
             localStorage.setItem("isLoggedIn", "pending");
-            console.log("set stuff");
         } catch (error) {
             alert("Error logging in.");
         }
@@ -189,9 +188,9 @@ class DiggerModel{
     // Should be run after we have been redirected back from Spotify's login page
     requestToken() {
         try {
-            requestAccessToken();
             this.setLogin("true");
             localStorage.setItem("isLoggedIn", "true");
+            return requestAccessToken();
         } catch (error) {
             // TODO fix logic so this error is actually caught here and not before
             this.setLogin("false");
@@ -208,6 +207,8 @@ class DiggerModel{
         localStorage.removeItem("refresh-token");
 
         // why not reset model parameters here?
+        //   because we need to remove observers first!
+        //   therefore it is easier if we do it in firebaseModel.js
     }
 
 
