@@ -206,6 +206,8 @@ class DiggerModel{
         localStorage.setItem("isLoggedIn", "false");
         localStorage.removeItem("access-token");
         localStorage.removeItem("refresh-token");
+
+        // why not reset model parameters here?
     }
 
 
