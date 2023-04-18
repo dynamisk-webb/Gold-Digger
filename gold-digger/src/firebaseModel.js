@@ -9,70 +9,60 @@ const app= initializeApp(firebaseConfig)
 const db= getDatabase(app)
 const PATH= "diggerModel";
 
-// ===================
-// ======TEST=========
-// ===================
-function testPersistenceToModel(model) {
-    let userPATH="";
-    /*
-    if(model.user) {
-        userPATH = "/"+model.userid;
-    }
-    */
-    console.log("userid before: " + model.userid);
-    get(ref(db, PATH+userPATH)).then(toModelACB).then(resultACB);
-    
-    function toModelACB(dataFromFirebase) {
-        return persistenceToModel(dataFromFirebase.val(), model);
-    }
-
-    function resultACB() {
-        console.log("userid after: " + model.userid);
-    }
-}
-
-function testModelToPersistence(model) {
-    let userPATH="";
-    /*
-    if(model.user) {
-        userPATH = "/"+model.userid;
-    }
-    */
-    
-    set(ref(db, PATH+userPATH), modelToPersistence(model));
-}
-// ===================
-// ===================
-// ===================
 
 
-
-function modelToPersistence(model){
+function modelParamsToPersistence(model){
     if (model.userid) {
          // TODO: update to correspond to what needs to be persisted
         return {userid:model.userid, testValue:"FallOutBoy4Life"};
     }
-    // TODO: return null when login has a functioning flow
-    return {userid:"test_userid", testValue:"FallOutBoy4Life"};
-    //return null;
+    return null;
+}
+
+function generatedListToPersistence(model){
+    if (model.userid) {
+        return {generated:model.generated};
+    }
+    return null;
 }
 
 
-function persistenceToModel(persistedData, model) {
-    // TODO: update to correspond to what needs to be persisted
-
+function persistenceToModelParams(persistedData, model) {
     if(persistedData !== null) {
-        console.log("We have persisted data!");
+        //console.log("Existing persisted data!");
+        
         if (persistedData.userid) {
             model.setUserID(persistedData.userid);  
         } else {
             model.setUserID(null);
         }
+
+        // TODO add remaining model parameters
+
     } else {
-        console.log("No persisted data!");
+        //console.log("No persisted data!");
     }
-    
     return model;
+}
+
+
+function persistenceToGeneratedList(persistedData, model) {
+    if(persistedData !== null) { //console.log("Existing persisted data!");
+        if (persistedData.generated) {
+            model.setGenerated(persistedData.generated);  
+        } else {
+            model.setGenerated(null);
+        }
+    } else { //console.log("No persisted data!");
+    }
+    return model;
+}
+
+
+// gets a prev generated list based on param firebaseKey (id) from persistence and replaces current generated 
+function generatedListPromise(model, firebaseKey) {
+    // TODO implement
+    // GET from firebase
 }
 
 
@@ -80,60 +70,76 @@ function firebaseModelPromise(model) {
     let userPATH="";
     if(model.userid) {
         userPATH = "/"+model.userid;
-    }
-
-    console.log("FIREBASE userpath set to: " + userPATH);
-    // 1) retrieves data from firebase using firebase get()
-    return get(ref(db, PATH+userPATH+"_SESSION")).then(toModelACB).then(addObserverACB); // return promise chain
-
-    // 2) saves the data into the model (received as parameter)
-    function toModelACB(dataFromFirebase) {
-        return persistenceToModel(dataFromFirebase.val(), model);
+        console.log("FIREBASE userpath set to: " + userPATH);
+    } else {
+        console.log("FIREBASE No user set in model, meaning firebasepath is incorrect");
     }
     
-    function addObserverACB() {
-        model.addObserver(obsACB);
-        //model.addObserver(signOutACB);
-        onValue(ref(db, PATH+"_SESSION"), changeModelACB);
+    // Retrieves persisted model parameters
+    return get(ref(db, PATH+userPATH+"-modelParams")).then(toModelACB).then(addObserversACB);
+
+    // Saves any persisted data into the model (received as parameter)
+    function toModelACB(dataFromFirebase) {
+        return persistenceToModelParams(dataFromFirebase.val(), model);
+    }
+    
+    function addObserversACB() {
+        model.addObserver(obsGeneralParamsACB);
+        model.addObserver(obsGeneratedListACB);
+        model.addObserver(logOutACB);
         return model;
     }
 
-    // 3) adds a model observer that calls firebase set() and modelToPersistence()
-    function obsACB(payload){
+    
+    // Observes all model parameters and saves to firebase
+    function obsGeneralParamsACB(payload){
         // Check payload to skip the set
-        if(payload !== "some payload" && !payload.key) {
-            set(ref(db, PATH+userPATH+"_SESSION"), modelToPersistence(model));
-        }
-    }
-
-    // 4) optional: calls firebase onValue() for live update
-    
-    function changeModelACB(payload) {
-        model.notifyObservers("some payload");
-        persistenceToModel(payload.val(), model);
-    }
-    
-
-    /*
-    function signOutACB (payload) {
         if (payload.key) {
-            if (payload.key === "signout") {
-                signout(model);
+            if(payload.key === "modelParams") {
+                set(ref(db, PATH+userPATH+"-modelParams"), modelParamsToPersistence(model));
             }
         }
     }
 
-    function signout(model) {
+    // Observes current generated list and saves any changes to firebase
+    // (eg changed name, removed song)
+    function obsGeneratedListACB(payload){
+        // Check payload to skip the set
+        if (payload.key) {
+            if(payload.key === "editGenerated") {
+                /*
+                TODO
+                - get key (aka firebasespecific ID) of current generated list
+                - something like payload.firebaseKey, alt model.generated.firebasekey
+                */
+                const firebaseKey = 0;
+                set(ref(db, PATH+userPATH+"-"+firebaseKey), generatedListToPersistence(model));
+            }
+        }
+    }
+
+
+    function logOutACB (payload) {
+        if (payload.key) {
+            if (payload.key === "signout") {
+                logout(model);
+            }
+        }
+    }
+
+
+    function logout(model) {
+        // remove all observers before resetting model
+        model.removeObserver(obsGeneralParamsACB);
+        model.removeObserver(obsGeneratedListACB);
+        model.removeObserver(logOutACB);
+        
         // TODO reset all values in model
         model.user = null;
     
-        model.removeObserver(obsACB);
-        model.removeObserver(signOutACB);
-
         console.log("Logged out");
     }
-    */
 }
 
 
-export {modelToPersistence, persistenceToModel, firebaseModelPromise, testPersistenceToModel, testModelToPersistence};
+export {modelParamsToPersistence, generatedListToPersistence, persistenceToModelParams, persistenceToGeneratedList, generatedListPromise, firebaseModelPromise};
