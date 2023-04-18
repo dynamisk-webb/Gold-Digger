@@ -24,18 +24,20 @@ import  "./firebaseModel.js";
 
 function App() {
   const navigate = useNavigate();
-  const [isLoggedIn, setLoggedIn] = useState("false");
+  const [isLoggedIn, setLoggedIn] = useState(localStorage.getItem("isLoggedIn"));
   const dModel = new DiggerModel(isLoggedIn, setLoggedIn);
   dModel.setGenerated(fixedPlaylist);
   
   useEffect(() => {
-    if(localStorage.getItem("log-in") === "true") {
-      console.log("you are logged in");
-    } else {
+    if(isLoggedIn === "true") {
+      console.log("LOGIN You are logged in");
+    } else if (isLoggedIn === "false") {
+      console.log("LOGIN You are not logged in");    
       navigate("/login");
-      console.log("you are not logged in");
+    } else if (isLoggedIn === "pending") {
+      console.log("LOGIN Pending login request");
     }
-  }, [navigate]);
+  }, [navigate, isLoggedIn, setLoggedIn]);
 
   // Routes 
   return (

@@ -19,13 +19,11 @@ function Home(props) {
 
     */
     function onMountedACB() {
-        console.log("access: " + localStorage.getItem("access-token"));
+        //console.log("RENDERED HOME\nCurrent access: " + localStorage.getItem("access-token"));
 
-        if (localStorage.getItem("access-token") === null && localStorage.getItem("log-in") === "true") {
-            localStorage.setItem("access-token", "in progress");
+        if (localStorage.getItem("access-token") === null && props.model.isLoggedIn === "pending") {
+            localStorage.setItem("access-token", "pending"); // prevents second request from comming through while running react strict mode
             props.model.requestToken();
-        } else {
-            //props.model.logout();
         }
 
         // ACB to run at the end
@@ -34,7 +32,7 @@ function Home(props) {
     }
     
     function logOutACB(){
-        props.model.setLogin("false");
+        //props.model.setLogin("false");
         props.model.logout();
     }
     

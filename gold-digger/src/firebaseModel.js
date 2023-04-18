@@ -4,7 +4,7 @@ const { getDatabase, ref, get, set, onValue } = require("firebase/database");
 const { initializeApp}= require( "firebase/app");
 
 // Initialise firebase app, database, ref
-console.log("Firebase init");
+console.log("FIREBASE init app");
 const app= initializeApp(firebaseConfig)
 const db= getDatabase(app)
 const PATH= "diggerModel";

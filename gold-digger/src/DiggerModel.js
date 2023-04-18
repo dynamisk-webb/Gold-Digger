@@ -23,6 +23,7 @@ class DiggerModel{
 
         this.observers = [];
         this.setLogin = setState;
+        this.isLoggedIn = state;
     }
 
     /**
@@ -177,7 +178,9 @@ class DiggerModel{
     login() {
         try {
             redirectToSpotifyLogIn();
-            localStorage.setItem("log-in", "true");
+            this.setLogin("pending");
+            localStorage.setItem("isLoggedIn", "pending");
+            console.log("set stuff");
         } catch (error) {
             alert("Error logging in.");
         }
@@ -187,15 +190,22 @@ class DiggerModel{
     requestToken() {
         try {
             requestAccessToken();
+            this.setLogin("true");
+            localStorage.setItem("isLoggedIn", "true");
         } catch (error) {
+            // TODO fix logic so this error is actually caught here and not before
+            this.setLogin("false");
+            localStorage.setItem("isLoggedIn", "false");
             alert("Error logging in.");
         }
     }
 
     // Logout current user
     logout() {
-        localStorage.setItem("log-in", "false");
+        this.setLogin("false");
+        localStorage.setItem("isLoggedIn", "false");
         localStorage.removeItem("access-token");
+        localStorage.removeItem("refresh-token");
     }
 
 
