@@ -1,6 +1,7 @@
 import Slider from '@mui/material/Slider';
 import Switch from '@mui/material/Switch';
 import Box from '@mui/material/Box';
+import Tooltip from '@mui/material/Tooltip';
 import * as React from 'react';
 
 
@@ -29,8 +30,11 @@ function ParameterView(props){
     return (<div id="parameterGrid">
         
         <div class="parameterSlider" id="tempoSlider">
-            <h2>Tempo</h2>
-            <p>BPM</p>
+            <Tooltip title={<p style={{ color: "white" }}>Overall estimated tempo in beats per minute (BPM)</p>}>
+                <h2>Tempo</h2>
+            </Tooltip>
+            
+            <p>(dB)</p>
             <Slider getAriaLabel={() => 'tempo range'} 
             defaultValue={20}
             onChange={onChangeTempoACB}
@@ -43,7 +47,9 @@ function ParameterView(props){
                     />
         </div>
         <div class="parameterSlider" id="loudSlider">
-            <h2>Loudness</h2>
+            <Tooltip title={<p style={{ color: "white" }}>Overall loudness in decibels (dB)</p>}>
+                <h2>Noisiness</h2>
+            </Tooltip>
             <p>Db</p>
             <Slider getAriaLabel={() => 'loudness range'} 
                     value={loudValue} 
@@ -54,7 +60,9 @@ function ParameterView(props){
                     valueLabelDisplay="auto" />
         </div>
         <div class="parameterSlider" id="instrSlider">
-            <h2>Instrumentalness</h2>
+            <Tooltip title={<p style={{ color: "white" }}>Overall amount of vocals in the song</p>}>
+                <h2>Amount of vocals</h2>
+            </Tooltip>
             <p>Percent</p>
             <Slider getAriaLabel={() => 'instrumentalness range'} 
                     value={instrValue} 
@@ -66,11 +74,15 @@ function ParameterView(props){
                     />
         </div>
         <div class = "parameterSwitch">
-            <h2>Danceable</h2>
+            <Tooltip title={<p style={{ color: "white" }}>Whether or not a song is suitable for dancing</p>}>
+                <h2>Danceable</h2>
+            </Tooltip>
             <Switch checked={props.checked} onChange={onChangeDanceableACB}/>
         </div>
         <div class = "parameterSwitch">
-            <h2>Acoustic</h2>
+            <Tooltip title={<p style={{ color: "white" }}>Whether or not a song only contains acoustic instruments</p>}>
+                <h2>Acoustic</h2>
+            </Tooltip>
             <Switch checked={props.checked} onChange={onChangeAcousticACB}/>
         </div>
         

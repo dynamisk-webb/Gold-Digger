@@ -21,6 +21,7 @@ h1{
 
 h2{
   color: gray;
+  width: fit-content;
 }
 
 p{
@@ -48,11 +49,17 @@ button{
   
 }
 
+input:focus { 
+  outline: none !important;
+  border-color: #FF6B35;
+  box-shadow: 0 0 10px #FF6B35;
+}
 
 /* GENERIC CLASSES */
 
 .scrollable{
-  overflow: hidden;
+  cursor: grab;
+  overflow: auto;
 }
 
 .clickable{
@@ -77,6 +84,60 @@ button{
 }
 
 /* ------------------- IDs ------------------- */
+
+/* ABOUT US*/
+#aboutUsContainer{
+  z-index: 100;
+  position:fixed;
+  height:100%;
+  width: 0%;
+  background-color: rgba(0, 0, 0, 0.623);
+}
+
+#aboutUs{
+  z-index: 1000;
+  position:fixed;
+  width: 0;
+  height:100%;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  background-color: #2b2b2b;
+  transition: width 0.2s;
+}
+
+#authorInfo{
+  margin: 10px 10px 40px 10px;
+  width:auto;
+  display:grid;
+  height: 200px;
+  grid-template-columns: 1fr 2fr;
+  grid-template-rows: 1fr 2fr;
+  overflow: hidden;
+}
+
+#authorName{
+  grid-column: 2/span 1;
+  grid-row: 1/span 1;
+}
+
+#authorAbout{
+  grid-column: 2/span 1;
+  grid-row: 2/span 1;
+}
+
+#authorImg {
+  grid-column: 1/span 1;
+  grid-row: 1/span 2;
+
+  object-fit: cover;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+}
+
+#closeButton{
+  z-index: 100;
+}
 
 /*  H O M E */
 
@@ -141,16 +202,19 @@ button{
 }
 
 #logOut{
-
+  
+  height: 60px;
+  width: 60px;
   background-image: url("./../img/logOut.png"); /* 16px x 16px */
   background-color:transparent;
   background-repeat: no-repeat;  /* make the background image appear only once */
   background-position: center; 
   background-size: contain;
 
-  grid-row: 1 / span 1;
-  grid-column: 4 /span 1;
-  margin: 38% 38% 38% 38%;
+  z-index: 100;
+  position: absolute;
+  top: 70px;
+  right: 60px;
 }
 
 /* S O U R C E */
@@ -183,16 +247,32 @@ button{
   margin: 0 0 0 0;
 }
 
-#sourcePlaylist{
+#sourceButtonPlaylist{
   grid-row: 3 / span 1;
   grid-column: 2 / span 1;
   justify-self: center;
   margin: 3% 0 3% 0;
   width: 60%;
   font-size: 25px;
+}
+
+#sourceInputPlaylist{
+  grid-row: 3 / span 1;
+  grid-column: 2 / span 1;
+  justify-self: center;
+  margin: 3% 0 3% 0;
+  width: 60%;
+  font-size: 25px;
+  border-radius: .6rem;
+  border-width: 0;
   background-color: #2b2b2b;
   color: gray;
 }
+
+input[type=text] {
+  padding-left: 25px; 
+}
+
 
 #sourceSaved{
   grid-row: 4 / span 1;
@@ -211,20 +291,24 @@ button{
   grid-template-rows: 1fr 4fr 1fr;
 }
 
-#search{
-  grid-row: 2 / span 1;
-  grid-column: 2 / span 1;
-  margin: 10% 50% 60% 41%;
-}
-
 #artistMainGrid{
 
 }
 
 #genreResults{
   position: fixed;
-  top:0;
-  left:0;
+  top:300px;
+  left:300px;
+  right: 300px;
+  bottom: 100px;
+}
+
+#artstResults{
+  position: fixed;
+  top:400px;
+  left:300px;
+  right: 300px;
+  bottom: 100px;
 }
 
 /* PARAMETER PRESENTER */
@@ -244,17 +328,19 @@ button{
 /* FILTERVIEW */
 
 #filterGrid{
+  
   grid-row: 1 /span 3;
   grid-column: 1/span 3;
   position:fixed;
   top:0;
   left:0;
+  z-index: -1;
 
   width: 100%;
   height: 100%;
   display: grid;
-  grid-template-columns: 1fr 3fr 1fr;
-  grid-template-rows: 1fr 2fr 0.5fr;
+  grid-template-columns: 100PX 1fr 200PX;
+  grid-template-rows: 200px 2fr 100PX;
 }
 
 #filterReturnButton{
@@ -302,6 +388,31 @@ button{
   
 }
 
+/* SEARCH VIEW */
+
+
+#search{
+  grid-row: 2 / span 1;
+  grid-column: 2 / span 1;
+  margin: 150px 250px 0px 250px;
+  
+}
+
+#searchBar{
+  width: 100%;
+  height: 70px;
+
+  
+  background-color: #828282;
+  background-image: url("./../img/magnify.png");
+  background-position: 16px 16px;
+  background-repeat: no-repeat;
+  padding-left: 40px;
+  border: 0;
+  border-radius: .6rem;
+
+}
+
 /*  PLAYLIST VIEW */
 
 #homeButton{
@@ -343,4 +454,88 @@ button{
   right: 0px;
   height: 40px;
   margin: 1% 1% 1% 1%;
+}
+
+#openAbout{
+  
+  z-index: 200;
+  position:fixed;
+  top:200px;
+  right:0;
+}
+
+/*GENRE RESULT VIEW*/
+
+#genreResult{
+  height: 100px;
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  grid-template-rows: 100px;
+}
+
+#genreText{
+  grid-column: 2/span 1;
+  grid-row: 1/span 1;
+
+  font-size: 45px;
+  font-weight: 700;
+  align-self: center;
+}
+
+[type=checkbox] {
+  width: 3rem;
+  height: 3rem;
+  color: #FF6B35;
+  vertical-align: middle;
+  -webkit-appearance: none;
+  background: none;
+  border: 0;
+  outline: 0;
+  flex-grow: 0;
+  border-radius: 50%;
+  background-color: transparent;
+  transition: background 300ms;
+  cursor: pointer;
+}
+
+[type=checkbox]::before {
+  content: "";
+  color: rgba(0,0,0,.5);
+  display: block;
+  width: inherit;
+  height: inherit;
+  border-radius: inherit;
+  border: 0;
+  background-color: #ff6b3533;
+  background-size: contain;
+  
+}
+
+
+#genreCheck{
+  grid-column: 1/span 1;
+  grid-row: 1/span 1;
+  margin: 10px 10px 10px 10px;
+  justify-self: center;
+  align-self: center;
+}
+
+[type=checkbox]:checked {
+  background-color: currentcolor;
+}
+
+/*ARTIST RESULT VIEW*/
+
+#artistResult{
+  height: 150px;
+  display: grid;
+  grid-template-columns: 100px 1fr 50px 50px;
+  grid-template-rows: 100px;
+}
+
+#artistImg{
+  grid-column: 1/span 1;
+  grid-row: 1/span 1;
+  width: 120px;
+
 }
