@@ -84,6 +84,60 @@ input:focus {
 
 /* ------------------- IDs ------------------- */
 
+/* ABOUT US*/
+#aboutUsContainer{
+  z-index: 100;
+  position:fixed;
+  height:100%;
+  width: 0%;
+  background-color: rgba(0, 0, 0, 0.623);
+}
+
+#aboutUs{
+  z-index: 1000;
+  position:fixed;
+  width: 0;
+  height:100%;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  background-color: #2b2b2b;
+  transition: width 0.2s;
+}
+
+#authorInfo{
+  margin: 10px 10px 40px 10px;
+  width:auto;
+  display:grid;
+  height: 200px;
+  grid-template-columns: 1fr 2fr;
+  grid-template-rows: 1fr 2fr;
+  overflow: hidden;
+}
+
+#authorName{
+  grid-column: 2/span 1;
+  grid-row: 1/span 1;
+}
+
+#authorAbout{
+  grid-column: 2/span 1;
+  grid-row: 2/span 1;
+}
+
+#authorImg {
+  grid-column: 1/span 1;
+  grid-row: 1/span 2;
+
+  object-fit: cover;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+}
+
+#closeButton{
+  z-index: 100;
+}
+
 /*  H O M E */
 
 #homeGrid{
@@ -147,16 +201,19 @@ input:focus {
 }
 
 #logOut{
-
+  
+  height: 60px;
+  width: 60px;
   background-image: url("./../img/logOut.png"); /* 16px x 16px */
   background-color:transparent;
   background-repeat: no-repeat;  /* make the background image appear only once */
   background-position: center; 
   background-size: contain;
 
-  grid-row: 1 / span 1;
-  grid-column: 4 /span 1;
-  margin: 38% 38% 38% 38%;
+  z-index: 100;
+  position: absolute;
+  top: 70px;
+  right: 60px;
 }
 
 /* S O U R C E */
@@ -209,6 +266,10 @@ input:focus {
   border-width: 0;
   background-color: #2b2b2b;
   color: gray;
+}
+
+input[type=text] {
+  padding-left: 25px; 
 }
 
 
@@ -392,6 +453,14 @@ input:focus {
   right: 0px;
   height: 40px;
   margin: 1% 1% 1% 1%;
+}
+
+#openAbout{
+  
+  z-index: 200;
+  position:fixed;
+  top:200px;
+  right:0;
 }
 
 /*GENRE RESULT VIEW*/
