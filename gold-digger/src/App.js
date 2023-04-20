@@ -6,7 +6,7 @@ import DiggerModel from "./DiggerModel.js";
 
 import fixedPlaylist from "./test/fixedList.js";
 
-import Layout from "./views/layoutView.js"
+//import Layout from "./views/layoutView.js"
 import Login from "./presenters/loginPresenter.js"
 import Home from "./presenters/homePresenter.js"
 // import Loading from "./presenters/loadingPresenter.js"
@@ -15,6 +15,7 @@ import Genres from "./presenters/genrePresenter.js"
 import Parameter from "./presenters/parameterPresenter.js"
 import Playlist from "./presenters/playlistPresenter.js"
 import Source from "./presenters/sourcePresenter.js"
+import Layout from "./presenters/layoutPresenter.js"
 
 /**
  *  Main App rendering all components
@@ -38,7 +39,7 @@ function App() {
   // Routes 
   return (
     <Routes>
-      <Route path="/" element={<Layout/>}>
+      <Route path="/" element={<Layout model={dModel}/>}>
         {/* Default route for / path */}
         <Route index element={<Home model={dModel}/>}/>
         <Route path="home" element={<Home model={dModel}/>}/>
