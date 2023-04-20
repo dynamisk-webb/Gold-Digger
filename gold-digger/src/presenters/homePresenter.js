@@ -9,7 +9,7 @@ function Home(props) {
     useEffect(onMountedACB, [props.model]);
 
     return (
-      <HomeView generatePlaylist={generatePlaylistACB} logOut={logOutACB}></HomeView>  
+      <HomeView generatePlaylist={generatePlaylistACB}></HomeView>  
     );
 
     /*
@@ -33,10 +33,7 @@ function Home(props) {
         }
     }
     
-    function logOutACB(){
-        props.model.setLogin("false");
-        props.model.logout();
-    }
+    
     
     /* Event: Set window location to Source */
     function generatePlaylistACB() {
