@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import LoggedInTestView from "./loggedInTestView.js";
-import { getSavedTracks } from "../spotifySource.js";
+import { getProfile, getSavedTracks } from "../spotifySource.js";
 import resolvePromise from "../resolvePromise.js";
 
 function LoggedInTest(props) {
@@ -9,8 +9,7 @@ function LoggedInTest(props) {
 
     useEffect(() => {
         const getTrack = async () => {
-            debugger;
-            console.log("Result: " + promiseState.data);
+            console.log("Result: " + promiseState.data.id);
         };
       getTrack();
     }, [promiseState]);
@@ -37,7 +36,8 @@ function LoggedInTest(props) {
     }
 
     async function onAPICallACB() {
-        resolvePromise(getSavedTracks(), promiseState, setPromiseState);
+        //resolvePromise(getSavedTracks(), promiseState, setPromiseState);
+        resolvePromise(getProfile(), promiseState, setPromiseState);
     }
 }
 

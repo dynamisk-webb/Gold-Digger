@@ -11,10 +11,6 @@ import { getProfile } from "../spotifySource.js";
 function Home(props) {
     useEffect(onMountedACB, [props.model]);
 
-    // init states to resolve promises
-    const [firebasePromiseState, setFirebasePromiseState] = useState({});
-    const [profilePromiseState, setProfilePromiseState] = useState({});
-
     return (
       <HomeView generatePlaylist={generatePlaylistACB} logOut={logOutACB}></HomeView>  
     );
@@ -30,7 +26,8 @@ function Home(props) {
 
         if (localStorage.getItem("access-token") === null && props.model.isLoggedIn === "pending") {
             localStorage.setItem("access-token", "pending"); // prevents second request from comming through while running react strict mode
-            props.model.requestToken().then(getUserIDACB).then(setUpFirebaseACB);
+            //props.model.requestToken().then(getUserIDACB).then(setUpFirebaseACB);
+            props.model.requestToken().then(setLoggedInACB);
         }
 
         // ACB to run at the end
@@ -38,22 +35,12 @@ function Home(props) {
         }
     }
 
+    // Set login 
+    function setLoggedInACB() {
+        props.model.setLogin("true");
+        localStorage.setItem("isLoggedIn", "true");
+    }
     
-    function getUserIDACB() {
-        console.log("begin to resolve profile promise");
-        return resolvePromise(getProfile(), profilePromiseState, setProfilePromiseState);
-    }
-
-
-    function setUpFirebaseACB() {
-        console.log("begin to resolve firebase promise");
-        
-        // TODO set userid in model
-        // props.model.setUserID(profilePromiseState.data.id);
-
-        return resolvePromise(firebaseModelPromise(props.model), firebasePromiseState, setFirebasePromiseState);
-    }
-
     
     function logOutACB(){
         props.model.logout();

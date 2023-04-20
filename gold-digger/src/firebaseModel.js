@@ -10,7 +10,6 @@ const db= getDatabase(app)
 const PATH= "diggerModel";
 
 
-
 function modelParamsToPersistence(model){
     if (model.userid) {
          // TODO: update to correspond to what needs to be persisted
@@ -40,7 +39,7 @@ function persistenceToModelParams(persistedData, model) {
         // TODO add remaining model parameters
 
     } else {
-        //console.log("No persisted data!");
+        console.log("No persisted data!");
     }
     return model;
 }

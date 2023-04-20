@@ -188,8 +188,6 @@ class DiggerModel{
     // Should be run after we have been redirected back from Spotify's login page
     requestToken() {
         try {
-            this.setLogin("true");
-            localStorage.setItem("isLoggedIn", "true");
             return requestAccessToken();
         } catch (error) {
             // TODO fix logic so this error is actually caught here and not before
@@ -209,6 +207,8 @@ class DiggerModel{
         // why not reset model parameters here?
         //   because we need to remove observers first!
         //   therefore it is easier if we do it in firebaseModel.js
+        //this.setUserID(null);
+        this.userid = null;
     }
 
 
