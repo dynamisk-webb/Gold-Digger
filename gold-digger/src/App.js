@@ -16,10 +16,13 @@ import Playlist from "./presenters/playlistPresenter.js"
 import Source from "./presenters/sourcePresenter.js"
 // import Loading from "./presenters/loadingPresenter.js"
 
-// MODEL, FIREBASE AND API
+// MODEL
 import DiggerModel from "./DiggerModel.js";
 import resolvePromise from "./resolvePromise";
+
+// API AND AUTHENTICATION
 import { getProfile } from "./spotifySource";
+import { refreshAccessToken } from "./authentication";
 
 // FIREBASE
 import  "./firebaseModel.js";
@@ -36,7 +39,7 @@ import LoggedInTest from "./test/loggedInTestPresenter";
 function App() {
   const navigate = useNavigate();
   const [isLoggedIn, setLoggedIn] = useState(localStorage.getItem("isLoggedIn"));
-  const dModel = new DiggerModel(isLoggedIn, setLoggedIn);
+  const [dModel, setDmodel] = useState(new DiggerModel(isLoggedIn, setLoggedIn));
   
   // Temporary fixed generated playlist for testing purposes
   dModel.setGenerated(fixedPlaylist);
@@ -47,10 +50,22 @@ function App() {
 
 
   useEffect(() => {
-    if(isLoggedIn === "true") {
+
+    if(isLoggedIn === "true" && window.location.pathname != "/login") {
       console.log("LOGIN Logged in");
-      // get userid in order to init firebase
-      resolvePromise(getProfile(), profilePromiseState, setProfilePromiseState);
+      
+      // check if we timed out during the time browser was closed
+      const currentTime = new Date().getTime();
+      if (currentTime > localStorage.getItem('expire-time')) {
+        // TODO: keep an eye out for if this was a fix or not for the following problem:
+        // wait for refreshAccess-token before resolving this promise (the getProfile API call)
+        refreshAccessToken().then(getUserIDACB);
+
+        console.log("refresh!");
+
+      } else {
+        resolvePromise(getProfile(), profilePromiseState, setProfilePromiseState);
+      }
 
     } else if (isLoggedIn === "false") {
       console.log("LOGIN Logged out");    
@@ -61,12 +76,16 @@ function App() {
     }
   }, [isLoggedIn, setLoggedIn]);
 
+  function getUserIDACB() {
+    resolvePromise(getProfile(), profilePromiseState, setProfilePromiseState);
+  }
+
 
   // Resolve firebasepromise after userid-promise has resolved
   useEffect(() => {
     if (profilePromiseState.data && isLoggedIn === "true") {
       dModel.setUserID(profilePromiseState.data.id)
-      resolvePromise(firebaseModelPromise(dModel), firebasePromiseState, setFirebasePromiseState);
+      resolvePromise(firebaseModelPromise(dModel, setDmodel), firebasePromiseState, setFirebasePromiseState);
     }
   }, [profilePromiseState, setProfilePromiseState]);
 

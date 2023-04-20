@@ -24,9 +24,11 @@ function Home(props) {
     function onMountedACB() {
         //console.log("RENDERED HOME\nCurrent access: " + localStorage.getItem("access-token"));
 
+        console.log("HOME access token: " + localStorage.getItem("access-token"));
+        console.log("HOME isLoggedIn (state and localstorage): " + props.model.isLoggedIn + ", " + localStorage.getItem("isLoggedIn"));
+
         if (localStorage.getItem("access-token") === null && props.model.isLoggedIn === "pending") {
             localStorage.setItem("access-token", "pending"); // prevents second request from comming through while running react strict mode
-            //props.model.requestToken().then(getUserIDACB).then(setUpFirebaseACB);
             props.model.requestToken().then(setLoggedInACB);
         }
 
@@ -37,8 +39,10 @@ function Home(props) {
 
     // Set login 
     function setLoggedInACB() {
+        console.log("isLoggedIn before setting to true (state and localstorage)" + props.model.isLoggedIn + " " + localStorage.getItem("isLoggedIn"));
         props.model.setLogin("true");
         localStorage.setItem("isLoggedIn", "true");
+        console.log("isLoggedIn after setting to true (state and localstorage)" + props.model.isLoggedIn + " " + localStorage.getItem("isLoggedIn"));
     }
     
     

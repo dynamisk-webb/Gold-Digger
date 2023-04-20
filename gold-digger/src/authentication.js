@@ -149,4 +149,6 @@ function refreshAccessToken() {
     .catch(error => {
         console.error('Error:', error);
     });
+
+    return response;
 }
