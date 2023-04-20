@@ -16,6 +16,8 @@ import Parameter from "./presenters/parameterPresenter.js"
 import Playlist from "./presenters/playlistPresenter.js"
 import Source from "./presenters/sourcePresenter.js"
 
+import AudioPlayView from "./views/audioPlayView";
+
 /**
  *  Main App rendering all components
  */
@@ -35,10 +37,10 @@ function App() {
   // Routes 
   return (
     <Routes>
+      <Route exact path ="/login" element={<Login model={dModel}/>}/>
       <Route path="/" element={<Layout/>}>
         {/* Default route for / path */}
         <Route index element={<Home model={dModel}/>}/>
-        <Route path="login" element={<Login model={dModel}/>}/>
         <Route path="artist" element={<Artist model={dModel}/>}/>
         <Route path="genre" element={<Genres model={dModel}/>}/>
         <Route path="parameter" element={<Parameter model={dModel}/>}/>

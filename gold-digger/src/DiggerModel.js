@@ -1,5 +1,4 @@
 // Imports
-// import resolvePromise from "./resolvePromise.js"
 import { redirectToSpotifyLogIn, requestAccessToken } from "./authentication.js";
 import { getProfile } from "./spotifySource.js";
 
@@ -10,7 +9,7 @@ class DiggerModel{
     constructor(setState, userid=null, prevPlaylists=[], acoustic=false, danceable=false) {
         this.userid = userid;
         this.source = null;
-        this.generated = {playlist: null, tracks: []};
+        this.generated = {playlistName: null, playlistid: null, firebaseKey: null, tracks: []};
         this.genres = [];   // String values
         this.includedArtists = [];  // Spotify ID
         this.excludedArtists = [];

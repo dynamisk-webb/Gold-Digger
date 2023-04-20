@@ -4,12 +4,13 @@ import {redirect} from "react-router-dom";
 import { useEffect } from "react";
 import PrevlistView from "../views/prevListView.js";
 
-
 function Home(props) {
     useEffect(onMountedACB, []);
 
     return (
-      <HomeView generatePlaylist={generatePlaylistACB} logOut={logOutACB}></HomeView>  
+        <div>
+            <HomeView generatePlaylist={generatePlaylistACB} logOut={logOutACB}></HomeView>
+        </div>
     );
 
     /*
