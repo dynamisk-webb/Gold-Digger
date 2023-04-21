@@ -1,9 +1,7 @@
-
 import HomeView from "../views/homeView.js";
 import {redirect} from "react-router-dom";
 import { useEffect } from "react";
 import PrevlistView from "../views/prevListView.js";
-
 
 function Home(props) {
     useEffect(onMountedACB, [props.model]);
@@ -13,33 +11,24 @@ function Home(props) {
     );
 
     /*
-
+    
+    TODO
     Lifecycle: GET prev playlists from Firebase
     For each previous playlist Event: onClick inspect playlist
 
     */
+    
     function onMountedACB() {
-        console.log("access: " + localStorage.getItem("access-token"));
-
-        if (localStorage.getItem("access-token") === null && localStorage.getItem("log-in") === "true") {
-            localStorage.setItem("access-token", "in progress");
-            props.model.requestToken();
-        } else {
-            //props.model.logout();
-        }
-
-        // ACB to run at the end
-        return function onUnmountedACB() {
+        if (localStorage.getItem("access-token") === null && props.model.isLoggedIn === "pending") {
+            localStorage.setItem("access-token", "pending"); // prevents second request from comming through while running react strict mode
+            props.model.requestToken().then(setLoggedInACB);
         }
     }
-    
-    
-    
-    /* Event: Set window location to Source */
-    function generatePlaylistACB() {
-        // go to next window, ie Source Presenter
-        return redirect("/source"); 
-    }
 
+    function setLoggedInACB() {
+        props.model.setLogin("true");
+        localStorage.setItem("isLoggedIn", "true");
+    }    
 }
+
 export default Home;
