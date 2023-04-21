@@ -4,11 +4,9 @@ const { getDatabase, ref, get, set, onValue } = require("firebase/database");
 const { initializeApp}= require( "firebase/app");
 
 // Initialise firebase app, database, ref
-console.log("FIREBASE init app");
 const app= initializeApp(firebaseConfig)
 const db= getDatabase(app)
 const PATH= "diggerModel";
-
 
 function modelParamsToPersistence(model){
     if (model.userid) {
@@ -24,7 +22,6 @@ function generatedListToPersistence(model){
     }
     return null;
 }
-
 
 function persistenceToModelParams(persistedData, model, setModel) {
     if(persistedData !== null) {
@@ -44,7 +41,6 @@ function persistenceToModelParams(persistedData, model, setModel) {
     return model;
 }
 
-
 function persistenceToGeneratedList(persistedData, model) {
     if(persistedData !== null) { //console.log("Existing persisted data!");
         if (persistedData.generated) {
@@ -57,13 +53,11 @@ function persistenceToGeneratedList(persistedData, model) {
     return model;
 }
 
-
 // gets a prev generated list based on param firebaseKey (id) from persistence and replaces current generated 
 function generatedListPromise(model, firebaseKey) {
     // TODO implement
     // GET from firebase
 }
-
 
 function firebaseModelPromise(model, setModel) {
     let userPATH="";
@@ -75,7 +69,6 @@ function firebaseModelPromise(model, setModel) {
     }
     
     // Retrieves persisted model parameters
-    
     return get(ref(db, PATH+userPATH+"-modelParams")).then(toModelACB).then(addObserversACB);
 
     // Saves any persisted data into the model (received as parameter)
@@ -88,13 +81,8 @@ function firebaseModelPromise(model, setModel) {
         model.addObserver(obsGeneralParamsACB);
         model.addObserver(obsGeneratedListACB);
         model.addObserver(logOutACB);
-
-        // TODO check if any of these are needed (it doesn't seem like it at the moment)
-        //setModel(model);
-        //return model;
     }
 
-    
     // Observes all model parameters and saves to firebase
     function obsGeneralParamsACB(payload){
         console.log("obsGeneralParamsACB notified!");
@@ -121,7 +109,6 @@ function firebaseModelPromise(model, setModel) {
         }
     }
 
-
     function logOutACB (payload) {
         if (payload.key) {
             if (payload.key === "logout") {
@@ -129,7 +116,6 @@ function firebaseModelPromise(model, setModel) {
             }
         }
     }
-
 
     function logout(model) {
         // remove all observers before resetting model
@@ -143,6 +129,5 @@ function firebaseModelPromise(model, setModel) {
         console.log("Observers removed and model reset");
     }
 }
-
 
 export {modelParamsToPersistence, generatedListToPersistence, persistenceToModelParams, persistenceToGeneratedList, generatedListPromise, firebaseModelPromise};

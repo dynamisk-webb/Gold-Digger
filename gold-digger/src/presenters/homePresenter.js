@@ -11,7 +11,7 @@ function Home(props) {
     );
 
     /*
-    
+
     TODO
     Lifecycle: GET prev playlists from Firebase
     For each previous playlist Event: onClick inspect playlist
@@ -29,6 +29,11 @@ function Home(props) {
         props.model.setLogin("true");
         localStorage.setItem("isLoggedIn", "true");
     }    
+
+    function generatePlaylistACB() {
+        // TODO
+        // make call to reset process parameters
+    }
 }
 
 export default Home;
