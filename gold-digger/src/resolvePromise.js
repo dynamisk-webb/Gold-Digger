@@ -17,7 +17,7 @@ function resolvePromise(promiseToResolve, promiseState, setState){
     }
 
     if (promiseState.promise === null) return;
-    return promiseToResolve.then(saveDataACB).catch(saveErrorACB);
+    promiseToResolve.then(saveDataACB).catch(saveErrorACB);
 }
 
 export default resolvePromise;
