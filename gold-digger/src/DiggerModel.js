@@ -6,14 +6,14 @@ import { getProfile } from "./spotifySource.js";
  * Model keeps abstract data
  */
 class DiggerModel{
-    constructor(setState, userid=null, prevPlaylists=[], acoustic=false, danceable=false) {
+    constructor(state, setState, userid=null, prevPlaylists=[], acoustic=false, danceable=false) {
         this.userid = userid;
         this.source = null;
         this.generated = {playlistName: null, playlistid: null, firebaseKey: null, tracks: []};
         this.genres = [];   // String values
         this.includedArtists = [];  // Spotify ID
         this.excludedArtists = [];
-        this.prevPlaylists = prevPlaylists; // [{playlist:, tracks: }, ...]
+        this.prevPlaylists = prevPlaylists; // [{playlist:, key: }, ...]
         this.tempo = {min: 0, max: 300}; // {min:, max}, set to default or limits
         this.loudness = {min: -60, max: 0};
         this.instrumentalness = {min: 0, max: 1};
@@ -22,6 +22,7 @@ class DiggerModel{
 
         this.observers = [];
         this.setLogin = setState;
+        this.isLoggedIn = state;
     }
 
     /**
@@ -34,7 +35,7 @@ class DiggerModel{
 
         if(id !== this.userid) {  
             this.userid = id;
-            this.notifyObservers("user");
+            this.notifyObservers({key:"modelParams"});
         }
     }
     setSource(id) { // Sets source playlist if there is one
@@ -43,43 +44,42 @@ class DiggerModel{
         }
         if(id !== this.source) {
             this.source = id;
-            this.notifyObservers("source");
+            this.notifyObservers({key:"modelParams"});
         }
     }
     setPrevPlaylists(playlists) {   // Sets previous playlists, takes an array
         this.prevPlaylists = [...playlists];
-        this.notifyObservers("prevplaylist");
+        this.notifyObservers({key:"modelParams"});
     }
     setTempo(min, max) {    // Sets min and max tempo (in bpm)
         if(this.tempo.min !== min || this.tempo.max !== max) {
             this.tempo = {min: min, max: max};
-            console.log("Min: " + min + " Min: " + min);
-            this.notifyObservers("tempo");
+            this.notifyObservers({key:"modelParams"});
         }
     }
     setLoudness(min, max) { // Sets min and max noise (in db) from -60 to 0
         if(this.loudness.min !== min || this.loudness.max !== max) {
             this.loudness = {min: min, max: max};
-            this.notifyObservers("loud");
+            this.notifyObservers({key:"modelParams"});
         }
     }
     setInstrumentalness(min, max) { // Sets min and max instrumentalness (amount of vocals) from 0.0 to 1.0
         if(this.instrumentalness.min !== min || this.instrumentalness.max !== max) {
             this.instrumentalness = {min: min, max: max};
-            this.notifyObservers("instr");
+            this.notifyObservers({key:"modelParams"});
         }
     }
     setGenerated(generate) {    // Sets generated playlist and adds to prev playlists
         this.generated = generate;
-        this.notifyObservers("generate");
+        this.notifyObservers({key:"modelParams"});
     }
     setDanceable(bool) {    // Sets danceability (how suitable it is for dancing) from 0.0 to 1.0
         this.danceable = bool;
-        this.notifyObservers("danceable");
+        this.notifyObservers({key:"modelParams"});
     }
     setAcoustic(bool) {
         this.acoustic = bool;
-        this.notifyObservers("acoustic");
+        this.notifyObservers({key:"modelParams"});
     }
 
     // Add to lists, could be more general
@@ -92,7 +92,7 @@ class DiggerModel{
     removePrevPlaylist(playlist) {  // Removes a previous playlist id 
         if(this.prevPlaylists.includes(playlist)) {
             this.prevPlaylists.filter(filterPlaylistCB);
-            this.notifyObservers("prevplaylist");
+            this.notifyObservers({key:"modelParams"});
         }
 
         function filterPlaylistCB(elem) {
@@ -102,13 +102,13 @@ class DiggerModel{
     addGenre(genre) {   // Add to genres
         if(!this.genres.includes(genre)) {
             this.genres = [...this.genres, genre];
-            this.notifyObservers("genre added");
+            this.notifyObservers({key:"modelParams"});
         }
     }
     removeGenre(genre) {    // Exclude from genres
         if(this.genres.includes(genre)) {
             this.genres.filter(filterGenreCB);
-            this.notifyObservers("genre remove");
+            this.notifyObservers({key:"modelParams"});
         }
 
         function filterGenreCB(elem) {
@@ -119,7 +119,7 @@ class DiggerModel{
         if(!this.includedArtists.includes(artist)) {
             this.removeArtist(artist);
             this.includedArtists = [...this.includeArtists, artist];
-            this.notifyObservers("artist included");
+            this.notifyObservers({key:"modelParams"});
 
         }
     }
@@ -127,16 +127,16 @@ class DiggerModel{
         if(!this.excludedArtists.includes(artist)) {
             this.removeArtist(artist);
             this.excludedArtists = [...this.excludedArtists, artist];
-            this.notifyObservers("artist excluded");
+            this.notifyObservers({key:"modelParams"});
         }
     }
     removeArtist(artist) {    // Removes from both include/exclude, neutral artist
         if(this.includedArtists.includes(artist)) {
             this.includedArtists.filter(filterArtistCB);
-            this.notifyObservers("included artist removed");
+            this.notifyObservers({key:"modelParams"});
         } else if(this.excludedArtists.includes(artist)) {
             this.excludedArtists.filter(artist);
-            this.notifyObservers("excluded artist removed");
+            this.notifyObservers({key:"modelParams"});
         }
         
         function filterArtistCB(elem) {
@@ -144,7 +144,9 @@ class DiggerModel{
         }
     }
 
-    // Observers
+    /**
+     * Observers
+     */
     addObserver(callback) {
         this.observers = [...this.observers, callback];
     }
@@ -165,22 +167,51 @@ class DiggerModel{
         this.observers.forEach(invokeCB);
     }
 
-    // Login functions
+
+    /**
+     * Login/Logout
+     */
+
+    // Redirects to Spotify's login page
     login() {
         try {
-            localStorage.setItem("log-in", true);
+            this.setLogin("pending");
+            localStorage.setItem("isLoggedIn", "pending");
             redirectToSpotifyLogIn();
         } catch (error) {
             alert("Error logging in.");
         }
     }
     
+    // Should be run after we have been redirected back from Spotify's login page
     requestToken() {
-        requestAccessToken();
+        try {
+            return requestAccessToken();
+        } catch (error) {
+            // TODO fix logic so this error is actually caught here and not before
+            this.setLogin("false");
+            localStorage.setItem("isLoggedIn", "false");
+            alert("Error logging in.");
+        }
     }
 
-    // API calls
-    requestGetProfile() {   // Example
+    // Logout current user
+    logout() {
+        console.log("removing local storage");
+        
+        this.setLogin("false");
+        localStorage.setItem("isLoggedIn", "false");
+        localStorage.removeItem("access-token");
+        localStorage.removeItem("refresh-token");
+
+        this.notifyObservers({key:"logout"});
+    }
+
+
+    /**
+     * Example API-call
+     */
+    requestGetProfile() { 
         getProfile();
     }
 }

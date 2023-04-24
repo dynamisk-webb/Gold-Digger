@@ -1,11 +1,10 @@
+import magnify from "./../img/magnify.png"
 function SearchView(props){
     return (
         <div id="search">
-            <input onChange={changeInputACB}>
+            <img scr={magnify}></img>
+            <input type="text" onChange={changeInputACB}  placeholder="Search.." id="searchBar">
             </input>
-            <button onClick={searchClickACB}>
-                Search
-            </button>
         </div>
         );
     

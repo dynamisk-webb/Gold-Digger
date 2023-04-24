@@ -3,25 +3,24 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
+import artistImg from "./../img/genericArtistIcon.png";
 
 function ArtistResultView(props){
-    return (<div class="scrollable">
+    return (<div class="scrollable" id="artstResults">
         {props.artistResults.map(getArtistACB)}
     </div>);
 
     function getArtistACB(result){
 
         function handleChange(evt){
-            if(evt.target.value == "include")
-                props.setExcludeInclude(result.id, 1);
-            if(evt.target.value == "neutral")
-                props.setExcludeInclude(result.id, 0);
-            if(evt.target.value == "exclude")
-                props.setExcludeInclude(result.id, -1);
+            props.setExcludeInclude(result.id, evt.target.value);
         }
 
         // TODO: add buttons to include/exclude artists
         return (
+            <div id="artistResult">
+                <img src={artistImg} id="artistImg"></img>
+                <p>{result.name /*IDK IF THIS IS CORRECT*/}</p>
             <div> 
                 <FormControl>
                 <FormLabel id="demo-radio-buttons-group-label">result.title</FormLabel>
@@ -35,6 +34,7 @@ function ArtistResultView(props){
                         <FormControlLabel value="exclude" control={<Radio />} label="exclude" />
                     </RadioGroup>
                 </FormControl>
+            </div>
             </div>
         );
     }

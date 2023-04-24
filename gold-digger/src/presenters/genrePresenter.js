@@ -19,9 +19,9 @@ function Genres(props) {
     // Add some loading
     return (
         <div id="genreMainGrid">
-            <FilterView filterType="genre" title="Select Genres" nextTitle="Next" ></FilterView>
             <SearchView id="search"></SearchView>
-            {<Loading/> || <GenreResultView genreResults={genres} setSelectDeselect={setSelectDeselectACB}></GenreResultView>}
+            {promiseNoData(promiseState) || <GenreResultView id="genreResults" genreResults={genres} setSelectDeselect={setSelectDeselectACB}></GenreResultView>}
+            <FilterView filterType="genre" title="Select Genres" nextTitle="Next" ></FilterView>
         </div>
     );
 
