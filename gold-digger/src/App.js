@@ -35,6 +35,8 @@ import fixedPlaylist from "./test/fixedList.js";
 import LoggedInTest from "./test/loggedInTestPresenter";
 
 
+import AudioPlayView from "./views/audioPlayView";
+
 /**
  *  Main App rendering all components
  */
@@ -96,11 +98,10 @@ function App() {
   // Routes 
   return (
     <Routes>
-      <Route path="/" element={<Layout model={dModel}/>}>
+      <Route exact path ="/login" element={<Login model={dModel}/>}/>
+      <Route path="/" element={<Layout/>}>
         {/* Default route for / path */}
         <Route index element={<Home model={dModel}/>}/>
-        <Route path="home" element={<Home model={dModel}/>}/>
-        <Route path="login" element={<Login model={dModel}/>}/>
         <Route path="artist" element={<Artist model={dModel}/>}/>
         <Route path="genre" element={<Genres model={dModel}/>}/>
         <Route path="parameter" element={<Parameter model={dModel}/>}/>
