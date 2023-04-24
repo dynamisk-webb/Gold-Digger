@@ -2,13 +2,11 @@
 import {Routes, Route, Navigate, useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
 
-
 // VIEW
 import './static/App.css';
-import Layout from "./views/layoutView.js"
 
 // PRESENTER
-
+import Layout from "./presenters/layoutPresenter.js";
 import Login from "./presenters/loginPresenter.js"
 import Home from "./presenters/homePresenter.js"
 import Artist from "./presenters/artistPresenter.js"
@@ -45,7 +43,7 @@ function App() {
   const [dModel, setDmodel] = useState(new DiggerModel(isLoggedIn, setLoggedIn));
   
   // Temporary fixed generated playlist for testing purposes
-  dModel.setGenerated(fixedPlaylist);
+  dModel.generated = fixedPlaylist;
 
   // Init states to resolve promises
   const [firebasePromiseState, setFirebasePromiseState] = useState({});

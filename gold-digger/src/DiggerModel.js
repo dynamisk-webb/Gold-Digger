@@ -10,7 +10,7 @@ class DiggerModel{
     constructor(state, setState, userid=null, prevPlaylists=[], acoustic=false, danceable=false) {
         this.userid = userid;
         this.source = null;
-        this.generated = {playlist: null, tracks: []};
+        this.generated = {playlist: null, firebaseKey: null, tracks: []}; // playlist is 
         this.genres = [];   // String values
         this.includedArtists = [];  // Spotify ID
         this.excludedArtists = [];
@@ -36,7 +36,7 @@ class DiggerModel{
 
         if(id !== this.userid) {  
             this.userid = id;
-            this.notifyObservers({key:"modelParams"});
+            this.notifyObservers({key:"modelParams", msg:"userid"});
         }
     }
     setSource(id) { // Sets source playlist if there is one
@@ -45,42 +45,43 @@ class DiggerModel{
         }
         if(id !== this.source) {
             this.source = id;
-            this.notifyObservers({key:"modelParams"});
+            this.notifyObservers({key:"modelParams", msg:"source"});
         }
     }
+
     setPrevPlaylists(playlists) {   // Sets previous playlists, takes an array
         this.prevPlaylists = [...playlists];
-        this.notifyObservers({key:"modelParams"});
+        this.notifyObservers({key:"modelParams", msg:"prevPlaylists"});
     }
     setTempo(min, max) {    // Sets min and max tempo (in bpm)
         if(this.tempo.min !== min || this.tempo.max !== max) {
             this.tempo = {min: min, max: max};
-            this.notifyObservers({key:"modelParams"});
+            this.notifyObservers({key:"modelParams", msg:"tempo"});
         }
     }
     setLoudness(min, max) { // Sets min and max noise (in db) from -60 to 0
         if(this.loudness.min !== min || this.loudness.max !== max) {
             this.loudness = {min: min, max: max};
-            this.notifyObservers({key:"modelParams"});
+            this.notifyObservers({key:"modelParams", msg:"loudness"});
         }
     }
     setInstrumentalness(min, max) { // Sets min and max instrumentalness (amount of vocals) from 0.0 to 1.0
         if(this.instrumentalness.min !== min || this.instrumentalness.max !== max) {
             this.instrumentalness = {min: min, max: max};
-            this.notifyObservers({key:"modelParams"});
+            this.notifyObservers({key:"modelParams", msg:"instrumentalness"});
         }
     }
     setGenerated(generate) {    // Sets generated playlist and adds to prev playlists
         this.generated = generate;
-        this.notifyObservers({key:"modelParams"});
+        this.notifyObservers({key:"modelParams", msg:"generated"});
     }
     setDanceable(bool) {    // Sets danceability (how suitable it is for dancing) from 0.0 to 1.0
         this.danceable = bool;
-        this.notifyObservers({key:"modelParams"});
+        this.notifyObservers({key:"modelParams", msg:"danceable"});
     }
     setAcoustic(bool) {
         this.acoustic = bool;
-        this.notifyObservers({key:"modelParams"});
+        this.notifyObservers({key:"modelParams", msg:"acoustic"});
     }
 
     // Add to lists, could be more general
@@ -93,7 +94,7 @@ class DiggerModel{
     removePrevPlaylist(playlist) {  // Removes a previous playlist id 
         if(this.prevPlaylists.includes(playlist)) {
             this.prevPlaylists.filter(filterPlaylistCB);
-            this.notifyObservers({key:"modelParams"});
+            this.notifyObservers({key:"modelParams", msg:"removePrevPlaylist"});
         }
 
         function filterPlaylistCB(elem) {
@@ -103,13 +104,13 @@ class DiggerModel{
     addGenre(genre) {   // Add to genres
         if(!this.genres.includes(genre)) {
             this.genres = [...this.genres, genre];
-            this.notifyObservers({key:"modelParams"});
+            this.notifyObservers({key:"modelParams", msg:"addGenre"});
         }
     }
     removeGenre(genre) {    // Exclude from genres
         if(this.genres.includes(genre)) {
             this.genres.filter(filterGenreCB);
-            this.notifyObservers({key:"modelParams"});
+            this.notifyObservers({key:"modelParams", msg:"removeGenre"});
         }
 
         function filterGenreCB(elem) {
@@ -120,7 +121,7 @@ class DiggerModel{
         if(!this.includedArtists.includes(artist)) {
             this.removeArtist(artist);
             this.includedArtists = [...this.includeArtists, artist];
-            this.notifyObservers({key:"modelParams"});
+            this.notifyObservers({key:"modelParams", msg:"addToIncludeArtist"});
 
         }
     }
@@ -128,16 +129,16 @@ class DiggerModel{
         if(!this.excludedArtists.includes(artist)) {
             this.removeArtist(artist);
             this.excludedArtists = [...this.excludedArtists, artist];
-            this.notifyObservers({key:"modelParams"});
+            this.notifyObservers({key:"modelParams", msg:"addToExcludeArtist"});
         }
     }
     removeArtist(artist) {    // Removes from both include/exclude, neutral artist
         if(this.includedArtists.includes(artist)) {
             this.includedArtists.filter(filterArtistCB);
-            this.notifyObservers({key:"modelParams"});
+            this.notifyObservers({key:"modelParams", msg:"removeFromIncludeArtist"});
         } else if(this.excludedArtists.includes(artist)) {
             this.excludedArtists.filter(artist);
-            this.notifyObservers({key:"modelParams"});
+            this.notifyObservers({key:"modelParams", msg:"removeFromExcludeArtist"});
         }
         
         function filterArtistCB(elem) {
