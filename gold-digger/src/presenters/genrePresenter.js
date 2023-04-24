@@ -3,10 +3,11 @@ import SearchView from "../views/searchView.js";
 import GenreResultView from "../views/genreResultView.js";
 import { getGenres } from "../spotifySource.js";
 import { useEffect, useState } from "react";
-import Loading from "../views/loadingView.js"
+import promiseNoData from "../views/promiseNoData.js";
 
 function Genres(props) {
     const [genres, setGenres] = useState();
+    const [promiseState, setState] = useState({});
     useEffect(()=>{    
         async function getGenreACB() {
             let response = await getGenres();

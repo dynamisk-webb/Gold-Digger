@@ -18,15 +18,6 @@ function getSavedTracks() {
   // Add limit and offset to pick out parts or limit amount of tracks
   let response = generalAPI('/me/tracks');
   const list =  [...response.items]; 
-
-  /* TODO: test
-  while(response.next) {
-    const next = response.next.replace('https://api.spotify.com/v1', '');
-    response = generalAPI(next);
-    list.push(...response.items);
-  }
-  */
-
   return list;
 }
 async function getTracksPlaylist(playlist) {  // Get from playlist
