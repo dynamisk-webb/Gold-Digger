@@ -54,20 +54,16 @@ function App() {
 
   useEffect(() => {
 
-    if(isLoggedIn === "true" && window.location.pathname != "/login") {
+    if(isLoggedIn === "true") {
       console.log("LOGIN Logged in");
-      
+    
       // check if we timed out during the time browser was closed
       const currentTime = new Date().getTime();
-      if (currentTime > localStorage.getItem('expire-time')) {
-        // TODO: keep an eye out for if this was a fix or not for the following problem:
-        // wait for refreshAccess-token before resolving this promise (the getProfile API call)
+      if (currentTime > localStorage.getItem("expire-time")) {
         refreshAccessToken().then(getUserIDACB);
-
         console.log("refresh!");
-
       } else {
-        resolvePromise(getProfile(), profilePromiseState, setProfilePromiseState);
+        getUserIDACB();
       }
 
     } else if (isLoggedIn === "false") {

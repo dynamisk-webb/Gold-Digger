@@ -5,18 +5,14 @@ import { useState, useEffect } from "react";
 
 function Login(props) {
 
-    useEffect(() => {
-      if(localStorage.getItem("isLoggedIn") === "true") {
-        props.model.logout();
-      }
-    }, []);
-
     return (
       <LoginView connectSpotify={connectSpotifyACB}></LoginView>  
     );
 
-
     function connectSpotifyACB() {
+        if(localStorage.getItem("access-token")) {
+          localStorage.removeItem("access-token"); // remove in order to not create conflicts with new login
+        }
         props.model.login();
     }
 }
