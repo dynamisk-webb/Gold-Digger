@@ -14,19 +14,10 @@ async function getProfile() {
 
 // TODO: Set limits
 /* Getter */
-async function getSavedTracks() { 
+function getSavedTracks() { 
   // Add limit and offset to pick out parts or limit amount of tracks
-  let response = await generalAPI('/me/tracks');
+  let response = generalAPI('/me/tracks');
   const list =  [...response.items]; 
-
-  /* TODO: test
-  while(response.next) {
-    const next = response.next.replace('https://api.spotify.com/v1', '');
-    response = await generalAPI(next);
-    list.push(...response.items);
-  }
-  */
-
   return list;
 }
 async function getTracksPlaylist(playlist) {  // Get from playlist
@@ -45,12 +36,13 @@ async function getTracksParams(idlist) {
   return await generalAPI('/audio-features' + ids);
 }
 async function getGenres() {
-  return await generalAPI('/recommendations/available-genre-seeds');
+  const response = await generalAPI('/recommendations/available-genre-seeds');
+  return response.genres;
 }
 async function getArtists(playlist) {
   const fields = "?fields=items(track(artists(name, id)))"; // Adjust what is retrieved here
   const response = await generalAPI('/playlists/' + playlist + '/tracks' + fields); // Returns a list of tracks with list of artists for each
-  return response.items.flat()
+  return response.items.flat();
 }
 async function getArtist(id) {  // By Spotify ID
   return await generalAPI('/artists/' + id);
@@ -58,9 +50,6 @@ async function getArtist(id) {  // By Spotify ID
 
 /* Search */
 async function searchArtist(term) { // By search term, return a list of possible artists
-  return await generalAPI('/search?' + new URLSearchParams("query=" + term + "&type=artist"));
-}
-async function searchGenre(term) {
   return await generalAPI('/search?' + new URLSearchParams("query=" + term + "&type=artist"));
 }
 
@@ -103,13 +92,11 @@ async function removeTrack(playlist, track) {
 // General Spotify API Call
 async function generalAPI(endpoint, method="GET", body=null) {
 
-  // TODO: if null, redirect to home
   if (localStorage.getItem('expire-time') != null) {
 
     // check if access token needs to be refreshed
     const currentTime = new Date().getTime();
     if (currentTime > localStorage.getItem('expire-time')) {
-      // do somthing about it
       console.log("refresh!");
       refreshAccessToken();
     }
@@ -123,9 +110,8 @@ async function generalAPI(endpoint, method="GET", body=null) {
       body:body
       });
 
-      return response.json();
+      return await response.json();
   }
 }
 
-
-export {getProfile, getSavedTracks, getTracks, getTracksPlaylist, getTrackParam, getTracksParams, getGenres, getArtists, getArtist, searchArtist, searchGenre, createPlaylist, addTracks, changePlaylistName, addImagePlaylist, removeTrack};
+export {getProfile, getSavedTracks, getTracks, getTracksPlaylist, getTrackParam, getTracksParams, getGenres, getArtists, getArtist, searchArtist, createPlaylist, addTracks, changePlaylistName, addImagePlaylist, removeTrack};

@@ -27,6 +27,7 @@
       <a href="#description">Description</a>
       <ul>
         <li><a href="#built-with">Built With</a></li>
+        <li><a href="#how-to-use">How to Use</a></li>
       </ul>
     </li>
     <li><a href="#progress">Progress</a></li>
@@ -34,11 +35,7 @@
     <li>
       <a href="#project-file-structure">Project File Structure</a>
       <ul>
-        <li><a href="#model">Model</a></li>
         <li><a href="#spotify-api">Spotify API</a></li>
-        <li><a href="#presenters">Presenters</a></li>
-        <li><a href="#views">Views</a></li>
-        <li><a href="persistence">Persistence</a></li>
       </ul>
     </li>
      <li><a href="#contact">Contact</a></li>
@@ -126,21 +123,47 @@ If we have time, we'd like to add a third-party component.
 
 We're following the MVP-architecture for the project.
 
-Project files for the app are under `/gold-digger/`. The code is mainly divided into the folders:
-- `src` contains DiggerModel.js, App.js, index.js that renders the app and source-files with authentication and api calls
-- `src/presenters/` contains our presenters 
-- `src/static/` contains CSS files
-- `src/views/`contains our views 
-- `src/test/` contains test files for API calls and log in
-
-### Spotify API
-
-We use Spotify's own API to implement our app. It requires authorize `OAuth 2.0` and redirects to Spotify's log in page. Our authentication implementation is defined in `authentication.js` 
-
-The API calls we run currently:
-- Fetch access token with ``requestAccessToken()`` in `authentication.js`
-
-The others are defined but not yet tested in `spotifySource.js`. 
+Project files for the app are under `/gold-digger/`. The code follows the following file structure:
+```
+│   App.js
+│   authentication.js
+│   DiggerModel.js
+│   firebaseConfig.js
+│   firebaseModel.js
+│   index.js
+│   resolvePromise.js
+│   spotifySource.js
+│
+├───presenters
+│       artistPresenter.js
+│       genrePresenter.js
+│       homePresenter.js
+│       loadingPresenter.js
+│       loginPresenter.js
+│       parameterPresenter.js
+│       playlistPresenter.js
+│       sourcePresenter.js
+│
+├───static
+│       App.css
+│       index.css
+│
+└───views
+        artistResultView.js
+        audioPlayView.js
+        filterView.js
+        genreResultView.js
+        homeView.js
+        layoutView.js
+        loadingView.js
+        loginView.js
+        parameterView.js
+        playlistView.js
+        prevListView.js
+        promiseNoData.js
+        searchView.js
+        sourceView.js
+```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

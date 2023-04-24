@@ -1,5 +1,4 @@
 // Imports
-// import resolvePromise from "./resolvePromise.js"
 import { redirectToSpotifyLogIn, requestAccessToken } from "./authentication.js";
 import { getProfile } from "./spotifySource.js";
 
@@ -10,11 +9,11 @@ class DiggerModel{
     constructor(state, setState, userid=null, prevPlaylists=[], acoustic=false, danceable=false) {
         this.userid = userid;
         this.source = null;
-        this.generated = {playlist: null, tracks: []};
+        this.generated = {playlistName: null, playlistId: null, firebaseKey: null, tracks: []};
         this.genres = [];   // String values
         this.includedArtists = [];  // Spotify ID
         this.excludedArtists = [];
-        this.prevPlaylists = prevPlaylists; // [{playlist:, key: }, ...]
+        this.prevPlaylists = prevPlaylists; // [{playlistName, playlistId, firebaseKey: }, ...]
         this.tempo = {min: 0, max: 300}; // {min:, max}, set to default or limits
         this.loudness = {min: -60, max: 0};
         this.instrumentalness = {min: 0, max: 1};
@@ -30,19 +29,12 @@ class DiggerModel{
      *  Setters, notifiers observers of changes
      */
     setUserID(id) { // Sets current user
-        if(id === null) {
-          throw new Error("User ID is null");  
-        }
-
         if(id !== this.userid) {  
             this.userid = id;
             this.notifyObservers({key:"modelParams"});
         }
     }
     setSource(id) { // Sets source playlist if there is one
-        if(id === null) {
-            throw new Error("Source playlist is null, invalid")
-        }
         if(id !== this.source) {
             this.source = id;
             this.notifyObservers({key:"modelParams"});
@@ -143,6 +135,19 @@ class DiggerModel{
         function filterArtistCB(elem) {
             return elem !== artist;
         }
+    }
+
+    resetParams() { // Set to default values
+        this.source = null;
+        this.generated = {playlistName: null, playlistId: null, firebaseKey: null, tracks: []};
+        this.genres = [];   // String values
+        this.includedArtists = [];
+        this.excludedArtists = [];
+        this.tempo = {min: 0, max: 300}; // {min:, max}, set to default or limits
+        this.loudness = {min: -60, max: 0};
+        this.instrumentalness = {min: 0, max: 1};
+        this.danceable = false;
+        this.acoustic = false;
     }
 
     /**

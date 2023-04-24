@@ -5,7 +5,7 @@ import {useEffect, useState} from "react";
 
 // VIEW
 import './static/App.css';
-import Layout from "./views/layoutView.js"
+import Layout from "./presenters/layoutPresenter.js"
 
 // PRESENTER
 
@@ -33,7 +33,6 @@ import { firebaseModelPromise } from "./firebaseModel.js";
 // TEMPORARY IMPORTS
 import fixedPlaylist from "./test/fixedList.js";
 import LoggedInTest from "./test/loggedInTestPresenter";
-
 
 /**
  *  Main App rendering all components
@@ -92,11 +91,10 @@ function App() {
   // Routes 
   return (
     <Routes>
+      <Route exact path ="/login" element={<Login model={dModel}/>}/>
       <Route path="/" element={<Layout model={dModel}/>}>
         {/* Default route for / path */}
         <Route index element={<Home model={dModel}/>}/>
-        <Route path="home" element={<Home model={dModel}/>}/>
-        <Route path="login" element={<Login model={dModel}/>}/>
         <Route path="artist" element={<Artist model={dModel}/>}/>
         <Route path="genre" element={<Genres model={dModel}/>}/>
         <Route path="parameter" element={<Parameter model={dModel}/>}/>
