@@ -29,7 +29,7 @@ function ParameterView(props){
 
     return (<div id="parameterGrid">
         
-        <div class="parameterSlider" id="tempoSlider">
+        <div className="parameterSlider" id="tempoSlider">
             <Tooltip title={<p style={{ color: "white" }}>Overall estimated tempo in beats per minute (BPM)</p>}>
                 <h2>Tempo</h2>
             </Tooltip>
@@ -46,7 +46,7 @@ function ParameterView(props){
             color="secondary"
                     />
         </div>
-        <div class="parameterSlider" id="loudSlider">
+        <div className="parameterSlider" id="loudSlider">
             <Tooltip title={<p style={{ color: "white" }}>Overall loudness in decibels (dB)</p>}>
                 <h2>Noisiness</h2>
             </Tooltip>
@@ -59,7 +59,7 @@ function ParameterView(props){
                     max={0.0}
                     valueLabelDisplay="auto" />
         </div>
-        <div class="parameterSlider" id="instrSlider">
+        <div className="parameterSlider" id="instrSlider">
             <Tooltip title={<p style={{ color: "white" }}>Overall amount of vocals in the song</p>}>
                 <h2>Amount of vocals</h2>
             </Tooltip>
@@ -73,13 +73,13 @@ function ParameterView(props){
                     max={100}
                     />
         </div>
-        <div class = "parameterSwitch">
+        <div className = "parameterSwitch">
             <Tooltip title={<p style={{ color: "white" }}>Whether or not a song is suitable for dancing</p>}>
                 <h2>Danceable</h2>
             </Tooltip>
             <Switch checked={props.checked} onChange={onChangeDanceableACB}/>
         </div>
-        <div class = "parameterSwitch">
+        <div className = "parameterSwitch">
             <Tooltip title={<p style={{ color: "white" }}>Whether or not a song only contains acoustic instruments</p>}>
                 <h2>Acoustic</h2>
             </Tooltip>

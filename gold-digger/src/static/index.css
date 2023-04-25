@@ -415,6 +415,51 @@ input[type=text] {
 
 /*  PLAYLIST VIEW */
 
+#playlistContainer{
+  display:grid;
+  margin-left: 200px;
+  margin-right: 200px;
+  grid-template-columns: 1fr;
+  grid-template-rows: 100px 100px 100px 1fr 100px;
+}
+
+#playlistText{
+  grid-row: 2 / span 1;
+  grid-column: 1 / span 1;
+}
+
+#playlistTitle{
+  grid-row: 2 / span 1;
+  grid-column: 1 / span 1;
+ 
+  border-width: 0; 
+  background-color: black;
+  color: whitesmoke;
+  font-weight: bold;
+  font-size: 60px;
+}
+
+#playlistTitle:focus { 
+  outline: none !important;
+  border-width: 0;
+  box-shadow:none;
+  color: gray;
+}
+
+#addPlaylistButton{
+  grid-row: 3 / span 1;
+  grid-column: 1 / span 1;
+  width: 200px;
+  margin-top: 30px;
+  margin-bottom: 30px;
+
+}
+
+#trackContainer{
+  grid-row: 4 / span 1;
+  grid-column: 1 / span 1;
+}
+
 #homeButton{
   background-image: url("./../img/home.png"); /* 16px x 16px */
   background-color:transparent;
@@ -425,6 +470,59 @@ input[type=text] {
   
   margin: 0px 0px 0px 0px; 
 }
+
+#trackInfo{
+  display: grid;
+  grid-template-columns: 120px 1fr 1fr 50px 120px;
+  grid-template-rows: 40px 40px 40px;
+
+}
+
+#trackImg{
+  grid-row: 1 / span 3;
+  grid-column: 1 / span 1;
+  object-fit: contain;
+  align-self: center;
+  justify-self: center;
+}
+
+#trackName{
+  grid-row: 2 / span 1;
+  grid-column: 2 / span 1;
+  align-self: center;
+}
+
+#trackArtist{
+  grid-row: 3 / span 1;
+  grid-column: 2 / span 1;
+  vertical-align: top;
+  margin:0 0 0 0;
+}
+
+#trackAlbum{
+  grid-row: 2 / span 1;
+  grid-column: 3 / span 1;
+  align-self: center;
+}
+
+#trackTime{
+  grid-row: 2 / span 1;
+  grid-column: 4 / span 1;
+  align-self: center;
+}
+
+#trackRemove{
+  grid-row: 1 / span 3;
+  grid-column: 5 / span 1;
+
+  background-image: url("./../img/garbageIcon.png"); 
+  background-color:transparent;
+  background-repeat: no-repeat;
+  background-size: contain;
+  margin: 40px 40px 40px 40px;
+}
+
+/*LAYOUT*/
 
 #layout{
   position:fixed;

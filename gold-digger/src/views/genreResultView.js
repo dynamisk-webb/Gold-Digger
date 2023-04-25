@@ -2,7 +2,7 @@
 import { Checkbox } from "@mui/material";
 
 function GenreResultView(props){
-    return (<div class="scrollable" id="genreResults">
+    return (<div className="scrollable" id="genreResults">
         {props.genreResults.map(getGenreACB)}
     </div>);
 
@@ -18,7 +18,7 @@ function GenreResultView(props){
         }
 
         return (
-            <div id = "genreResult"> 
+            <div id = "genreResult" key={result}> 
                 <input type="checkbox" id= "genreCheck"></input>
                 <p id="genreText">{result}</p>
                 

@@ -1,5 +1,5 @@
 function PrevlistView(props){
-    return (<div class="scrollable">
+    return (<div className="scrollable">
         previous playlist wow
         {/*props.prevPlaylist.map(songInfoACB)*/}
     </div>);

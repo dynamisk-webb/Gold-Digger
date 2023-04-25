@@ -1,14 +1,17 @@
 import {useNavigate} from "react-router-dom"
+import albumImg from "./../img/genericAlbumIcon.png";
+
+
 function PlaylistView(props){
 
     const navigate = useNavigate(); // So React doesn't complain about React components
 
-    return (<div>
-        <p>Playlist added to your spotify!</p>
-        <h1>{props.generatedName}</h1>
-        <button onClick={savePlaylistToSpotifyACB}>add list to your account</button>
+    return (<div id="playlistContainer">
+        <p id="playlistText">Here's your playlist!</p>
+        <input id="playlistTitle" type="text" placeholder="Default Playlist" maxLength="50"></input>
+        <button id="addPlaylistButton" onClick={savePlaylistToSpotifyACB}>add list to your account</button>
         <button id="homeButton" onClick={returnHomeACB}></button>
-        <div class="scrollable">
+        <div className="scrollable" id="trackContainer">
             {props.generatedTracks.map(getSongInfoACB)}
         </div>
     </div>);
@@ -23,10 +26,18 @@ function PlaylistView(props){
 
     
     function getSongInfoACB(item){
-        return (<div>
-            <img></img>
+        function removeTrackACB(){
+            props.removeTrack(item);
+        }
+
+        return (<div id="trackInfo" key={item.track.name}>
+            <img id="trackImg" src={albumImg}></img>
             {/*Should display more info in the future*/}
-            <h2>{item.track.name}</h2>
+            <h2 id="trackName">{/*item.track.name*/}Uma Thurman</h2>
+            <p id="trackArtist">{/*item.track.artist*/}Fall out boy</p>
+            <p id="trackAlbum">{/*item.track.album*/}American Beauty/American Psycho</p>
+            <p id="trackTime">{/*item.track.time*/}3:31</p>
+            <button id="trackRemove" onClick={removeTrackACB}></button>
         </div>);
     }
 }
