@@ -42,7 +42,7 @@ function AboutUsView(props){
     </div>);
 
     function displayInfoCB(author){
-        return (<div id="authorInfo">
+        return (<div key={author.name} id="authorInfo">
             <img src={author.image} id="authorImg"></img>
             <h2 id="authorName">{author.name}</h2>
             <p id="authorAbout">{author.about}</p>

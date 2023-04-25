@@ -89,7 +89,7 @@ function App() {
   // Routes 
   return (
     <Routes>
-      <Route exact path ="/login" element={<Login model={dModel}/>}/>
+      <Route exact path ="/login" element={isLoggedIn === "true" ? <Navigate to="/"/> : <Login model={dModel}/>}/>
       <Route path="/" element={<Layout model={dModel}/>}>
         {/* Default route for / path */}
         <Route index element={<Home model={dModel}/>}/>
@@ -100,7 +100,7 @@ function App() {
         <Route path="source" element={<Source model={dModel}/>}/>
         <Route path="test" element={<LoggedInTest model={dModel}/>}/>
       </Route>
-      <Route path="*" element={<Navigate to="/"/>}/>
+      <Route path="*" element={isLoggedIn === "true" ? <Navigate to="/"/> : <Navigate to="/login"/>}/>
     </Routes>
   );
 }
