@@ -7,7 +7,7 @@ function HomeView(props){
     
     return (
     <div id="homeGrid">
-        <h1 id="homeTitle">Gold Digger!!!</h1>
+        <h1 id="homeTitle">Gold Digger</h1>
         <h2 id="homeSubTitle">A playlist generator for Spotify</h2>
         <p id="homeText"> Match!</p>
         <button id="generatePlaylist" onClick={generatePlaylistACB}>Generate a playlist</button>
