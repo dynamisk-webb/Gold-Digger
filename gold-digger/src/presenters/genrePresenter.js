@@ -19,7 +19,7 @@ function Genres(props) {
         getGenreACB();
     }, []);
 
-    // function getGenreACB() {}
+    function getGenreACB() {}
 
     // TODO: sort function. Sort the chosen genres to display. Sort based on... what?
     function filterGenreACB() {
