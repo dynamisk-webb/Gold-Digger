@@ -34,6 +34,7 @@ class DiggerModel{
             this.notifyObservers({key:"modelParams", msg:"userid"});
         }
     }
+
     setSource(id) { // Sets source playlist if there is one
         if(id !== this.source) {
             this.source = id;
@@ -45,32 +46,38 @@ class DiggerModel{
         this.prevPlaylists = [...playlists];
         this.notifyObservers({key:"modelParams", msg:"prevPlaylists"});
     }
+
     setTempo(min, max) {    // Sets min and max tempo (in bpm)
         if(this.tempo.min !== min || this.tempo.max !== max) {
             this.tempo = {min: min, max: max};
             this.notifyObservers({key:"modelParams", msg:"tempo"});
         }
     }
+
     setLoudness(min, max) { // Sets min and max noise (in db) from -60 to 0
         if(this.loudness.min !== min || this.loudness.max !== max) {
             this.loudness = {min: min, max: max};
             this.notifyObservers({key:"modelParams", msg:"loudness"});
         }
     }
+
     setInstrumentalness(min, max) { // Sets min and max instrumentalness (amount of vocals) from 0.0 to 1.0
         if(this.instrumentalness.min !== min || this.instrumentalness.max !== max) {
             this.instrumentalness = {min: min, max: max};
             this.notifyObservers({key:"modelParams", msg:"instrumentalness"});
         }
     }
+
     setGenerated(generate) {    // Sets generated playlist and adds to prev playlists
         this.generated = generate;
         this.notifyObservers({key:"modelParams", msg:"generated"});
     }
+
     setDanceable(bool) {    // Sets danceability (how suitable it is for dancing) from 0.0 to 1.0
         this.danceable = bool;
         this.notifyObservers({key:"modelParams", msg:"danceable"});
     }
+
     setAcoustic(bool) {
         this.acoustic = bool;
         this.notifyObservers({key:"modelParams", msg:"acoustic"});
@@ -83,6 +90,7 @@ class DiggerModel{
             this.setPrevPlaylists(prev);   
         }
     }
+
     removePrevPlaylist(playlist) {  // Removes a previous playlist id 
         if(this.prevPlaylists.includes(playlist)) {
             this.prevPlaylists = this.prevPlaylists.filter(filterPlaylistCB);
@@ -93,12 +101,14 @@ class DiggerModel{
             return elem !== playlist;
         }
     }
+
     addGenre(genre) {   // Add to genres
         if(!this.genres.includes(genre)) {
             this.genres = [...this.genres, genre];
             this.notifyObservers({key:"modelParams", msg:"addGenre"});
         }
     }
+
     removeGenre(genre) {    // Exclude from genres
         if(this.genres.includes(genre)) {
             this.genres = this.genres.filter(filterGenreCB);
@@ -109,6 +119,7 @@ class DiggerModel{
             return elem !== genre;
         }
     }
+
     includeArtist(artist) {   // Includes artist, always added in generated list
         if(!this.includedArtists.includes(artist)) {
             this.removeArtist(artist);
@@ -117,6 +128,7 @@ class DiggerModel{
 
         }
     }
+
     excludeArtist(artist) {    // Exclude artists, always ignored in generated list
         if(!this.excludedArtists.includes(artist)) {
             this.removeArtist(artist);
@@ -124,6 +136,7 @@ class DiggerModel{
             this.notifyObservers({key:"modelParams", msg:"addToExcludeArtist"});
         }
     }
+
     removeArtist(artist) {    // Removes from both include/exclude, neutral artist
         if(this.includedArtists.includes(artist)) {
             this.includedArtists = this.includedArtists.filter(filterArtistCB);
@@ -157,12 +170,14 @@ class DiggerModel{
     addObserver(callback) {
         this.observers = [...this.observers, callback];
     }
+
     removeObserver(callback) {
         function filterObsCB(obs) {
             return obs !== callback;
         }
         this.observers = this.observers.filter(filterObsCB);
     }
+    
     notifyObservers(payload) {
         function invokeCB(obs) {
             try {
