@@ -69,7 +69,7 @@ function App() {
     } else if (isLoggedIn === "pending") {
       console.log("LOGIN Pending login request");
 
-      if ( window.location.pathname !== "/redirect" ||
+      if ( window.location.pathname !== "/redirect" &&
            window.location.pathname !== "/login") {
         navigate("/login");
       }
