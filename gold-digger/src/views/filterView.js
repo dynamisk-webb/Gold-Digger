@@ -1,5 +1,6 @@
 import {useNavigate} from "react-router-dom"
 
+
 function FilterView(props){
 
     const navigate = useNavigate(); // So React doesn't complain about React components
