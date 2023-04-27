@@ -1,15 +1,21 @@
 import piano from "./../img/piano.png";
 import {useNavigate} from "react-router-dom"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function SourceView(props){
     const navigate = useNavigate(); // So React doesn't complain about React components
     const [input, setInput] = useState(false);
 
+    // Once the URL is validated
+    useEffect(() => {
+        if(props.validURL)
+            navigate("/genre");
+      }, [props.validURL]);
+
     return (<div id="sourceGrid">
             <h1 id="sourceTitle">Select a source</h1>
             <h2 id="sourceSubTitle">to generate a playlist from</h2>
-            {input  ?<input id="sourceInputPlaylist" onKeyDown={handlePlaylistInputACB} type="text" placeholder="https://open.spotify.com/playlist/.."></input>
+            {input  ?<input id="sourceInputPlaylist" onKeyDown={setSourcePlaylistACB} type="text" placeholder="https://open.spotify.com/playlist/.."></input>
                     :<button id="sourceButtonPlaylist" onClick={updateSearchbarACB}>From Playlist</button>}
             <button id="sourceSaved" onClick={setSourceSavedACB}>From Saved Tracks</button>
             <img src={piano} id="pianoImage"></img>
@@ -22,20 +28,15 @@ function SourceView(props){
 
     function setSourceSavedACB(evt){
         navigate("/genre");
-        props.setSource(""); // Set source empty when taking from saved tracks
+        props.setSourceSaved(); // Set source empty when taking from saved tracks
     }
-
     
-    function handlePlaylistInputACB(evt){
+    function setSourcePlaylistACB(evt){
         let url = "";
-        function setSourcePlaylist(){
-            navigate("/genre");
-            props.setSource(url);
-        }
 
         if(evt.key === "Enter"){
             url = document.getElementById("sourceInputPlaylist").value;
-            setSourcePlaylist()
+            props.setSource(url);
         }
     }
 }
