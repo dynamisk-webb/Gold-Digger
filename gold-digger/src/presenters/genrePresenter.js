@@ -4,24 +4,34 @@ import GenreResultView from "../views/genreResultView.js";
 import { getGenres } from "../spotifySource.js";
 import { useEffect, useState } from "react";
 import promiseNoData from "../views/promiseNoData.js";
+import resolvePromise from "../resolvePromise.js";
 
 function Genres(props) {
-    const [genres, setGenres] = useState();
+   
     const [promiseState, setState] = useState({});
     useEffect(()=>{    
         async function getGenreACB() {
-            let response = await getGenres();
-            setGenres(response);
-            console.log("Genres: " + genres[0]);
+            resolvePromise(getGenres(), promiseState, setState);
+            
+            // resolve promise with sort function, promiseState and setPromise
+            // resolvePromise(filterGenreACB, promiseState, setPromise);
         } 
         getGenreACB();
     }, []);
+
+    function getGenreACB() {}
+
+    // TODO: sort function. Sort the chosen genres to display. Sort based on... what?
+    function filterGenreACB() {
+        // filter out everything that matches the searchTerm from the list of genres
+
+    }
 
     // Add some loading
     return (
         <div id="genreMainGrid">
             <SearchView id="search"></SearchView>
-            {promiseNoData(promiseState) || <GenreResultView id="genreResults" genreResults={genres} setSelectDeselect={setSelectDeselectACB}></GenreResultView>}
+            {promiseNoData(promiseState) || <GenreResultView id="genreResults" genreResults={promiseState.data} setSelectDeselect={setSelectDeselectACB}></GenreResultView>}
             <FilterView filterType="genre" title="Select Genres" nextTitle="Next" ></FilterView>
         </div>
     );
@@ -35,4 +45,5 @@ function Genres(props) {
     }
 }
 
+// TODO: export searchTerm and setSearch to genreView
 export default Genres;
