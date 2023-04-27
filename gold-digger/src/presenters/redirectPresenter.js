@@ -9,14 +9,10 @@ function Redirect (props) {
         <div></div>
     );
 
-    /*
-    Is this one needed...?
-    
     function setLoggedInACB() {
         props.model.setLogin("true");
         localStorage.setItem("isLoggedIn", "true");
     }
-    */
 
     function onMountedACB() {
         if (localStorage.getItem("access-token") === null && props.model.isLoggedIn === "pending") {

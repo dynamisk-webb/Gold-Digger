@@ -135,10 +135,11 @@ function firebaseModelPromise(model, setModel) {
     }
     
     function addObserversACB() {
-        console.log("observers added");
+        //console.log("observers added");
         model.addObserver(obsGeneralParamsACB);
         model.addObserver(obsGeneratedListACB);
         model.addObserver(logOutACB);
+        return {};
     }
 
     // Observes all model parameters and saves to firebase

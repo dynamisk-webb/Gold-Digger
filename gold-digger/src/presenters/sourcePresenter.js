@@ -30,47 +30,46 @@ import SourceView from "../views/sourceView";
 import { getTracksPlaylist } from "../spotifySource";
 import { useState } from "react";
 
+function Source(props) {
+  const [validURL, setValidURL] = useState(false);
 
-function Source (props) {
+  return (
+    <SourceView
+      validURL={validURL}
+      setSource={setPlaylistIDACB}
+      setSourceSaved={setSourceSavedACB}
+    />
+  );
 
-    const [validURL, setValidURL] = useState (false);
-
-    return (
-        <SourceView validURL={validURL} setSource={setPlaylistIDACB} setSourceSaved={setSourceSavedACB}/>
-    );
-
-    /* Event: onInput set playlist ID (based on URL)
+  /* Event: onInput set playlist ID (based on URL)
     User chooses to generate playlist based on a playlist on Spotify
-    */    
-    function setPlaylistIDACB (playlistID) {
-        
-        // Use API call 'getTracksPlaylist' to check if URL leads to an exisiting playlist
-        try {
-            // using a promise chain so that we wait for getTracksPlaylist to return, THEN set the source.
-            getTracksPlaylist (playlistID).then (setValidSourceACB);
-        }   
-        catch {
-            // send popup to user
-            alert("Oops! That URL doesn't go to a Spotify playlist. Try again!");
-        }
-
-        // helper function. Sets the playlist as the source once we know it's a valid source. 
-        function setValidSourceACB () {
-            props.model.setSource (playlistID);
-            setValidURL (true);
-
-            // pass this state to sourceView, so that it knows to redirect.
-            // using 'setAndGoForward'
-        }
+    */
+  function setPlaylistIDACB(playlistID) {
+    // Use API call 'getTracksPlaylist' to check if URL leads to an exisiting playlist
+    try {
+      // using a promise chain so that we wait for getTracksPlaylist to return, THEN set the source.
+      getTracksPlaylist(playlistID).then(setValidSourceACB);
+    } catch {
+      // send popup to user
+      alert("Oops! That URL doesn't go to a Spotify playlist. Try again!");
     }
-    
-    /* Event: onClick set source to saved songs
+
+    // helper function. Sets the playlist as the source once we know it's a valid source.
+    function setValidSourceACB() {
+      props.model.setSource(playlistID);
+      setValidURL(true);
+
+      // pass this state to sourceView, so that it knows to redirect.
+      // using 'setAndGoForward'
+    }
+  }
+
+  /* Event: onClick set source to saved songs
     User chooses to generate playlist based on their saved songs on Spotify.
     We use setSource ("") to signify that we are supposed to use the users own saved tracks. 
     */
-    function setSourceSavedACB () {
-        props.model.setSource ("");
-    }
-    
+  function setSourceSavedACB() {
+    props.model.setSource("");
+  }
 }
 export default Source;
