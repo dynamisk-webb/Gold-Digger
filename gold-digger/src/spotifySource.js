@@ -8,7 +8,6 @@ Current access token is available in localStorage
 */
 async function getProfile() {
     let response = await generalAPI('/me');
-    console.log("Response: " + response.id);
     return response;
 }
 
