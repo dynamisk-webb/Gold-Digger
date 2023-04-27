@@ -27,10 +27,7 @@ export const Player = () => {
     const device = usePlayerDevice();
     const player = useSpotifyPlayer();
     const playback = usePlaybackState();
-
-    if(device === null) return;
-    player.resume();
-
+    
     const dTheme = {
         highLightColor: '#FF6B35',
     }

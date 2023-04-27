@@ -7,14 +7,15 @@ import './static/App.css';
 
 // PRESENTER
 import Layout from "./presenters/layoutPresenter.js";
-import Login from "./presenters/loginPresenter.js"
-import Home from "./presenters/homePresenter.js"
-import Artist from "./presenters/artistPresenter.js"
-import Genres from "./presenters/genrePresenter.js"
-import Parameter from "./presenters/parameterPresenter.js"
-import Playlist from "./presenters/playlistPresenter.js"
-import Source from "./presenters/sourcePresenter.js"
-import Loading from "./presenters/loadingPresenter.js"
+import Login from "./presenters/loginPresenter.js";
+import Home from "./presenters/homePresenter.js";
+import Artist from "./presenters/artistPresenter.js";
+import Genres from "./presenters/genrePresenter.js";
+import Parameter from "./presenters/parameterPresenter.js";
+import Playlist from "./presenters/playlistPresenter.js";
+import Source from "./presenters/sourcePresenter.js";
+import Loading from "./presenters/loadingPresenter.js";
+import Redirect from "./presenters/redirectPresenter.js";
 
 // MODEL
 import DiggerModel from "./DiggerModel.js";
