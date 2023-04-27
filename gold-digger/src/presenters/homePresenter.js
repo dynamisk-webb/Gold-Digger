@@ -1,27 +1,25 @@
 import HomeView from "../views/homeView.js";
-import { useEffect } from "react";
-import PrevlistView from "../views/prevListView.js";
+import { generatedListPromise } from "../firebaseModel.js";
 
 function Home(props) {
-    useEffect(onMountedACB, [props.model]);
 
     return (
-      <HomeView generatePlaylist={generatePlaylistACB}></HomeView>  
+      <HomeView generatePlaylist={generatePlaylistACB} setCurrentPlaylist={setCurrentPlaylistACB} prevPlaylists={props.model.prevPlaylists}></HomeView>  
     );
 
     /*
-
     TODO
     For each previous playlist Event: onClick inspect playlist
-
     */
-    
-    function onMountedACB() {
-    }
+  
 
     function generatePlaylistACB() {
         // TODO
-        // make call to reset process parameters
+    }
+
+    // Set the generated playlist as the current playlist in the model
+    function setCurrentPlaylistACB (firebaseKey) {
+      generatedListPromise (props.model, firebaseKey);
     }
 }
 
