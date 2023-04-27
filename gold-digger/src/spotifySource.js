@@ -111,13 +111,18 @@ async function generalAPI(endpoint, method="GET", body=null) {
     }
 
     let accessToken = localStorage.getItem('access-token');
-    const response = await fetch('https://api.spotify.com/v1' + endpoint, {
+      const response = await fetch('https://api.spotify.com/v1' + endpoint, {
       method:method,  
       headers: {
           Authorization: 'Bearer ' + accessToken
         },
       body:body
       });
+      
+      // TODO throws error too late to catch XHR errors
+      if (!response.ok) {
+        throw new Error('HTTP status ' + response.status);
+      } 
 
       return await response.json();
   }

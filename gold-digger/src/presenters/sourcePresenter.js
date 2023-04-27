@@ -29,10 +29,11 @@ export default Sidebar;
 import SourceView from "../views/sourceView";
 import { getTracksPlaylist } from "../spotifySource";
 import { useState, alert } from "react";
-
+import resolvePromise from "../resolvePromise";
 
 function Source(props) {
   const [validURL, setValidURL] = useState(false);
+  const [promiseState, setState] = useState({});
 
   return (
     <SourceView
@@ -47,7 +48,12 @@ function Source(props) {
     User chooses to generate playlist based on a playlist on Spotify
   */
   function setPlaylistIDACB(playlistID) {
+    
     // Use API call 'getTracksPlaylist' to check if URL leads to an exisiting playlist
+    
+    /*
+    BEFORE: try-catch
+    PROBLEM: not async, we need the promise chain!
     try {
       // using a promise chain so that we wait for getTracksPlaylist to return, THEN set the source.
       getTracksPlaylist(playlistID).then(setValidSourceACB);
@@ -55,6 +61,9 @@ function Source(props) {
       // send popup to user
       alert("Oops! That URL doesn't go to a Spotify playlist. Try again!");
     }
+    */
+    getTracksPlaylist(playlistID).then(setValidSourceACB).catch(invalidSourceACB);
+
 
     /*
       Helper function. Sets the playlist as the source once we know it's a valid source.
@@ -66,7 +75,16 @@ function Source(props) {
       props.model.setSource(playlistID);
       setValidURL(true);
     }
+
+    /*
+      Helper function. Should notify with alert.
+    */
+    function invalidSourceACB() {
+      console.log("Caught invalid source error");
+      //alert("Oops! That URL doesn't go to a Spotify playlist. Try again!");
+    }
   }
+
 
   /* 
     Event: onClick set source to saved songs

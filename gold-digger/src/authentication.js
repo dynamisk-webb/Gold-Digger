@@ -107,6 +107,7 @@ function requestAccessToken() {
     })
     .catch(error => {
         console.error('Error:', error);
+        throw new Error('Error: ' + error);
     });
 
     return response;
