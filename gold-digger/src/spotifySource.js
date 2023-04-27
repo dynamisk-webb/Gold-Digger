@@ -1,5 +1,4 @@
 import {refreshAccessToken} from "./authentication.js";
-import {usePlayerDevice} from "react-spotify-web-playback-sdk";
 
 /* 
 EXAMPLE FUNCTION FROM SPOTIFYS TUTORIAL
@@ -12,6 +11,7 @@ async function getProfile() {
     return response;
 }
 
+// TODO: Set limits
 /* Getter */
 function getSavedTracks() { 
   // Add limit and offset to pick out parts or limit amount of tracks
@@ -52,18 +52,6 @@ async function searchArtist(term) { // By search term, return a list of possible
   return await generalAPI('/search?' + new URLSearchParams("query=" + term + "&type=artist"));
 }
 
-/* Set playback state */
-async function useTrack(track) { // Set player to track based on id
-  const device = usePlayerDevice();
-  if(device === null) return;
-
-  const body = {
-    "uris": track
-  }
-
-  generalAPI('/me/player/play?device_id=${device.device_id}', "PUT", body);
-}
-
 /* Generate Playlist and Add to it */
 async function createPlaylist(userid, name) {
   const body = {
@@ -71,7 +59,7 @@ async function createPlaylist(userid, name) {
     "description": "Playlist Generated through Gold Digger",
     "public": false
   };
-  return generalAPI('/users/' + userid + '/playlists', "POST", body).id;  // Returns the new playlist id
+  return generalAPI('/users/' + userid + '/playlists', "POST", body).od;  // Returns the new playlist id
 }
 async function addTracks(playlist, idlist) {  // Adds several tracks to one playlist based on id, max 100
   const uris = idlist.map(convertToURICB);
@@ -89,6 +77,9 @@ async function changePlaylistName(playlist, name) { // Changes playlist name
     "name": name,
   };
   generalAPI('/playlists/' + playlist, "PUT", body);
+}
+async function addImagePlaylist(playlist) {
+  // TODO: Fill
 }
 async function removeTrack(playlist, track) {
   const body = {
@@ -122,4 +113,4 @@ async function generalAPI(endpoint, method="GET", body=null) {
   }
 }
 
-export {getProfile, getSavedTracks, getTracks, getTracksPlaylist, getTrackParam, getTracksParams, getGenres, getArtists, getArtist, searchArtist, createPlaylist, addTracks, changePlaylistName, useTrack, removeTrack};
+export {getProfile, getSavedTracks, getTracks, getTracksPlaylist, getTrackParam, getTracksParams, getGenres, getArtists, getArtist, searchArtist, createPlaylist, addTracks, changePlaylistName, addImagePlaylist, removeTrack};

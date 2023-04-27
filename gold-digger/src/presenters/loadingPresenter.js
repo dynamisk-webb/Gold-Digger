@@ -31,18 +31,10 @@ TODO
 
 
 */
-import AudioPlayer from "../views/audioPlayView";
 import LoadingView from "../views/loadingView";
 
 function Loading(props) {
-
-    return (
-        <div>
-            <LoadingView></LoadingView>
-            <AudioPlayer/>
-        </div>
-    );
-
+    return <LoadingView></LoadingView>;
 }
 
 export default Loading;
