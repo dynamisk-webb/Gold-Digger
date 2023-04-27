@@ -77,6 +77,7 @@ function App() {
   }, [isLoggedIn, setLoggedIn]);
 
   
+  // Set userID in model on login
   function getUserID() {
     function getUserIDACB() {
       resolvePromise(getProfile(), profilePromiseState, setProfilePromiseState);
