@@ -14,8 +14,8 @@ import Genres from "./presenters/genrePresenter.js";
 import Parameter from "./presenters/parameterPresenter.js";
 import Playlist from "./presenters/playlistPresenter.js";
 import Source from "./presenters/sourcePresenter.js";
-import Redirect from "./presenters/redirectPresenter";
-// import Loading from "./presenters/loadingPresenter.js";
+import Loading from "./presenters/loadingPresenter.js";
+import Redirect from "./presenters/redirectPresenter.js";
 
 // MODEL
 import DiggerModel from "./DiggerModel.js";
