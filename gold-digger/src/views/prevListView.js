@@ -3,7 +3,6 @@ function PrevlistView(props){
         <h3 id="prevListsTitle"> Previously generated playlists</h3>
         <div className="scrollable"  id="prevLists">
         {props.prevPlaylists.map(songInfoACB)}
-        {songInfoACB()}
         </div>
     </div>);
 
