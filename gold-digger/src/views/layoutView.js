@@ -11,7 +11,7 @@ function LayoutView(props){
       <button id="logOut" onClick={logOutACB}></button>
       <button id="openAbout" onClick={openAboutACB}>&#9776; Open Sidebar</button>
 
-      <Outlet />
+      <Outlet /> { /* Renders next route element */}
     </div>
   )
 
