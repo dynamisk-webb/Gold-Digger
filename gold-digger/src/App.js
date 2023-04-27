@@ -105,7 +105,6 @@ function App() {
     <Routes>
       <Route exact path ="/login" element={isLoggedIn === "true" ? <Navigate to="/"/> : <Login model={dModel}/>}/>
       <Route exact path ="/redirect" element={<Redirect model={dModel}/>}/>
-      
       {/* Handles firebasepromise if login-status changes */}      
       <Route
         path="/"
@@ -120,6 +119,7 @@ function App() {
         <Route path="parameter" element={<Parameter model={dModel}/>}/>
         <Route path="playlist" element={<Playlist model={dModel}/>}/>
         <Route path="source" element={<Source model={dModel}/>}/>
+        <Route path="loading" element={<Loading model={dModel}/>}/>
         <Route path="test" element={<LoggedInTest model={dModel}/>}/>
       </Route>
       <Route path="*" element={isLoggedIn === "true" ? <Navigate to="/"/> : <Navigate to="/login"/>}/>
