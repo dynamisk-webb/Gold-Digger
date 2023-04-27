@@ -55,19 +55,10 @@ function App() {
 
     if(isLoggedIn === "true") {
       console.log("LOGIN Logged in");
-    
-      // check if we timed out during the time browser was closed
-      const currentTime = new Date().getTime();
-      if (currentTime > localStorage.getItem("expire-time")) {
-        refreshAccessToken().then(getUserIDACB);
-        console.log("refresh!");
-      } else {
-        getUserIDACB();
-      }
+      getUserID();
 
       // redirect from redirect view
       if (window.location.pathname === "/redirect") {
-        console.log("redirect to home");
         navigate("/");
       }
 
@@ -77,12 +68,28 @@ function App() {
 
     } else if (isLoggedIn === "pending") {
       console.log("LOGIN Pending login request");
+
+      if ( window.location.pathname !== "/redirect" ||
+           window.location.pathname !== "/login") {
+        navigate("/login");
+      }
     }
   }, [isLoggedIn, setLoggedIn]);
 
-  function getUserIDACB() {
-    resolvePromise(getProfile(), profilePromiseState, setProfilePromiseState);
+  
+  function getUserID() {
+    function getUserIDACB() {
+      resolvePromise(getProfile(), profilePromiseState, setProfilePromiseState);
+    }
+    // check if we timed out during the time browser was closed
+    const currentTime = new Date().getTime();
+    if (currentTime > localStorage.getItem("expire-time")) {
+      refreshAccessToken().then(getUserIDACB);
+    } else {
+      getUserIDACB();
+    }
   }
+  
 
   // Resolve firebasepromise after userid-promise has resolved
   useEffect(() => {
@@ -99,9 +106,13 @@ function App() {
       <Route exact path ="/login" element={isLoggedIn === "true" ? <Navigate to="/"/> : <Login model={dModel}/>}/>
       <Route exact path ="/redirect" element={<Redirect model={dModel}/>}/>
       
-      {/* test to be removed) */}      
-      <Route path="/" element={waitForFirebase(firebasePromiseState) || <Layout model={dModel}/>}>
-      {/*<Route path="/" element={<Layout model={dModel}/>}>*/}
+      {/* Handles firebasepromise if login-status changes */}      
+      <Route
+        path="/"
+        element={
+          waitForFirebase(firebasePromiseState) || <Layout model={dModel} />
+        }
+      >
         {/* Default route for / path */}
         <Route index element={<Home model={dModel}/>}/>
         <Route path="artist" element={<Artist model={dModel}/>}/>
