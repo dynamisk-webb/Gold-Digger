@@ -7,18 +7,19 @@ import './static/App.css';
 
 // PRESENTER
 import Layout from "./presenters/layoutPresenter.js";
-import Login from "./presenters/loginPresenter.js"
-import Home from "./presenters/homePresenter.js"
-import Artist from "./presenters/artistPresenter.js"
-import Genres from "./presenters/genrePresenter.js"
-import Parameter from "./presenters/parameterPresenter.js"
-import Playlist from "./presenters/playlistPresenter.js"
-import Source from "./presenters/sourcePresenter.js"
-// import Loading from "./presenters/loadingPresenter.js"
+import Login from "./presenters/loginPresenter.js";
+import Home from "./presenters/homePresenter.js";
+import Artist from "./presenters/artistPresenter.js";
+import Genres from "./presenters/genrePresenter.js";
+import Parameter from "./presenters/parameterPresenter.js";
+import Playlist from "./presenters/playlistPresenter.js";
+import Source from "./presenters/sourcePresenter.js";
+import Redirect from "./presenters/redirectPresenter";
+// import Loading from "./presenters/loadingPresenter.js";
 
 // MODEL
 import DiggerModel from "./DiggerModel.js";
-import resolvePromise from "./resolvePromise";
+import resolvePromise from "./resolvePromise.js";
 
 // API AND AUTHENTICATION
 import { getProfile } from "./spotifySource";
@@ -27,6 +28,7 @@ import { refreshAccessToken } from "./authentication";
 // FIREBASE
 import  "./firebaseModel.js";
 import { firebaseModelPromise } from "./firebaseModel.js";
+import waitForFirebase from "./views/waitForFirebase.js";
 
 // TEMPORARY IMPORTS
 import fixedPlaylist from "./test/fixedList.js";
@@ -63,6 +65,12 @@ function App() {
         getUserIDACB();
       }
 
+      // redirect from redirect view
+      if (window.location.pathname === "/redirect") {
+        console.log("redirect to home");
+        navigate("/");
+      }
+
     } else if (isLoggedIn === "false") {
       console.log("LOGIN Logged out");    
       navigate("/login");
@@ -76,11 +84,10 @@ function App() {
     resolvePromise(getProfile(), profilePromiseState, setProfilePromiseState);
   }
 
-
   // Resolve firebasepromise after userid-promise has resolved
   useEffect(() => {
     if (profilePromiseState.data && isLoggedIn === "true") {
-      dModel.setUserID(profilePromiseState.data.id)
+      dModel.setUserID(profilePromiseState.data.id);
       resolvePromise(firebaseModelPromise(dModel, setDmodel), firebasePromiseState, setFirebasePromiseState);
     }
   }, [profilePromiseState, setProfilePromiseState]);
@@ -90,7 +97,11 @@ function App() {
   return (
     <Routes>
       <Route exact path ="/login" element={isLoggedIn === "true" ? <Navigate to="/"/> : <Login model={dModel}/>}/>
-      <Route path="/" element={<Layout model={dModel}/>}>
+      <Route exact path ="/redirect" element={<Redirect model={dModel}/>}/>
+      
+      {/* test to be removed) */}      
+      <Route path="/" element={waitForFirebase(firebasePromiseState) || <Layout model={dModel}/>}>
+      {/*<Route path="/" element={<Layout model={dModel}/>}>*/}
         {/* Default route for / path */}
         <Route index element={<Home model={dModel}/>}/>
         <Route path="artist" element={<Artist model={dModel}/>}/>
