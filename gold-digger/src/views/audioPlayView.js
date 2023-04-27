@@ -6,12 +6,11 @@ import { WebPlaybackSDK,
 import { SpotifyPlaybackPlayer } from "react-spotify-playback-player";
 
 /**
- * Code based on Spotify & react-spotify-playback-player by ...
+ * Code based on Spotify & react-spotify-playback-player by https://github.com/ArielBetti/react-spotify-playback-player
  */
-function AudioPlayer(props){
-    const token = "BQC4f-42thY3kNms6WGP2V7Y6Sho0q5Gw-RWf5_s4DiaM0V8LJaRHA3lO9Tp56z7Xi2n3nPg0yLuN-MpwB6OFuRbqShLa8CxwkXRK-CLYooOnrWQcYayzdjoSvLFhzXEj_z_QOts3lmO0UO2H9_2RbnkCZVuXulHH4BeLZb7j4V5-W8IvwKH2NQD07eAEbbwXfBPwfFOZnujhbzZwcIqwrHCqFU";
-    // const token = localStorage.getItem("access-token");
-    const getOAuthToken = useCallback(getToken  => getToken(token), []);
+function AudioPlayer(){
+    const token = localStorage.getItem('access-token');
+    const getOAuthToken = useCallback(getToken  => getToken(token), [token]);
     
     return (
         <WebPlaybackSDK
@@ -29,12 +28,20 @@ export const Player = () => {
     const player = useSpotifyPlayer();
     const playback = usePlaybackState();
 
+    if(device === null) return;
+    player.resume();
+
+    const dTheme = {
+        highLightColor: '#FF6B35',
+    }
+
     return (
         <SpotifyPlaybackPlayer
             playback={playback || undefined}
             player={player || undefined}
             deviceIsReady={device?.status}
             onLinkClick={linkClickCB}
+            theme={dTheme}
         />
     );
 

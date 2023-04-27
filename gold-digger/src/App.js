@@ -14,7 +14,7 @@ import Genres from "./presenters/genrePresenter.js"
 import Parameter from "./presenters/parameterPresenter.js"
 import Playlist from "./presenters/playlistPresenter.js"
 import Source from "./presenters/sourcePresenter.js"
-// import Loading from "./presenters/loadingPresenter.js"
+import Loading from "./presenters/loadingPresenter.js"
 
 // MODEL
 import DiggerModel from "./DiggerModel.js";
@@ -47,7 +47,6 @@ function App() {
   // Init states to resolve promises
   const [firebasePromiseState, setFirebasePromiseState] = useState({});
   const [profilePromiseState, setProfilePromiseState] = useState({});
-
 
   useEffect(() => {
 
@@ -98,6 +97,7 @@ function App() {
         <Route path="parameter" element={<Parameter model={dModel}/>}/>
         <Route path="playlist" element={<Playlist model={dModel}/>}/>
         <Route path="source" element={<Source model={dModel}/>}/>
+        <Route path="loading" element={<Loading model={dModel}/>}/>
         <Route path="test" element={<LoggedInTest model={dModel}/>}/>
       </Route>
       <Route path="*" element={isLoggedIn === "true" ? <Navigate to="/"/> : <Navigate to="/login"/>}/>
