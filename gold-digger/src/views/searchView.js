@@ -17,10 +17,6 @@ function SearchView(props){
                 props.search(searchTerm);
             }
         }
-    
-        function searchClickACB(evt){
-            props.search();
-        }
 }
 
 export default SearchView;
