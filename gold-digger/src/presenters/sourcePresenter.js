@@ -27,26 +27,49 @@ export default Sidebar;
 */
 
 import SourceView from "../views/sourceView";
+import { getTracksPlaylist } from "../spotifySource";
+import { useState } from "react";
 
 
 function Source (props) {
+
+    const [validURL, setValidURL] = useState (false);
+
     return (
-        <SourceView setSource={setPlaylistIDACB} setSourceSaved={setSourceACB}/>
+        <SourceView validURL={validURL} setSource={setPlaylistIDACB} setSourceSaved={setSourceSavedACB}/>
     );
 
-    /* Event: onInput set playlist ID 
+    /* Event: onInput set playlist ID (based on URL)
     User chooses to generate playlist based on a playlist on Spotify
     */    
     function setPlaylistIDACB (playlistID) {
-        props.model.setSource (playlistID);
+        
+        // Use API call 'getTracksPlaylist' to check if URL leads to an exisiting playlist
+        try {
+            // using a promise chain so that we wait for getTracksPlaylist to return, THEN set the source.
+            getTracksPlaylist (playlistID).then (setValidSourceACB);
+        }   
+        catch {
+            // send popup to user
+            alert("Oops! That URL doesn't go to a Spotify playlist. Try again!");
+        }
+
+        // helper function. Sets the playlist as the source once we know it's a valid source. 
+        function setValidSourceACB () {
+            props.model.setSource (playlistID);
+            setValidURL (true);
+
+            // pass this state to sourceView, so that it knows to redirect.
+            // using 'setAndGoForward'
+        }
     }
     
     /* Event: onClick set source to saved songs
-    User chooses to generate playlist based on their saved songs on Spotify
+    User chooses to generate playlist based on their saved songs on Spotify.
+    We use setSource ("") to signify that we are supposed to use the users own saved tracks. 
     */
-    // TODO: Will this be any different from the function above...? 
-    function setSourceACB() {
-        // TODO, call function made by Julia
+    function setSourceSavedACB () {
+        props.model.setSource ("");
     }
     
 }
