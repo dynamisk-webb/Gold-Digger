@@ -218,9 +218,7 @@ class DiggerModel{
     }
 
     // Logout current user
-    logout() {
-        console.log("removing local storage");
-        
+    logout() { 
         this.setLogin("false");
         localStorage.setItem("isLoggedIn", "false");
         localStorage.removeItem("access-token");
