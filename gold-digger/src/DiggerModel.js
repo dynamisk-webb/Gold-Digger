@@ -85,7 +85,7 @@ class DiggerModel{
     }
     removePrevPlaylist(playlist) {  // Removes a previous playlist id 
         if(this.prevPlaylists.includes(playlist)) {
-            this.prevPlaylists.filter(filterPlaylistCB);
+            this.prevPlaylists = this.prevPlaylists.filter(filterPlaylistCB);
             this.notifyObservers({key:"modelParams", msg:"removePrevPlaylist"});
         }
 
@@ -101,7 +101,7 @@ class DiggerModel{
     }
     removeGenre(genre) {    // Exclude from genres
         if(this.genres.includes(genre)) {
-            this.genres.filter(filterGenreCB);
+            this.genres = this.genres.filter(filterGenreCB);
             this.notifyObservers({key:"modelParams", msg:"removeGenre"});
         }
 
@@ -126,10 +126,10 @@ class DiggerModel{
     }
     removeArtist(artist) {    // Removes from both include/exclude, neutral artist
         if(this.includedArtists.includes(artist)) {
-            this.includedArtists.filter(filterArtistCB);
+            this.includedArtists = this.includedArtists.filter(filterArtistCB);
             this.notifyObservers({key:"modelParams", msg:"removeFromIncludeArtist"});
         } else if(this.excludedArtists.includes(artist)) {
-            this.excludedArtists.filter(artist);
+            this.excludedArtists = this.excludedArtists.filter(artist);
             this.notifyObservers({key:"modelParams", msg:"removeFromExcludeArtist"});
         }
         
