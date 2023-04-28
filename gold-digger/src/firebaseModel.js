@@ -110,14 +110,14 @@ function persistenceToGeneratedList(persistedData, model) {
 }
 
 // gets a prev generated list based on param firebaseKey (id) from firebase and replaces current generated 
-function generatedListPromise(model, setModel, firebaseKey) {
+function generatedListPromise(model, firebaseKey) {
     let userPATH=setUserPath(model);
 
     return get(ref(db, userPATH+"_generatedList_"+firebaseKey)).then(toModelACB);
 
     // Saves any persisted data into the model (received as parameter)
     function toModelACB(dataFromFirebase) {
-        return persistenceToGeneratedList(dataFromFirebase.val(), model, setModel);
+        return persistenceToGeneratedList(dataFromFirebase.val(), model);
     }
 }
 
