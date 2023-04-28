@@ -1,6 +1,7 @@
 
 import piano from "./../img/piano.png";
 import {useNavigate} from "react-router-dom"
+import PrevlistView from "./prevListView";
 
 function HomeView(props){
     const navigate = useNavigate(); // So React doesn't complain about React components
@@ -10,7 +11,9 @@ function HomeView(props){
         <h1 id="homeTitle">Gold Digger</h1>
         <h2 id="homeSubTitle">A playlist generator for Spotify</h2>
         <p id="homeText"> Match!</p>
-        <button id="generatePlaylist" onClick={generatePlaylistACB}>Generate a playlist</button>
+        <PrevlistView id="prevListView" prevPlaylists={props.prevPlaylists} setCurrentPlaylist={props.setCurrentPlaylist}></PrevlistView>
+        <button id="createPlaylist" onClick={generatePlaylistACB}>Create new playlist</button>
+        <button id="continuePlaylist" onClick={generatePlaylistACB}>Continue Previous Session</button>
         <img src={piano} id="pianoImage"></img>
     </div>);
 

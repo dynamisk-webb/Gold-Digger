@@ -20,7 +20,6 @@ function Redirect (props) {
             props.model.requestToken().then(setLoggedInACB);
         }
     }
-
 }
 
 export default Redirect;

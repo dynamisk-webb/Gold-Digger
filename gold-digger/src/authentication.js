@@ -43,7 +43,7 @@ function redirectToSpotifyLogIn() {
 
     generateCodeChallenge(codeVerifier).then(codeChallenge => {
     let state = generateRandomString(16);
-    let scope = 'user-read-private user-read-email playlist-read-private user-library-read playlist-modify-public playlist-modify-private';
+    let scope = 'user-read-private user-read-email playlist-read-private user-library-read playlist-modify-public playlist-modify-private streaming user-modify-playback-state user-read-playback-state user-read-currently-playing';
 
     localStorage.setItem('code-verifier', codeVerifier);
     localStorage.setItem('test-item', 'i am a test item');
@@ -97,8 +97,7 @@ function requestAccessToken() {
     .then(data => {
         // set access token
         localStorage.setItem('access-token', data.access_token);
-        console.log("AUTH access token set: " +  data.access_token);
-
+        
         // Set expire time
         const expire_time = new Date().getTime() + data.expires_in*1000;
         localStorage.setItem('expire-time', expire_time);
@@ -108,6 +107,7 @@ function requestAccessToken() {
     })
     .catch(error => {
         console.error('Error:', error);
+        throw new Error('Error: ' + error);
     });
 
     return response;
@@ -137,7 +137,6 @@ function refreshAccessToken() {
     })
     .then(data => {
         localStorage.setItem('access-token', data.access_token);
-        //console.log("AUTH new access token set: " +  data.access_token);
        
         // set expire time
         const expire_time = new Date().getTime() + data.expires_in*1000;

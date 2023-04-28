@@ -91,20 +91,20 @@ function persistenceToModelParams(persistedData, model, setModel) {
             model.acoustic = persistedData.acoustic;
         }
     } else {
-        console.log("No persisted data!");
+        //console.log("No persisted data!");
     }
     return model;
 }
 
 function persistenceToGeneratedList(persistedData, model) {
-    if(persistedData !== null) { //console.log("Existing persisted data!");
+    if(persistedData !== null) {
         if (persistedData.generated) {
             model.generated = persistedData.generated;  
         } else {
             model.generated = null;
         }
     } else {
-        console.log("No persisted data!");
+        //console.log("No persisted data!");
     }
     return model;
 }
@@ -144,14 +144,8 @@ function firebaseModelPromise(model, setModel) {
 
     // Observes all model parameters and saves to firebase
     function obsGeneralParamsACB(payload){
-        console.log("obsGeneralParamsACB notified with payload: " + payload.key);
         if (payload.key) {
             if(payload.key === "modelParams") {
-                if (payload.msg) {
-                    console.log("msg: " + payload.msg)
-                } else {
-                    console.log("no msg");
-                }
                 set(ref(db, userPATH+"_modelParams"), modelParamsToPersistence(model));
             }
         }
@@ -192,10 +186,8 @@ function firebaseModelPromise(model, setModel) {
         model.removeObserver(obsGeneratedListACB);
         model.removeObserver(logOutACB);
 
-        // TODO reset all values in model
         model.user = null;
-
-        console.log("Observers removed and model reset");
+        model.resetParams();
     }
 }
 
@@ -204,9 +196,9 @@ function setUserPath(model) {
     let userPATH="";
     if(model.userid) {
         userPATH = "/"+model.userid;
-        console.log("FIREBASE userpath set to: " + userPATH);
+        //console.log("FIREBASE userpath set to: " + userPATH);
     } else {
-        console.log("FIREBASE No user set in model, meaning firebasepath is incorrect");
+        //console.log("FIREBASE No user set in model, firebasepath is incorrect");
     }
     return userPATH;
 }
