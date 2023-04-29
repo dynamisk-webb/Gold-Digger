@@ -8,7 +8,7 @@ function PlaylistView(props){
 
     return (<div id="playlistContainer">
         <p id="playlistText">Here's your playlist!</p>
-        <input id="playlistTitle" type="text" placeholder="Default Playlist" maxLength="50"></input>
+        <input id="playlistTitle" type="text" placeholder={props.generatedName} maxLength="50"></input>
         <button id="addPlaylistButton" onClick={savePlaylistToSpotifyACB}>add list to your account</button>
         <button id="homeButton" onClick={returnHomeACB}></button>
         <div className="scrollable" id="trackContainer">
@@ -30,12 +30,16 @@ function PlaylistView(props){
             props.removeTrack(item);
         }
 
+        function getArtistsACB(artist) {
+            return artist.name + " ";
+        }
+
         return (<div id="trackInfo" key={item.track.name}>
             <img id="trackImg" src={albumImg}></img>
             {/*Should display more info in the future*/}
-            <h2 id="trackName">{/*item.track.name*/}Uma Thurman</h2>
-            <p id="trackArtist">{/*item.track.artist*/}Fall out boy</p>
-            <p id="trackAlbum">{/*item.track.album*/}American Beauty/American Psycho</p>
+            <h2 id="trackName">{item.track.name}</h2>
+            <p id="trackArtist">{item.track.artists.map(getArtistsACB)}</p>
+            <p id="trackAlbum">{item.track.album.name}</p>
             <p id="trackTime">{/*item.track.time*/}3:31</p>
             <button id="trackRemove" onClick={removeTrackACB}></button>
         </div>);
