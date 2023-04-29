@@ -19,7 +19,8 @@ function Home(props) {
 
     // Set the generated playlist as the current playlist in the model
     function setCurrentPlaylistACB (firebaseKey) {
-      generatedListPromise (props.model, firebaseKey);
+      props.model.setGeneratedFirebaseKey(firebaseKey);
+      //TODO resolve generatedListPromise in playlistPresenter instead!
     }
 }
 

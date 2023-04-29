@@ -4,12 +4,13 @@ const { getDatabase, ref, get, set, onValue } = require("firebase/database");
 const { initializeApp}= require( "firebase/app");
 
 // Initialise firebase app, database, ref
-const app= initializeApp(firebaseConfig)
-const db= getDatabase(app)
+const app= initializeApp(firebaseConfig);
+const db= getDatabase(app);
 
 function modelParamsToPersistence(model){
     if (model.userid) {
         
+        // handle case of no generated playlist set in model
         let playlist = null;
         let firebaseKey = null;
         if (model.generated) {
@@ -23,6 +24,7 @@ function modelParamsToPersistence(model){
 
         return {userid:model.userid,
             source:model.source,
+            playlistCounter:model.playlistCounter,
             generated:{playlist:playlist, firebaseKey:firebaseKey},
             genres:model.genres,
             includedArtists:model.includedArtists,
@@ -38,16 +40,18 @@ function modelParamsToPersistence(model){
 }
 
 function generatedListToPersistence(model){
-    if (model.userid) {
-        return {generated:model.generated};
-    }
-    return null;
+    return {generated:model.generated};
 }
 
 function persistenceToModelParams(persistedData, model, setModel) {
     if(persistedData !== null) {
         if (persistedData.userid) {
             model.userid = persistedData.userid;
+        }
+        console.log("Counter from persisted data" + persistedData.playlistCounter);
+        if (persistedData.playlistCounter) {
+            model.playlistCounter = persistedData.playlistCounter;
+            console.log("Counter from persisted data, set" + persistedData.playlistCounter);
         }
         if (persistedData.source) {
             model.source = persistedData.source;
@@ -152,22 +156,21 @@ function firebaseModelPromise(model, setModel) {
     }
 
     // Observes current generated list and saves any changes to firebase
-    // (eg changed name, removed song)
+    // (eg creation, name change, removed track)
     function obsGeneratedListACB(payload){
-        if (payload.key) {
-            if(payload.key === "editGenerated") {
-                /*
-                TODO
-                - get key (aka firebasespecific ID) of current generated list
-                - something like model.generated.firebasekey
-                */
-                const firebaseKey = 0;
-                // update this path with whole generated list
-                set(ref(db, userPATH+"_generatedList_"+firebaseKey), generatedListToPersistence(model));
-                // update this path with eg. name updates
-                if (payload.msg === "editName" && payload.msg === "editFirebaseKey") {
-                    set(ref(db, userPATH+"_modelParams"), modelParamsToPersistence(model));
+        if (payload.key && payload.param) {
+            if(payload.key === "modelParams" && payload.param === "generated") {
+                if (payload.specs === "newList") {
+                    model.playlistCounter++;
+                    console.log("model.fire" + model.generated.firebaseKey);
+                    model.generated.firebaseKey = model.playlistCounter;
+                    console.log("Playlist counter: " + model.playlistCounter);
+                    console.log("model.fire" + model.generated.firebaseKey);
+                    model.addToPrevPlaylists();
                 }
+                console.log("Playlist counter: " + model.playlistCounter);
+                console.log("model.fire" + model.generated.firebaseKey);
+                set(ref(db, userPATH+"_generatedList_" + model.generated.firebaseKey), generatedListToPersistence(model));
             }
         }
     }
