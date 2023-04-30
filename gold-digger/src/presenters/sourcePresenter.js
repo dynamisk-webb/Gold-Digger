@@ -28,7 +28,7 @@ export default Sidebar;
 
 import SourceView from "../views/sourceView";
 import { getTracksPlaylist } from "../spotifySource";
-import { useState, alert } from "react";
+import { useState } from "react";
 import resolvePromise from "../resolvePromise";
 
 function Source(props) {
@@ -81,7 +81,7 @@ function Source(props) {
     */
     function invalidSourceACB() {
       console.log("Caught invalid source error");
-      //alert("Oops! That URL doesn't go to a Spotify playlist. Try again!");
+      alert("Oops! That URL doesn't go to a Spotify playlist. Try again!");
     }
   }
 
