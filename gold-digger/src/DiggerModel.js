@@ -9,12 +9,13 @@ class DiggerModel{
     constructor(state, setState, userid=null, prevPlaylists=[], acoustic=false, danceable=false) {
         this.userid = userid;
         this.source = null;
-        this.generated = {playlistName: null, playlistId: null, firebaseKey: null, tracks: []};
+        this.generated = {playlist: null, playlistId: null, firebaseKey: null, tracks: []};
         this.genres = [];   // String values
         this.includedArtists = [];  // Spotify ID
         this.excludedArtists = [];
-        this.prevPlaylists = prevPlaylists; // [{playlistName, playlistId, firebaseKey: }, ...]
+        this.prevPlaylists = prevPlaylists; // [{playlist, playlistId, firebaseKey: }, ...]
         this.playlistCounter = 0;
+        
         this.tempo = {min: 0, max: 300}; // {min:, max}, set to default or limits
         this.loudness = {min: -60, max: 0};
         this.instrumentalness = {min: 0, max: 1};
@@ -90,7 +91,9 @@ class DiggerModel{
         this.notifyObservers({key:"modelParams", param:"acoustic"});
     }
 
-    // Add to lists, could be more general
+    /**
+     *  Modify lists
+     */
     addToPrevPlaylists(newPlaylist) {   // Adds a playlist to previous playlists
         if(!this.prevPlaylists.includes(newPlaylist)) {
             const prev = [...this.prevPlaylists, newPlaylist];
@@ -98,24 +101,24 @@ class DiggerModel{
         }
     }
 
-    removeTrackFromGenerated(trackID) {  // Removes a specific track from an already generated list
-        // TODO implement
-        // Should remove a specific track from the current object generated
+    addTracks(idlist) {   // Add multiple tracks to generated playlist
+        idlist.forEach(id => this.generated.tracks.push(id));
+        this.notifyObserveres({key: "modelParams", param: "generated", specs:"addTracks", firebaseKey:this.generated.firebaseKey});
+    }
+
+    removeTrack(trackID) {  // Removes a specific track from the already generated list
+        this.generated.tracks = this.generated.tracks(tr => tr.id !== trackID);
         this.notifyObservers({key:"modelParams", param:"generated", specs:"removeTrack", firebaseKey:this.generated.firebaseKey});
     }
 
     removePrevPlaylist(playlist) {  // Removes a previous playlist id 
         if(this.prevPlaylists.includes(playlist)) {
-            this.prevPlaylists = this.prevPlaylists.filter(filterPlaylistCB);
+            this.prevPlaylists = this.prevPlaylists.filter(elem => elem.playlistId !== playlist);
             this.notifyObservers({key:"modelParams", param:"removePrevPlaylist"});
-        }
-
-        function filterPlaylistCB(elem) {
-            return elem !== playlist;
         }
     }
 
-    addGenre(genre) {   // Add to genres
+    addGenre(genre) {   // Add to included genres
         if(!this.genres.includes(genre)) {
             this.genres = [...this.genres, genre];
             this.notifyObservers({key:"modelParams", param:"addGenre"});
@@ -124,16 +127,12 @@ class DiggerModel{
 
     removeGenre(genre) {    // Exclude from genres
         if(this.genres.includes(genre)) {
-            this.genres = this.genres.filter(filterGenreCB);
+            this.genres = this.genres.filter(elem => elem !== genre);
             this.notifyObservers({key:"modelParams", param:"removeGenre"});
-        }
-
-        function filterGenreCB(elem) {
-            return elem !== genre;
         }
     }
 
-    includeArtist(artist) {   // Includes artist, always added in generated list
+    includeArtist(artist) {   // Include artist, always added in generated list
         if(!this.includedArtists.includes(artist)) {
             this.removeArtist(artist);
             this.includedArtists = [...this.includeArtists, artist];
@@ -150,23 +149,19 @@ class DiggerModel{
         }
     }
 
-    removeArtist(artist) {    // Removes from both include/exclude, neutral artist
+    removeArtist(artist) {    // Remove from both include/exclude, neutral artist
         if(this.includedArtists.includes(artist)) {
-            this.includedArtists = this.includedArtists.filter(filterArtistCB);
+            this.includedArtists = this.includedArtists.filter(elem => elem !== artist);
             this.notifyObservers({key:"modelParams", param:"removeFromIncludeArtist"});
         } else if(this.excludedArtists.includes(artist)) {
-            this.excludedArtists = this.excludedArtists.filter(artist);
+            this.excludedArtists = this.excludedArtists.filter(elem => elem !== artist);
             this.notifyObservers({key:"modelParams", param:"removeFromExcludeArtist"});
         }
-        
-        function filterArtistCB(elem) {
-            return elem !== artist;
-        }
-    }
+    }  
 
-    resetParams() { // Set to default values
+    resetParams() { // Set to default values for params
         this.source = null;
-        this.generated = {playlistName: null, playlistId: null, firebaseKey: null, tracks: []};
+        this.generated = {playlist: null, playlistId: null, firebaseKey: null, tracks: []};
         this.genres = [];   // String values
         this.includedArtists = [];
         this.excludedArtists = [];
@@ -231,7 +226,9 @@ class DiggerModel{
     }
 
     // Logout current user
-    logout() { 
+    logout() {
+        console.log("removing local storage");
+        
         this.setLogin("false");
         localStorage.setItem("isLoggedIn", "false");
         localStorage.removeItem("access-token");
@@ -239,7 +236,6 @@ class DiggerModel{
 
         this.notifyObservers({key:"logout"});
     }
-
 
     /**
      * Example API-call
