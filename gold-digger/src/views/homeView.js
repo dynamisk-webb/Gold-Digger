@@ -13,7 +13,7 @@ function HomeView(props){
         <p id="homeText"> Match!</p>
         <PrevlistView id="prevListView" prevPlaylists={props.prevPlaylists} setCurrentPlaylist={props.setCurrentPlaylist}></PrevlistView>
         <button id="createPlaylist" onClick={generatePlaylistACB}>Create new playlist</button>
-        <button id="continuePlaylist" onClick={generatePlaylistACB}>Continue Previous Session</button>
+        <button id="continuePlaylist" onClick={continueLastSessionACB}>Continue Previous Session</button>
         <img src={piano} id="pianoImage"></img>
     </div>);
 
@@ -21,7 +21,10 @@ function HomeView(props){
 
     function generatePlaylistACB(evt){
         navigate("/source");
-        props.generatePlaylist();
+    }
+
+    function continueLastSessionACB(evt){
+        navigate("/genre");
     }
 };
 
