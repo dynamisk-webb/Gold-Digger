@@ -48,6 +48,7 @@ function Playlist(props) {
       generatedName={playlistName}
       removeTrack={removeTrackACB}
       getPlaylistURL={getPlaylistURLACB}
+      setPlaylistName={setPlaylistNameACB}
       setAudioPlayerSong={setAudioPlayerSongACB}
       returnHome={returnHomeACB}
       savePlaylistToSpotify={savePlaylistToSpotifyACB}
@@ -65,6 +66,11 @@ function Playlist(props) {
     // https://stackoverflow.com/questions/65930199/copy-active-browsers-url-to-clipboard-with-reactjs
   }
 
+  /* Event: onInput set name of generated list */
+  function setPlaylistNameACB(input) {
+    props.model.setGeneratedName(input);
+  }
+
   /* Event: onClick set audio player song */
   function setAudioPlayerSongACB() {}
 
@@ -74,8 +80,18 @@ function Playlist(props) {
   }
 
   function savePlaylistToSpotifyACB() {
-    //console.log("playlistPresenter.js");
-    props.model.setGeneratedName("Svampplockning i gryningsljus");
+    // TODO should use a function from spotifySource to add list to users account
+    
+    // =============================
+    // Firebase tests, SHOULD BE REMOVED
+    
+    // Test for editing a previously saved list to firebase
+    //props.model.setGeneratedName("Svampplockning i gryningsljus");
+    
+    // Test for adding a list to firebase:
+    console.log("List no " + (props.model.playlistCounter+1) + " persisted to firebase!");
+    props.model.setGenerated(props.model.generated);
+    // =============================
   }
 
 }

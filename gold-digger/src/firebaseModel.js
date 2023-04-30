@@ -48,10 +48,8 @@ function persistenceToModelParams(persistedData, model, setModel) {
         if (persistedData.userid) {
             model.userid = persistedData.userid;
         }
-        console.log("Counter from persisted data" + persistedData.playlistCounter);
         if (persistedData.playlistCounter) {
             model.playlistCounter = persistedData.playlistCounter;
-            console.log("Counter from persisted data, set" + persistedData.playlistCounter);
         }
         if (persistedData.source) {
             model.source = persistedData.source;
@@ -162,14 +160,10 @@ function firebaseModelPromise(model, setModel) {
             if(payload.key === "modelParams" && payload.param === "generated") {
                 if (payload.specs === "newList") {
                     model.playlistCounter++;
-                    console.log("model.fire" + model.generated.firebaseKey);
                     model.generated.firebaseKey = model.playlistCounter;
-                    console.log("Playlist counter: " + model.playlistCounter);
-                    console.log("model.fire" + model.generated.firebaseKey);
-                    model.addToPrevPlaylists();
+                    model.addToPrevPlaylists({name:model.generated.playlist, firebaseKey:model.generated.firebaseKey});
                 }
-                console.log("Playlist counter: " + model.playlistCounter);
-                console.log("model.fire" + model.generated.firebaseKey);
+                //set(ref(db, userPATH+"_modelParams"), modelParamsToPersistence(model));
                 set(ref(db, userPATH+"_generatedList_" + model.generated.firebaseKey), generatedListToPersistence(model));
             }
         }

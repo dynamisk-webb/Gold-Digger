@@ -13,7 +13,7 @@ class DiggerModel{
         this.genres = [];   // String values
         this.includedArtists = [];  // Spotify ID
         this.excludedArtists = [];
-        this.prevPlaylists = prevPlaylists; // [{playlist, playlistId, firebaseKey: }, ...]
+        this.prevPlaylists = prevPlaylists; // [{name, playlistId (opt), firebaseKey: }, ...]
         this.playlistCounter = 0;
         
         this.tempo = {min: 0, max: 300}; // {min:, max}, set to default or limits
@@ -76,7 +76,7 @@ class DiggerModel{
     }
 
     setGeneratedName(name) { // Sets name of current generated playlist
-        console.log("diggerModel");
+        // TODO make sure the name saved in prevList is also updated
         this.generated.playlist = name;
         this.notifyObservers({key:"modelParams", param:"generated", specs:"name", firebaseKey:this.generated.firebaseKey});
     }
