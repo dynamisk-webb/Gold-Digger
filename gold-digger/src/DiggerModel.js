@@ -14,8 +14,7 @@ class DiggerModel{
         this.includedArtists = [];  // Spotify ID
         this.excludedArtists = [];
         this.prevPlaylists = prevPlaylists; // [{name, playlistId (opt), firebaseKey: }, ...]
-        this.playlistCounter = 0;
-        
+
         this.tempo = {min: 0, max: 300}; // {min:, max}, set to default or limits
         this.loudness = {min: -60, max: 0};
         this.instrumentalness = {min: 0, max: 1};
