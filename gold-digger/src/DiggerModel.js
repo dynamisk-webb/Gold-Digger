@@ -81,6 +81,11 @@ class DiggerModel{
         this.notifyObservers({key:"modelParams", param:"generated", specs:"name", firebaseKey:this.generated.firebaseKey});
     }
 
+    setPrevName(name, playlist) {   // Sets name of previous playlist by name
+        this.prevPlaylists.forEach(list => {if(list.playlist === playlist) list.playlist = name});
+        this.notifyObservers({key:"modelParams", param:"INPUT SOMETHING HERE", specs:"name"}); // TODO
+    }
+
     setDanceable(bool) {    // Sets danceability (how suitable it is for dancing) from 0.0 to 1.0
         this.danceable = bool;
         this.notifyObservers({key:"modelParams", param:"danceable"});
@@ -103,12 +108,17 @@ class DiggerModel{
 
     addTracks(idlist) {   // Add multiple tracks to generated playlist
         idlist.forEach(id => this.generated.tracks.push(id));
-        this.notifyObserveres({key: "modelParams", param: "generated", specs:"addTracks", firebaseKey:this.generated.firebaseKey});
+        this.notifyObserveres({key: "modelParams", param: "generated", specs:"addTracks", firebaseKey:this.generated.firebaseKey}); // TODO
     }
 
     removeTrack(trackID) {  // Removes a specific track from the already generated list
         this.generated.tracks = this.generated.tracks(tr => tr.id !== trackID);
         this.notifyObservers({key:"modelParams", param:"generated", specs:"removeTrack", firebaseKey:this.generated.firebaseKey});
+    }
+
+    removeTrackPrev(trackID, playlist) {
+        this.generated.tracks = this.generated.tracks(tr => tr.id !== trackID);
+        this.notifyObservers({key:"modelParams", param:"INPUT SOMETHING", specs:"removeTrackPrev"}); // TODO
     }
 
     removePrevPlaylist(playlist) {  // Removes a previous playlist id 

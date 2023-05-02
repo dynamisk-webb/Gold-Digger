@@ -32,13 +32,8 @@
     </li>
     <li><a href="#progress">Progress</a></li>
     <li><a href="#plan">Plan</a></li>
-    <li>
-      <a href="#project-file-structure">Project File Structure</a>
-      <ul>
-        <li><a href="#spotify-api">Spotify API</a></li>
-      </ul>
-    </li>
-     <li><a href="#contact">Contact</a></li>
+    <li><a href="#project-file-structure">Project File Structure</a></li>
+    <li><a href="#contact">Contact</a></li>
   </ol>
 </details>
 
@@ -52,10 +47,12 @@ Our web app will help Spotify users generate new playlists from sections of thei
 *Go to <a href="progress">Progress</a> amd <a href="plan">Plan</a> to see detailed description of functionality.*
 
 ### Built with
+* [![Javascript][js-shield]][js-url]
 * [![Node.js][node-shield]][node-url]
-* [![MUI][mui-shield]][mui-url]
-* [![Spotify][spotify-shield]][spotify-url]
 * [![React][react-shield]][react-url]
+* [![MUI][mui-shield]][mui-url]
+* [![npmjs][npm-shield]][npm-url]
+* [![Spotify][spotify-shield]][spotify-url]
 
 ### How to use
 
@@ -187,3 +184,7 @@ Rej Karlander – isakkar@kth.se
 [node-url]:https://nodejs.org/en
 [mui-shield]:https://camo.githubusercontent.com/208852c2348eb4c34115c18e7bc1364ef7ccc88a76a8e659a7ba13c4da7318c0/68747470733a2f2f696d672e736869656c64732e696f2f7374617469632f76313f7374796c653d666f722d7468652d6261646765266d6573736167653d4d554926636f6c6f723d303037464646266c6f676f3d4d5549266c6f676f436f6c6f723d464646464646266c6162656c3d
 [mui-url]:https://mui.com/
+[npm-shield]: https://camo.githubusercontent.com/fd60ad1cae960eb3117e20dc1305b39f820004bf601b0e00ea032eccb9897dfd/68747470733a2f2f696d672e736869656c64732e696f2f7374617469632f76313f7374796c653d666f722d7468652d6261646765266d6573736167653d6e706d26636f6c6f723d434233383337266c6f676f3d6e706d266c6f676f436f6c6f723d464646464646266c6162656c3d
+[npm-url]: https://www.npmjs.com/package/react-spotify-playback-player
+[js-shield]: https://camo.githubusercontent.com/3aaee8bf7885dcf0cea8a5647c4514b7d800b1a730d38bce7dadf6bff883378d/68747470733a2f2f696d672e736869656c64732e696f2f7374617469632f76313f7374796c653d666f722d7468652d6261646765266d6573736167653d4a61766153637269707426636f6c6f723d323232323232266c6f676f3d4a617661536372697074266c6f676f436f6c6f723d463744463145266c6162656c3d
+[js-url]: https://developer.mozilla.org/en-US/docs/Web/JavaScript
