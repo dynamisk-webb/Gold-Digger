@@ -11,51 +11,60 @@ Set name to new input name
 
 import PlaylistView from "../views/playlistView.js";
 import { redirect } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { generatedListPromise } from "../firebaseModel.js";
+import resolvePromise from "../resolvePromise.js";
+import waitForFirebase from "../views/waitForFirebase.js";
+
 
 /**
  * Sends a playlist containing all tracks to props.
  * Will present the "finished" playlist to the user. I.e. send the generated playlist to the PlaylistView
  */
-function Playlist(props) {
-  //let tracks = [{title: "hej", artists: "test", album: "no", time:"yes"}];
-  let tracks = props.model.generated.tracks;
-  let playlistName = props.model.generated.playlistName;
 
-  // lifecycle
-  function onMount() {
-    //tracks = getTracks(props.playlistID);
-    // list of tracks will contain:
-    // title
-    // artist
-    // album
-    // time
+function Playlist (props) {
 
-    /*<h2>{track.title}</h2>
-            <p>{track.artists}</p>
-            <p>{track.album}</p>
-            <p>{track.time}</p> */
+    let tracks = props.model.generated.tracks;
+    let playlistName = props.model.generated.playlistName;
 
-    function onMounted() {
-      // do stuff
-      return;
+    const [playlistPromiseState, setPlaylistPromiseState] = useState({});
+
+    useEffect (onMountedACB, []);
+
+    // Lifecycle
+    function onMountedACB(){
+
+        // Resolve promise. Get all data in generated playlist from firebase, add it to model.
+        // NOTE TO SELF: add this back in.
+        resolvePromise (generatedListPromise (props.model, props.model.generated.firebaseKey), playlistPromiseState, setPlaylistPromiseState);
+
+        // Lifecycle: GET the playlist. Set name to new input name
+        // tracks = getTracks(props.playlistID);
+        // list of tracks will contain:
+                    // title
+                    // artist
+                    // album
+                    // time
+        return;
     }
-    return;
-  }
 
-  return (
-    <PlaylistView
-      generatedTracks={tracks}
-      generatedName={playlistName}
-      removeTrack={removeTrackACB}
-      getPlaylistURL={getPlaylistURLACB}
-      setPlaylistName={setPlaylistNameACB}
-      setAudioPlayerSong={setAudioPlayerSongACB}
-      returnHome={returnHomeACB}
-      savePlaylistToSpotify={savePlaylistToSpotifyACB}
-    ></PlaylistView>
-  );
 
-  /* Event: onClick REMOVE /playlists/{playlist_id}/tracks */
+    return (
+      <div>
+        {waitForFirebase(playlistPromiseState) ||
+        <PlaylistView
+          generatedTracks={tracks}
+          generatedName={playlistName}
+          removeTrack={removeTrackACB}
+          getPlaylistURL={getPlaylistURLACB}
+          setAudioPlayerSong={setAudioPlayerSongACB}
+          returnHome={returnHomeACB}
+        ></PlaylistView>}
+      </div>
+    );
+
+    
+    /* Event: onClick REMOVE /playlists/{playlist_id}/tracks */
   function removeTrackACB() {
     // TODO;
     // props.model.removeTrack;
@@ -94,7 +103,6 @@ function Playlist(props) {
     alert("Playlist has been added to your account!");
     // =============================
   }
-
 }
 
 export default Playlist;
