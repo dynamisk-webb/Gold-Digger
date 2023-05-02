@@ -87,7 +87,7 @@ class DiggerModel{
     setPrevName(name) {   // Sets name of previous playlist by name
         let firebaseKey = this.generated.firebaseKey;
         this.prevPlaylists.forEach(list => {if(list.firebaseKey === firebaseKey) list.playlistName = name});
-        this.notifyObservers({key:"modelParams", param:"INPUT SOMETHING HERE", specs:"name"}); // TODO
+        this.notifyObservers({key:"modelParams", param:"prevGenerated", specs:"name"}); 
 
     }
 
@@ -119,12 +119,6 @@ class DiggerModel{
     removeTrack(trackID) {  // Removes a specific track from the already generated list
         this.generated.tracks = this.generated.tracks(tr => tr.id !== trackID);
         this.notifyObservers({key:"modelParams", param:"generated", specs:"removeTrack", firebaseKey:this.generated.firebaseKey});
-    }
-
-    // I don't think we need this? Tracks aren't saved in prevGenerated, just name and firebase
-    removeTrackPrev(trackID, playlist) {
-        this.generated.tracks = this.generated.tracks(tr => tr.id !== trackID);
-        this.notifyObservers({key:"modelParams", param:"INPUT SOMETHING", specs:"removeTrackPrev"}); // TODO
     }
 
     removePrevPlaylist(playlist) {  // Removes a previous playlist id 
