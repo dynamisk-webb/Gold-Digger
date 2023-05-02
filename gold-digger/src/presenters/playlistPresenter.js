@@ -13,8 +13,8 @@ import PlaylistView from "../views/playlistView.js";
 import { redirect } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { generatedListPromise } from "../firebaseModel.js";
-import promiseNoData from "../views/promiseNoData.js";
 import resolvePromise from "../resolvePromise.js";
+import waitForFirebase from "../views/waitForFirebase.js";
 
 
 
@@ -24,18 +24,19 @@ import resolvePromise from "../resolvePromise.js";
  */
 function Playlist (props) {
 
-    let tracks = [];
+    let tracks = props.model.generated.tracks;
+    let playlistName = props.model.generated.playlistName;
 
     const [playlistPromiseState, setPlaylistPromiseState] = useState({});
 
-    useEffect (onMountedACB);
+    useEffect (onMountedACB, []);
 
     // Lifecycle
     function onMountedACB(){
 
         // Resolve promise. Get all data in generated playlist from firebase, add it to model.
         // NOTE TO SELF: add this back in.
-        /*resolvePromise (generatedListPromise (props.model, props.model.generated.firebaseKey), playlistPromiseState, setPlaylistPromiseState);*/
+        resolvePromise (generatedListPromise (props.model, props.model.generated.firebaseKey), playlistPromiseState, setPlaylistPromiseState);
 
         // Lifecycle: GET the playlist. Set name to new input name
         // tracks = getTracks(props.playlistID);
@@ -49,7 +50,17 @@ function Playlist (props) {
 
 
     return (
-        <div> {promiseNoData(playlistPromiseState)} </div> || <playlistView generatedTracks={tracks} removeTrack={removeTrackACB} getPlaylistURL={getPlaylistURLACB} setAudioPlayerSong={setAudioPlayerSongACB} returnHome={returnHomeACB}></playlistView>
+      <div>
+        {waitForFirebase(playlistPromiseState) ||
+        <PlaylistView
+          generatedTracks={tracks}
+          generatedName={playlistName}
+          removeTrack={removeTrackACB}
+          getPlaylistURL={getPlaylistURLACB}
+          setAudioPlayerSong={setAudioPlayerSongACB}
+          returnHome={returnHomeACB}
+        ></PlaylistView>}
+      </div>
     );
 
     
