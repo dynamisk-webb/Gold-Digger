@@ -91,17 +91,18 @@ function Playlist (props) {
 
   function savePlaylistToSpotifyACB() {
     // TODO should use a function from spotifySource to add list to users account
+    /*
+    TODO
+
+    POST /users/{user_id}/playlists
+    Set generated playlist id
+    --> 
+    POST /playlists/{playlists_id}/tracks
+    PUT /playlists/{playlist_id}/images
+    */
     
-    // =============================
-    // Firebase tests, SHOULD BE REMOVED
     
-    // Test for editing a previously saved list to firebase
-    //props.model.setGeneratedName("Svampplockning i gryningsljus");
-    
-    // Test for adding a list to firebase:
-    props.model.setGenerated(props.model.generated);
     alert("Playlist has been added to your account!");
-    // =============================
   }
 }
 

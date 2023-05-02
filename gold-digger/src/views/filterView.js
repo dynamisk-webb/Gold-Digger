@@ -28,7 +28,7 @@ function FilterView(props){
         else if(props.filterType == "artist")
             navigate("/parameter");
         else if(props.filterType == "parameter")
-            navigate("/playlist");
+            navigate("/loading");
     }
 }
 
