@@ -11,8 +11,8 @@ function modelParamsToPersistence(model){
     if (model.userid) {
         
         // handle case of no generated playlist set in model
-        let playlistName = "doublesike";
-        let firebaseKey = "sike";
+        let playlistName = null;
+        let firebaseKey = null;
         if (model.generated) {
             if (model.generated.playlistName) {
                 playlistName = model.generated.playlistName;
