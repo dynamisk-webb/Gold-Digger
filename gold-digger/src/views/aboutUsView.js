@@ -35,7 +35,7 @@ function AboutUsView(props){
 
     return (<div id="aboutUsContainer">
         <div id="aboutUs">
-        <h1>About the authors</h1>
+        <h1 >About the authors</h1>
         {authors.map(displayInfoCB)}
         <button id="closeButton" onClick={closeAboutCB}>X</button>
         </div>

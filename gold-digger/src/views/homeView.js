@@ -10,8 +10,7 @@ function HomeView(props){
     <div id="homeGrid">
         <h1 id="homeTitle">Gold Digger</h1>
         <h2 id="homeSubTitle">A playlist generator for Spotify</h2>
-        <p id="homeText"> Match!</p>
-        <PrevlistView id="prevListView" prevPlaylists={props.prevPlaylists} setCurrentPlaylist={props.setCurrentPlaylist}></PrevlistView>
+        <PrevlistView prevPlaylists={props.prevPlaylists} setCurrentPlaylist={props.setCurrentPlaylist}></PrevlistView>
         <button id="createPlaylist" onClick={generatePlaylistACB}>Create new playlist</button>
         <button id="continuePlaylist" onClick={continueLastSessionACB}>Continue Previous Session</button>
         <img src={piano} id="pianoImage"></img>

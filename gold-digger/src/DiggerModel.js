@@ -13,7 +13,7 @@ class DiggerModel{
         this.genres = [];   // String values
         this.includedArtists = [];  // Spotify ID
         this.excludedArtists = [];
-        this.prevPlaylists = prevPlaylists; // [{name, playlistId (opt), firebaseKey: }, ...]
+        this.prevPlaylists = prevPlaylists; // [{name, playlistId, firebaseKey: }, ...]
 
         this.tempo = {min: 0, max: 300}; // {min:, max}, set to default or limits
         this.loudness = {min: -60, max: 0};
@@ -75,9 +75,14 @@ class DiggerModel{
     }
 
     setGeneratedName(name) { // Sets name of current generated playlist
-        // TODO make sure the name saved in prevList is also updated
-        this.generated.playlist = name;
+        this.generated.name = name;
         this.notifyObservers({key:"modelParams", param:"generated", specs:"name", firebaseKey:this.generated.firebaseKey});
+    }
+
+    setPrevName(name, playlist) {   // Sets name of previous playlist by name
+        this.prevPlaylists.forEach(list => {if(list.playlist === playlist) list.playlist = name});
+        this.notifyObservers({key:"modelParams", param:"INPUT SOMETHING HERE", specs:"name"}); // TODO
+
     }
 
     setDanceable(bool) {    // Sets danceability (how suitable it is for dancing) from 0.0 to 1.0
@@ -102,12 +107,18 @@ class DiggerModel{
 
     addTracks(idlist) {   // Add multiple tracks to generated playlist
         idlist.forEach(id => this.generated.tracks.push(id));
-        this.notifyObserveres({key: "modelParams", param: "generated", specs:"addTracks", firebaseKey:this.generated.firebaseKey});
+        this.notifyObserveres({key: "modelParams", param: "generated", specs:"addTracks", firebaseKey:this.generated.firebaseKey}); // TODO
     }
 
     removeTrack(trackID) {  // Removes a specific track from the already generated list
         this.generated.tracks = this.generated.tracks(tr => tr.id !== trackID);
         this.notifyObservers({key:"modelParams", param:"generated", specs:"removeTrack", firebaseKey:this.generated.firebaseKey});
+    }
+
+    // I don't think we need this? Tracks aren't saved in prevGenerated, just name and firebase
+    removeTrackPrev(trackID, playlist) {
+        this.generated.tracks = this.generated.tracks(tr => tr.id !== trackID);
+        this.notifyObservers({key:"modelParams", param:"INPUT SOMETHING", specs:"removeTrackPrev"}); // TODO
     }
 
     removePrevPlaylist(playlist) {  // Removes a previous playlist id 
