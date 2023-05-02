@@ -58,7 +58,9 @@ function Playlist (props) {
           removeTrack={removeTrackACB}
           getPlaylistURL={getPlaylistURLACB}
           setAudioPlayerSong={setAudioPlayerSongACB}
+          setPlaylistName={setPlaylistNameACB}
           returnHome={returnHomeACB}
+          savePlaylistToSpotify={savePlaylistToSpotifyACB}
         ></PlaylistView>}
       </div>
     );
@@ -102,7 +104,7 @@ function Playlist (props) {
     */
     
     
-    alert("Playlist has been added to your account!");
+    alert("Should add playlist to users Spotify account (not implemented yet)");
   }
 }
 
