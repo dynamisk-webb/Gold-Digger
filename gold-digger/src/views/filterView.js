@@ -14,7 +14,12 @@ function FilterView(props){
     );
 
     function returnACB(){
-        navigate(-1);
+        if(props.filterType == "genre")
+            navigate("/source");
+        else if(props.filterType == "artist")
+            navigate("/genre");
+        else if(props.filterType == "parameter")
+            navigate("/artist");
     }
 
     function continueACB(){

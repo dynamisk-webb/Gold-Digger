@@ -32,7 +32,8 @@ h3{
 
 p{
   color: whitesmoke;
-  font-size:20px;
+  font-size:15px;
+  width: fit-content;
 }
 
 button{
@@ -52,6 +53,16 @@ button{
   font-family: "Lexend", -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
+  
+}
+
+.MuiSlider-mark{
+  color: whitesmoke;
+  background-color: #FF6B35;
+
+}
+
+.MuiSlider-markLabel{
   
 }
 
@@ -75,19 +86,39 @@ input:focus {
 
 .parameterSlider{
   grid-column: 3 / span 1;
+  
   color:#FF6B35;
-  width:50%;
-  margin-left: 20%;
+  width:80%;
+}
+
+.parameterTitle{
+  display: flex;
+  width: fit-content;
+  height: 50px;
+  
+  margin-bottom: 30px;
+  gap: 10px;
 }
 
 .parameterSwitch{
   grid-column: 3 / span 1;
-  color:#FF6B35;;
-  margin-left: 20%;
+  color:#FF6B35;
 }
 
 .parameterSubTitle{
   grid-column: 2 / span 1;
+}
+
+.white{
+  color: whitesmoke;
+}
+
+.gray{
+  color: gray;
+}
+
+.paddingLess{
+  padding: 0;
 }
 
 /* ------------------- IDs ------------------- */
@@ -113,10 +144,10 @@ input:focus {
 }
 
 #authorInfo{
-  margin: 10px 10px 40px 10px;
+  margin: 10px 10px 25px 10px;
   width:auto;
   display:grid;
-  height: 200px;
+  height: 130px;
   grid-template-columns: 1fr 2fr;
   grid-template-rows: 1fr 2fr;
   overflow: hidden;
@@ -125,6 +156,7 @@ input:focus {
 #authorName{
   grid-column: 2/span 1;
   grid-row: 1/span 1;
+  margin-bottom: 0;
 }
 
 #authorAbout{
@@ -137,13 +169,14 @@ input:focus {
   grid-row: 1/span 2;
 
   object-fit: cover;
-  width: 150px;
-  height: 150px;
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
 }
 
 #closeButton{
   z-index: 100;
+
 }
 
 /*  H O M E */
@@ -157,7 +190,7 @@ input:focus {
   height: 100%;
   display: grid;
   grid-template-columns: 0.3fr 1fr 1fr 0.3fr;
-  grid-template-rows: 1.5fr 1fr 1fr 1fr 1fr 2fr 0.5fr;
+  grid-template-rows: 1.5fr 120px 80px 1fr 1fr 2fr 0.5fr;
 }
 
 #homeTitle{
@@ -219,8 +252,8 @@ input:focus {
 
 #logOut{
   
-  height: 60px;
-  width: 60px;
+  height: 40px;
+  width: 40px;
   background-image: url("./../img/logOut.png"); /* 16px x 16px */
   background-color:transparent;
   background-repeat: no-repeat;  /* make the background image appear only once */
@@ -229,29 +262,28 @@ input:focus {
 
   z-index: 100;
   position: absolute;
-  top: 70px;
-  right: 60px;
+  top: 14px;
+  right: 230px;
 }
 
 /* PREVLIST */
 
 #prevListsContainer{
-  grid-row: 4 / span 3;
+  grid-row: 3 / span 3;
   grid-column: 2 / span 1;
   height: 100%;
-  
   
 }
 
 #prevListsTitle{
   margin-top: 0;
-  padding-top: 0;
+  padding-top: 30px;
 }
 
 #prevLists{
   background-color: #ffffff27;
   border-radius: .6rem;
-  height: 400px;
+  height:100%;
   width: 500px;
 }
 
@@ -350,17 +382,17 @@ input[type=text] {
 
 #genreResults{
   position: fixed;
-  top:300px;
-  left:300px;
-  right: 300px;
+  top:250px;
+  left:200px;
+  right: 200px;
   bottom: 100px;
 }
 
-#artstResults{
+#artistResults{
   position: fixed;
-  top:400px;
-  left:300px;
-  right: 300px;
+  top:250px;
+  left:220px;
+  right: 200px;
   bottom: 100px;
 }
 
@@ -370,9 +402,11 @@ input[type=text] {
   position:fixed;
   top:0;
   left:0;
+  top:150px;
+  left:200px;
+  right: 200px;
+  bottom: 100px;
 
-  width: 100%;
-  height: 100%;
   display: grid;
   grid-template-columns: 1fr 3fr 1fr;
   grid-template-rows: 1fr 3fr 1fr;
@@ -441,24 +475,32 @@ input[type=text] {
   
 }
 
+.MuiSlider-root{
+  color: pink;
+}
+
+.MuiSlider-colorPrimary{
+  track-Color: "yellow",
+}
+
 /* SEARCH VIEW */
 
 
 #search{
   grid-row: 2 / span 1;
   grid-column: 2 / span 1;
-  margin: 150px 250px 0px 250px;
+  margin: 150px 300px 0px 230px;
   
 }
 
 #searchBar{
   width: 100%;
-  height: 70px;
+  height: 50px;
 
   
   background-color: #828282;
   background-image: url("./../img/magnify.png");
-  background-position: 16px 16px;
+  background-position: 8px 8px;
   background-repeat: no-repeat;
   padding-left: 70px;
   border: 0;
@@ -613,16 +655,25 @@ input[type=text] {
 
 #openAbout{
   
+  background-image: url("./../img/aboutUsIcon.png"); /* 16px x 16px */
+  background-color:transparent;
+  background-repeat: no-repeat;  /* make the background image appear only once */
+  width: 40px;
+  height: 40px;
+  background-size: contain;
+  
+  margin: 0px 0px 0px 0px; 
   z-index: 200;
   position:fixed;
-  top:200px;
-  right:0;
+  top:14px;
+  right:170px;
+  
 }
 
 /*GENRE RESULT VIEW*/
 
 #genreResult{
-  height: 100px;
+  height: 60px;
   display: grid;
   grid-template-columns: 100px 1fr;
   grid-template-rows: 100px;
@@ -632,14 +683,14 @@ input[type=text] {
   grid-column: 2/span 1;
   grid-row: 1/span 1;
 
-  font-size: 45px;
+  font-size: 25px;
   font-weight: 700;
   align-self: center;
 }
 
 [type=checkbox] {
-  width: 3rem;
-  height: 3rem;
+  width: 2rem;
+  height: 2rem;
   color: #FF6B35;
   vertical-align: middle;
   -webkit-appearance: none;
@@ -682,7 +733,7 @@ input[type=text] {
 /*ARTIST RESULT VIEW*/
 
 #artistResult{
-  height: 150px;
+  height: 100px;
   display: grid;
   grid-template-columns: 100px 1fr 50px 50px;
   grid-template-rows: 100px;
@@ -691,6 +742,6 @@ input[type=text] {
 #artistImg{
   grid-column: 1/span 1;
   grid-row: 1/span 1;
-  width: 120px;
+  width: 80px;
 
 }
