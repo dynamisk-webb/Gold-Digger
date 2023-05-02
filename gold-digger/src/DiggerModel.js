@@ -80,7 +80,6 @@ class DiggerModel{
     }
 
     setPrevName(name) {   // Sets name of previous playlist by name
-        console.log("setPrevName");
         let firebaseKey = this.generated.firebaseKey;
         this.prevPlaylists.forEach(list => {if(list.firebaseKey === firebaseKey) list.playlistName = name});
         this.notifyObservers({key:"modelParams", param:"INPUT SOMETHING HERE", specs:"name"}); // TODO
@@ -101,7 +100,6 @@ class DiggerModel{
      *  Modify lists
      */
     addToPrevPlaylists(newPlaylist) {   // Adds a playlist to previous playlists
-        console.log("Added with name " + newPlaylist.playlistName);
         if(!this.prevPlaylists.includes(newPlaylist)) {
             const prev = [...this.prevPlaylists, newPlaylist];
             this.setPrevPlaylists(prev);   
@@ -240,8 +238,6 @@ class DiggerModel{
 
     // Logout current user
     logout() {
-        console.log("removing local storage");
-        
         this.setLogin("false");
         localStorage.setItem("isLoggedIn", "false");
         localStorage.removeItem("access-token");
