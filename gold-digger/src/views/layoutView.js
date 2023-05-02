@@ -9,7 +9,7 @@ function LayoutView(props){
     <div id="layout">
       <img src={spotifyLogo} id="spotifyLogo" ></img>
       <button id="logOut" onClick={logOutACB}></button>
-      <button id="openAbout" onClick={openAboutACB}>&#9776; Open Sidebar</button>
+      <button id="openAbout" onClick={openAboutACB}></button>
 
       <Outlet />
     </div>

@@ -1,8 +1,10 @@
-import Slider from '@mui/material/Slider';
+import Slider,  { sliderClasses } from '@mui/material/Slider';
 import Switch from '@mui/material/Switch';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Tooltip from '@mui/material/Tooltip';
 import * as React from 'react';
+
 
 
 function ParameterView(props){
@@ -10,6 +12,35 @@ function ParameterView(props){
     const [tempValue, setTempValue] = React.useState([props.model.tempo.min, props.model.tempo.max]);
     const [loudValue, setLoudValue] = React.useState([props.model.loudness.min, props.model.loudness.max]);
     const [instrValue, setInstrValue] = React.useState([props.model.instrumentalness.min, props.model.instrumentalness.max]);
+
+    const TooltipStyle = {
+        color: "white",
+        marginTop: 0,
+        top: 0,
+        paddingTop: 0
+      };
+
+      const finalTheme = createTheme({
+        components: {
+            MuiSlider: {
+              styleOverrides: {
+                root:{
+                    color: "#FF6B35"
+                }
+              },
+            },
+            MuiSwitch: {
+                styleOverrides: {
+                    root:{
+                        color: "#FF6B35"
+                    },
+                    checked:{
+                    color: "#FF6B35"
+                    }
+                },
+            }
+        }
+      });
     
     const onChangeTempoACB = (event, newValue) => {
         setTempValue(newValue);
@@ -27,14 +58,17 @@ function ParameterView(props){
     }
 
 
-    return (<div id="parameterGrid">
-        
+    return (
+        <ThemeProvider theme={finalTheme}>
+        <div id="parameterGrid">
         <div className="parameterSlider" id="tempoSlider">
-            <Tooltip title={<p style={{ color: "white" }}>Overall estimated tempo in beats per minute (BPM)</p>}>
-                <h2>Tempo</h2>
+            <Tooltip title={<p style={TooltipStyle}>Overall estimated tempo in beats per minute (BPM)</p>}>
+                <div className="parameterTitle">
+                    <h2 className='white paddingLess'>Tempo</h2>
+                    <p className='gray'>(BMP)</p>
+                </div>
             </Tooltip>
             
-            <p>(dB)</p>
             <Slider getAriaLabel={() => 'tempo range'} 
             defaultValue={20}
             onChange={onChangeTempoACB}
@@ -43,14 +77,18 @@ function ParameterView(props){
             min={0.0}
             max={300.0}
             valueLabelDisplay="auto"
-            color="secondary"
-                    />
+            color="primary"
+            marks={[{value: 0, label: "0 bpm"}]}
+                />
         </div>
         <div className="parameterSlider" id="loudSlider">
             <Tooltip title={<p style={{ color: "white" }}>Overall loudness in decibels (dB)</p>}>
-                <h2>Noisiness</h2>
+                <div className="parameterTitle">
+                    <h2 className='white'>Noisiness</h2>
+                    <p className='gray'>(dB)</p>
+                </div>
             </Tooltip>
-            <p>Db</p>
+            
             <Slider getAriaLabel={() => 'loudness range'} 
                     value={loudValue} 
                     onChange={onChangeLoudnessACB} 
@@ -61,9 +99,12 @@ function ParameterView(props){
         </div>
         <div className="parameterSlider" id="instrSlider">
             <Tooltip title={<p style={{ color: "white" }}>Overall amount of vocals in the song</p>}>
-                <h2>Amount of vocals</h2>
+                <div className="parameterTitle">
+                <h2 className='white'>Amount of vocals</h2>
+                <p className='gray'>(Percent)</p>
+                </div>
             </Tooltip>
-            <p>Percent</p>
+            
             <Slider getAriaLabel={() => 'instrumentalness range'} 
                     value={instrValue} 
                     onChange={onChangeInstrumentalnessACB} 
@@ -75,18 +116,19 @@ function ParameterView(props){
         </div>
         <div className = "parameterSwitch">
             <Tooltip title={<p style={{ color: "white" }}>Whether or not a song is suitable for dancing</p>}>
-                <h2>Danceable</h2>
+                <h2 className='white'>Danceable</h2>
             </Tooltip>
             <Switch checked={props.checked} onChange={onChangeDanceableACB}/>
         </div>
         <div className = "parameterSwitch">
             <Tooltip title={<p style={{ color: "white" }}>Whether or not a song only contains acoustic instruments</p>}>
-                <h2>Acoustic</h2>
+                <h2 className='white'>Acoustic</h2>
             </Tooltip>
             <Switch checked={props.checked} onChange={onChangeAcousticACB}/>
         </div>
         
-    </div>);
+    </div>
+    </ThemeProvider>);
 
 
     function onChangeDanceableACB(evt){

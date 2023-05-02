@@ -4,26 +4,26 @@ const { getDatabase, ref, get, set, onValue } = require("firebase/database");
 const { initializeApp}= require( "firebase/app");
 
 // Initialise firebase app, database, ref
-const app= initializeApp(firebaseConfig)
-const db= getDatabase(app)
+const app= initializeApp(firebaseConfig);
+const db= getDatabase(app);
 
 function modelParamsToPersistence(model){
     if (model.userid) {
         
-        let playlist = null;
+        // handle case of no generated playlist set in model
+        let playlistName = null;
         let firebaseKey = null;
         if (model.generated) {
-            if (model.generated.playlist) {
-                playlist = model.generated.playlist;
+            if (model.generated.playlistName) {
+                playlistName = model.generated.playlistName;
             } 
-            if (model.generated.firebaseKey) {
+            if (model.generated.firebaseKey || model.generated.firebaseKey === 0) {
                  firebaseKey = model.generated.firebaseKey;
             }
         }
-
         return {userid:model.userid,
             source:model.source,
-            generated:{playlist:playlist, firebaseKey:firebaseKey},
+            generated:{playlistName:playlistName, firebaseKey:firebaseKey},
             genres:model.genres,
             includedArtists:model.includedArtists,
             excludedArtists:model.excludedArtists,
@@ -38,10 +38,7 @@ function modelParamsToPersistence(model){
 }
 
 function generatedListToPersistence(model){
-    if (model.userid) {
-        return {generated:model.generated};
-    }
-    return null;
+    return {generated:model.generated};
 }
 
 function persistenceToModelParams(persistedData, model, setModel) {
@@ -53,10 +50,10 @@ function persistenceToModelParams(persistedData, model, setModel) {
             model.source = persistedData.source;
         }
         if (persistedData.generated) {
-            if (persistedData.generated.playlist) {
-                model.generated.playlist = persistedData.generated.playlist;
+            if (persistedData.generated.playlistName) {
+                model.generated.playlistName = persistedData.generated.playlistName;
             }
-            if (persistedData.generated.firebaseKey) {
+            if (persistedData.generated.firebaseKey || persistedData.generated.firebaseKey === 0) {
                 model.generated.firebaseKey = persistedData.generated.firebaseKey;
             }
         }
@@ -113,7 +110,7 @@ function persistenceToGeneratedList(persistedData, model) {
 function generatedListPromise(model, firebaseKey) {
     let userPATH=setUserPath(model);
 
-    return get(ref(db, userPATH+"_generatedList_"+firebaseKey)).then(toModelACB);
+    return get(ref(db, userPATH+"lists/"+"generatedList_"+firebaseKey)).then(toModelACB);
 
     // Saves any persisted data into the model (received as parameter)
     function toModelACB(dataFromFirebase) {
@@ -127,7 +124,7 @@ function firebaseModelPromise(model, setModel) {
     let userPATH=setUserPath(model);
     
     // Retrieves persisted model parameters
-    return get(ref(db, userPATH+"_modelParams")).then(toModelACB).then(addObserversACB);
+    return get(ref(db, userPATH+"modelParams")).then(toModelACB).then(addObserversACB);
 
     // Saves any persisted data into the model (received as parameter)
     function toModelACB(dataFromFirebase) {
@@ -135,10 +132,11 @@ function firebaseModelPromise(model, setModel) {
     }
     
     function addObserversACB() {
-        //console.log("observers added");
-        model.addObserver(obsGeneralParamsACB);
-        model.addObserver(obsGeneratedListACB);
-        model.addObserver(logOutACB);
+        if (model.observers.length === 0) {
+            model.addObserver(obsGeneralParamsACB);
+            model.addObserver(obsGeneratedListACB);
+            model.addObserver(logOutACB);
+        }
         return {};
     }
 
@@ -146,28 +144,31 @@ function firebaseModelPromise(model, setModel) {
     function obsGeneralParamsACB(payload){
         if (payload.key) {
             if(payload.key === "modelParams") {
-                set(ref(db, userPATH+"_modelParams"), modelParamsToPersistence(model));
+                set(ref(db, userPATH+"modelParams"), modelParamsToPersistence(model));
             }
         }
     }
 
     // Observes current generated list and saves any changes to firebase
-    // (eg changed name, removed song)
+    // (eg creation, name change, removed track)
     function obsGeneratedListACB(payload){
-        if (payload.key) {
-            if(payload.key === "editGenerated") {
-                /*
-                TODO
-                - get key (aka firebasespecific ID) of current generated list
-                - something like model.generated.firebasekey
-                */
-                const firebaseKey = 0;
-                // update this path with whole generated list
-                set(ref(db, userPATH+"_generatedList_"+firebaseKey), generatedListToPersistence(model));
-                // update this path with eg. name updates
-                if (payload.msg === "editName" && payload.msg === "editFirebaseKey") {
-                    set(ref(db, userPATH+"_modelParams"), modelParamsToPersistence(model));
+        if (payload.key && payload.param) {
+            if(payload.key === "modelParams" && payload.param === "generated") {
+                if (payload.specs === "newList") {
+                    
+                    // Set firebasekey based on the current highest key
+                    // NOTE: if we implement a restore fn it needs to sort prevPlaylist based on firebaseKey
+                    if (model.prevPlaylists.length) {
+                        let playlistWithCurrentHighestKey = model.prevPlaylists[model.prevPlaylists.length-1];
+                        model.generated.firebaseKey = playlistWithCurrentHighestKey.firebaseKey + 1;
+                    } else {
+                        model.generated.firebaseKey = 0;
+                    }
+                
+                    model.addToPrevPlaylists({playlistName:model.generated.playlistName, firebaseKey:model.generated.firebaseKey});
                 }
+                //set(ref(db, userPATH+"modelParams"), modelParamsToPersistence(model));
+                set(ref(db, userPATH+"lists/"+"generatedList_" + model.generated.firebaseKey), generatedListToPersistence(model));
             }
         }
     }
@@ -195,7 +196,7 @@ function firebaseModelPromise(model, setModel) {
 function setUserPath(model) {
     let userPATH="";
     if(model.userid) {
-        userPATH = "/"+model.userid;
+        userPATH = "/"+model.userid+"/";
         //console.log("FIREBASE userpath set to: " + userPATH);
     } else {
         //console.log("FIREBASE No user set in model, firebasepath is incorrect");

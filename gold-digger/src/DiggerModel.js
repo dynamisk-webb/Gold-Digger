@@ -9,13 +9,12 @@ class DiggerModel{
     constructor(state, setState, userid=null, prevPlaylists=[], acoustic=false, danceable=false) {
         this.userid = userid;
         this.source = null;
-        this.generated = {playlist: null, playlistId: null, firebaseKey: null, tracks: []};
+        this.generated = {playlistName: 'Default playlist', playlistId: null, firebaseKey: null, tracks: []};
         this.genres = [];   // String values
         this.includedArtists = [];  // Spotify ID
         this.excludedArtists = [];
-        this.prevPlaylists = prevPlaylists; // [{playlist, playlistId, firebaseKey: }, ...]
-        this.playlistCounter = 0;
-        
+        this.prevPlaylists = prevPlaylists; // [{name, playlistId, firebaseKey: }, ...]
+
         this.tempo = {min: 0, max: 300}; // {min:, max}, set to default or limits
         this.loudness = {min: -60, max: 0};
         this.instrumentalness = {min: 0, max: 1};
@@ -76,9 +75,20 @@ class DiggerModel{
     }
 
     setGeneratedName(name) { // Sets name of current generated playlist
-        console.log("diggerModel");
-        this.generated.playlist = name;
+        this.generated.playlistName = name;
         this.notifyObservers({key:"modelParams", param:"generated", specs:"name", firebaseKey:this.generated.firebaseKey});
+    }
+
+    setGeneratedFirebaseKey(firebaseKey) { // Sets key of current generated playlist
+        this.generated.firebaseKey = firebaseKey;
+        this.notifyObservers({key:"modelParams", param:"generated", specs:"firebaseKey"});
+    }
+
+    setPrevName(name) {   // Sets name of previous playlist by name
+        let firebaseKey = this.generated.firebaseKey;
+        this.prevPlaylists.forEach(list => {if(list.firebaseKey === firebaseKey) list.playlistName = name});
+        this.notifyObservers({key:"modelParams", param:"INPUT SOMETHING HERE", specs:"name"}); // TODO
+
     }
 
     setDanceable(bool) {    // Sets danceability (how suitable it is for dancing) from 0.0 to 1.0
@@ -103,12 +113,18 @@ class DiggerModel{
 
     addTracks(idlist) {   // Add multiple tracks to generated playlist
         idlist.forEach(id => this.generated.tracks.push(id));
-        this.notifyObserveres({key: "modelParams", param: "generated", specs:"addTracks", firebaseKey:this.generated.firebaseKey});
+        this.notifyObserveres({key: "modelParams", param: "generated", specs:"addTracks", firebaseKey:this.generated.firebaseKey}); // TODO
     }
 
     removeTrack(trackID) {  // Removes a specific track from the already generated list
         this.generated.tracks = this.generated.tracks(tr => tr.id !== trackID);
         this.notifyObservers({key:"modelParams", param:"generated", specs:"removeTrack", firebaseKey:this.generated.firebaseKey});
+    }
+
+    // I don't think we need this? Tracks aren't saved in prevGenerated, just name and firebase
+    removeTrackPrev(trackID, playlist) {
+        this.generated.tracks = this.generated.tracks(tr => tr.id !== trackID);
+        this.notifyObservers({key:"modelParams", param:"INPUT SOMETHING", specs:"removeTrackPrev"}); // TODO
     }
 
     removePrevPlaylist(playlist) {  // Removes a previous playlist id 
@@ -161,7 +177,7 @@ class DiggerModel{
 
     resetParams() { // Set to default values for params
         this.source = null;
-        this.generated = {playlist: null, playlistId: null, firebaseKey: null, tracks: []};
+        this.generated = {playlistName: 'Default playlist', playlistId: null, firebaseKey: null, tracks: []};
         this.genres = [];   // String values
         this.includedArtists = [];
         this.excludedArtists = [];
@@ -227,8 +243,6 @@ class DiggerModel{
 
     // Logout current user
     logout() {
-        console.log("removing local storage");
-        
         this.setLogin("false");
         localStorage.setItem("isLoggedIn", "false");
         localStorage.removeItem("access-token");

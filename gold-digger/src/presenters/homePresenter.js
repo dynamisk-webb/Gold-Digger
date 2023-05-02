@@ -4,8 +4,8 @@ import { generatedListPromise } from "../firebaseModel.js";
 function Home(props) {
 
     return (
-      <HomeView generatePlaylist={generatePlaylistACB} setCurrentPlaylist={setCurrentPlaylistACB} prevPlaylists={props.model.prevPlaylists}></HomeView>  
-    ); 
+      <HomeView testName={props.model.generated.playlistName} generatePlaylist={generatePlaylistACB} setCurrentPlaylist={setCurrentPlaylistACB} prevPlaylists={props.model.prevPlaylists}></HomeView>  
+    );
 
     /*
     TODO
@@ -18,8 +18,10 @@ function Home(props) {
     }
 
     // Set the generated playlist as the current playlist in the model
-    function setCurrentPlaylistACB (firebaseKey) {
-      generatedListPromise (props.model, firebaseKey);
+    function setCurrentPlaylistACB (playlistName, firebaseKey) {
+      props.model.setGeneratedName(playlistName);
+      props.model.setGeneratedFirebaseKey(firebaseKey);
+      //TODO resolve generatedListPromise in playlistPresenter instead!
     }
 }
 

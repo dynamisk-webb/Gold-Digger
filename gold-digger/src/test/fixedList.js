@@ -1,5 +1,5 @@
 const fixedPlaylist = {
-  playlist: "Default playlist",
+  playlistName: "Default playlist",
   playlistid: "7j3dDab7O8OPEs7I346ZP3",
   tracks: [
     {

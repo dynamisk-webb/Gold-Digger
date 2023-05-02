@@ -6,7 +6,7 @@ import FormLabel from '@mui/material/FormLabel';
 import artistImg from "./../img/genericArtistIcon.png";
 
 function ArtistResultView(props){
-    return (<div class="scrollable" id="artstResults">
+    return (<div class="scrollable" id="artistResults">
         {props.artistResults.map(getArtistACB)}
     </div>);
 
