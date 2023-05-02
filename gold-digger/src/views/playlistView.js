@@ -8,7 +8,7 @@ function PlaylistView(props){
 
     return (<div id="playlistContainer">
         <p id="playlistText">Here's your playlist!</p>
-        <input id="playlistTitle" type="text" placeholder={props.generatedName} maxLength="50"></input>
+        <input id="playlistTitle" type="text" placeholder={props.generatedName} maxLength="50" onChange={setPlaylistNameACB}></input>
         <button id="addPlaylistButton" onClick={savePlaylistToSpotifyACB}>add list to your account</button>
         <button id="homeButton" onClick={returnHomeACB}></button>
         <div className="scrollable" id="trackContainer">
@@ -22,6 +22,10 @@ function PlaylistView(props){
 
     function returnHomeACB(){
         navigate("/");
+    }
+
+    function setPlaylistNameACB(evt) {
+        props.setPlaylistName(evt.target.value);
     }
 
     
