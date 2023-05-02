@@ -79,6 +79,11 @@ class DiggerModel{
         this.notifyObservers({key:"modelParams", param:"generated", specs:"name", firebaseKey:this.generated.firebaseKey});
     }
 
+    setGeneratedFirebaseKey(firebaseKey) { // Sets key of current generated playlist
+        this.generated.firebaseKey = firebaseKey;
+        this.notifyObservers({key:"modelParams", param:"generated", specs:"firebaseKey"});
+    }
+
     setPrevName(name) {   // Sets name of previous playlist by name
         let firebaseKey = this.generated.firebaseKey;
         this.prevPlaylists.forEach(list => {if(list.firebaseKey === firebaseKey) list.playlistName = name});
