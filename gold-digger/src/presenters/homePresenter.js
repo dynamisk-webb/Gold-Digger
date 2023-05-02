@@ -5,7 +5,7 @@ function Home(props) {
 
     return (
       <HomeView generatePlaylist={generatePlaylistACB} setCurrentPlaylist={setCurrentPlaylistACB} prevPlaylists={props.model.prevPlaylists}></HomeView>  
-    );
+    ); 
 
     /*
     TODO

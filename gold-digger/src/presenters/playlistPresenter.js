@@ -11,6 +11,11 @@ Set name to new input name
 
 import PlaylistView from "../views/playlistView.js";
 import { redirect } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { generatedListPromise } from "../firebaseModel.js";
+import promiseNoData from "../views/promiseNoData.js";
+import resolvePromise from "../resolvePromise.js";
+
 
 
 /**
@@ -19,36 +24,32 @@ import { redirect } from "react-router-dom";
  */
 function Playlist (props) {
 
-    //let tracks = [{title: "hej", artists: "test", album: "no", time:"yes"}];
-    let tracks = props.model.generated.tracks;
-    let playlistName = props.model.generated.playlist;
-    console.log(props.model.generated.playlist);
+    let tracks = [];
 
-    // lifecycle
-    function onMount(){
+    const [playlistPromiseState, setPlaylistPromiseState] = useState({});
 
-        //tracks = getTracks(props.playlistID);
+    useEffect (onMountedACB);
+
+    // Lifecycle
+    function onMountedACB(){
+
+        // Resolve promise. Get all data in generated playlist from firebase, add it to model.
+        // NOTE TO SELF: add this back in.
+        /*resolvePromise (generatedListPromise (props.model, props.model.generated.firebaseKey), playlistPromiseState, setPlaylistPromiseState);*/
+
+        // Lifecycle: GET the playlist. Set name to new input name
+        // tracks = getTracks(props.playlistID);
         // list of tracks will contain:
                     // title
                     // artist
                     // album
                     // time
-
-                    /*<h2>{track.title}</h2>
-            <p>{track.artists}</p>
-            <p>{track.album}</p>
-            <p>{track.time}</p> */
-
-        function onMounted() {
-            // do stuff
-            return;
-        }
         return;
     }
 
 
     return (
-        <PlaylistView generatedTracks={tracks} generatedName={playlistName} removeTrack={removeTrackACB} getPlaylistURL={getPlaylistURLACB} setAudioPlayerSong={setAudioPlayerSongACB} returnHome={returnHomeACB}></PlaylistView>
+        <div> {promiseNoData(playlistPromiseState)} </div> || <playlistView generatedTracks={tracks} removeTrack={removeTrackACB} getPlaylistURL={getPlaylistURLACB} setAudioPlayerSong={setAudioPlayerSongACB} returnHome={returnHomeACB}></playlistView>
     );
 
     
@@ -68,10 +69,12 @@ function Playlist (props) {
     }
     /* Event: onClick return to Home */
     function returnHomeACB() {
-        // TODO prio, 
-
+        return redirect("/home");
     }
-
+    // Event: onInput PUT /playlist/{playlist_id}
+    function putPlaylistACB () {
+        //TODO
+    }
 }
 
 export default Playlist;
