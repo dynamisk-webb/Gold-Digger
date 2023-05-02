@@ -13,7 +13,7 @@ function PrevlistView(props){
 
         return (
             <button onClick={setCurrentPlaylistACB} id="prevList" >
-                {playlist.name}
+                {playlist.playlistName}
             </button>);
     }
 

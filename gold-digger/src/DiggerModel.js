@@ -9,7 +9,7 @@ class DiggerModel{
     constructor(state, setState, userid=null, prevPlaylists=[], acoustic=false, danceable=false) {
         this.userid = userid;
         this.source = null;
-        this.generated = {playlist: null, playlistId: null, firebaseKey: null, tracks: []};
+        this.generated = {playlistName: 'Default playlist', playlistId: null, firebaseKey: null, tracks: []};
         this.genres = [];   // String values
         this.includedArtists = [];  // Spotify ID
         this.excludedArtists = [];
@@ -75,12 +75,14 @@ class DiggerModel{
     }
 
     setGeneratedName(name) { // Sets name of current generated playlist
-        this.generated.name = name;
+        this.generated.playlistName = name;
         this.notifyObservers({key:"modelParams", param:"generated", specs:"name", firebaseKey:this.generated.firebaseKey});
     }
 
-    setPrevName(name, playlist) {   // Sets name of previous playlist by name
-        this.prevPlaylists.forEach(list => {if(list.playlist === playlist) list.playlist = name});
+    setPrevName(name) {   // Sets name of previous playlist by name
+        console.log("setPrevName");
+        let firebaseKey = this.generated.firebaseKey;
+        this.prevPlaylists.forEach(list => {if(list.firebaseKey === firebaseKey) list.playlistName = name});
         this.notifyObservers({key:"modelParams", param:"INPUT SOMETHING HERE", specs:"name"}); // TODO
 
     }
@@ -99,6 +101,7 @@ class DiggerModel{
      *  Modify lists
      */
     addToPrevPlaylists(newPlaylist) {   // Adds a playlist to previous playlists
+        console.log("Added with name " + newPlaylist.playlistName);
         if(!this.prevPlaylists.includes(newPlaylist)) {
             const prev = [...this.prevPlaylists, newPlaylist];
             this.setPrevPlaylists(prev);   
@@ -171,7 +174,7 @@ class DiggerModel{
 
     resetParams() { // Set to default values for params
         this.source = null;
-        this.generated = {playlist: null, playlistId: null, firebaseKey: null, tracks: []};
+        this.generated = {playlistName: 'Default playlist', playlistId: null, firebaseKey: null, tracks: []};
         this.genres = [];   // String values
         this.includedArtists = [];
         this.excludedArtists = [];

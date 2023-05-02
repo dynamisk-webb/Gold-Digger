@@ -25,6 +25,7 @@ function PlaylistView(props){
     }
 
     function setPlaylistNameACB(evt) {
+        console.log("tholajopp");
         props.setPlaylistName(evt.target.value);
     }
 

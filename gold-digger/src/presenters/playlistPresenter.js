@@ -19,7 +19,7 @@ import { redirect } from "react-router-dom";
 function Playlist(props) {
   //let tracks = [{title: "hej", artists: "test", album: "no", time:"yes"}];
   let tracks = props.model.generated.tracks;
-  let playlistName = props.model.generated.playlist;
+  let playlistName = props.model.generated.playlistName;
 
   // lifecycle
   function onMount() {
@@ -68,7 +68,9 @@ function Playlist(props) {
 
   /* Event: onInput set name of generated list */
   function setPlaylistNameACB(input) {
+    console.log("input: " + input);
     props.model.setGeneratedName(input);
+    props.model.setPrevName(input);
   }
 
   /* Event: onClick set audio player song */
@@ -89,7 +91,7 @@ function Playlist(props) {
     //props.model.setGeneratedName("Svampplockning i gryningsljus");
     
     // Test for adding a list to firebase:
-    console.log("List no " + (props.model.playlistCounter+1) + " persisted to firebase!");
+    console.log("savePlaylistToSpotifyACB");
     props.model.setGenerated(props.model.generated);
     // =============================
   }

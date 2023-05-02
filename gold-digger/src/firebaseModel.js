@@ -11,20 +11,25 @@ function modelParamsToPersistence(model){
     if (model.userid) {
         
         // handle case of no generated playlist set in model
-        let playlist = null;
-        let firebaseKey = null;
+        let playlistName = "doublesike";
+        let firebaseKey = "sike";
         if (model.generated) {
-            if (model.generated.playlist) {
-                playlist = model.generated.playlist;
+            console.log("There is a generated");
+            if (model.generated.playlistName) {
+                console.log("There is a generated name " + model.generated.playlistName);
+                playlistName = model.generated.playlistName;
+                console.log("STATUS 1 generated name " + model.generated.playlistName);
             } 
-            if (model.generated.firebaseKey) {
+            if (model.generated.firebaseKey || model.generated.firebaseKey === 0) {
+                console.log("There is a generated key " +  model.generated.firebaseKey);
                  firebaseKey = model.generated.firebaseKey;
             }
+            console.log("STATUS 2 generated name " + model.generated.playlistName);
         }
-
+        console.log("STATUS 3 generated name " + model.generated.playlistName);
         return {userid:model.userid,
             source:model.source,
-            generated:{playlist:playlist, firebaseKey:firebaseKey},
+            generated:{playlistName:playlistName, firebaseKey:firebaseKey},
             genres:model.genres,
             includedArtists:model.includedArtists,
             excludedArtists:model.excludedArtists,
@@ -39,6 +44,7 @@ function modelParamsToPersistence(model){
 }
 
 function generatedListToPersistence(model){
+    console.log("generated (firebasekey, playlist, playlistname: " + model.generated.firebaseKey + ", " + model.generated.playlist + ", " + model.generated.playlistName);
     return {generated:model.generated};
 }
 
@@ -51,8 +57,8 @@ function persistenceToModelParams(persistedData, model, setModel) {
             model.source = persistedData.source;
         }
         if (persistedData.generated) {
-            if (persistedData.generated.playlist) {
-                model.generated.playlist = persistedData.generated.playlist;
+            if (persistedData.generated.playlistName) {
+                model.generated.playlistName = persistedData.generated.playlistName;
             }
             if (persistedData.generated.firebaseKey || persistedData.generated.firebaseKey === 0) {
                 model.generated.firebaseKey = persistedData.generated.firebaseKey;
@@ -133,10 +139,13 @@ function firebaseModelPromise(model, setModel) {
     }
     
     function addObserversACB() {
-        //console.log("observers added");
-        model.addObserver(obsGeneralParamsACB);
-        model.addObserver(obsGeneratedListACB);
-        model.addObserver(logOutACB);
+        console.log("observers added");
+        if (model.observers.length === 0) {
+            console.log("actually");
+            model.addObserver(obsGeneralParamsACB);
+            model.addObserver(obsGeneratedListACB);
+            model.addObserver(logOutACB);
+        }
         return {};
     }
 
@@ -144,6 +153,7 @@ function firebaseModelPromise(model, setModel) {
     function obsGeneralParamsACB(payload){
         if (payload.key) {
             if(payload.key === "modelParams") {
+                console.log("Status generated name: " + model.generated.playlistName);
                 set(ref(db, userPATH+"modelParams"), modelParamsToPersistence(model));
             }
         }
@@ -165,7 +175,9 @@ function firebaseModelPromise(model, setModel) {
                         model.generated.firebaseKey = 0;
                     }
                     
-                    model.addToPrevPlaylists({name:model.generated.playlist, firebaseKey:model.generated.firebaseKey});
+                    console.log("Adding new playlist, about to call addToPrevPlaylist with " + model.generated.playlistName);
+                    console.log("Generated is " + model.generated.firebaseKey);
+                    model.addToPrevPlaylists({playlistName:model.generated.playlistName, firebaseKey:model.generated.firebaseKey});
                 }
                 //set(ref(db, userPATH+"modelParams"), modelParamsToPersistence(model));
                 set(ref(db, userPATH+"lists/"+"generatedList_" + model.generated.firebaseKey), generatedListToPersistence(model));
