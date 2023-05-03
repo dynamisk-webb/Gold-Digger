@@ -6,13 +6,15 @@ import { useState, useEffect } from "react";
 // temp import
 import fixedPlaylist from "../test/fixedList";
 
-
 function Loading(props) {
     // state for visual feedback when loading is done
     const [loadingDone, setloadingDone] = useState(false);
 
     // Objects to save tracks from Spotify in
-    let tracks = {};
+    let tracks = {}; // final tracklist
+    let trackIDs = []; // keep track of ids when filtering
+    let trackInformation = {}; // info includes artist, genre etc
+    let trackAudioFeatures = {}; // info includes tempo, loudness etc
     let newGenerated = {};
 
     useEffect(onMountedACB, [props.model]);
@@ -26,54 +28,95 @@ function Loading(props) {
 
     function onMountedACB() {
         // create and save generated list from source
-        getTracksFromSource();
-        filterTracksNotMatchingParams();
+        /* 
+        * get list of ids from source
+        * get audiofeatures for those ids
+        * filter ids based on audiofeatures
+        * 
+        * get trackinformation based on filtered ids
+        * filter genre and excluded artists
+        * create final playlist with a mix of wanted and neutral artists
+        */
+
+        getTrackIDsFromSource();
+        getTrackAudioFeatures();
+        filterOnAudioFeatParams();
+
+        getTracksFromFilteredIDs();
+        filterOnGenreAndExclArtist();
         setTracksBasedOnIncludedArtists();
+
         setNewGenerated();
+
+        // ==================
+        // temp: set tracks to  the ones from the fixed playlist
+        tracks = fixedPlaylist.tracks;
+        // ==================
     
         // loading done
         props.model.resetParams();
         setloadingDone(true);
     }
 
-    // Get tracks from source and save to component state
-    function getTracksFromSource() {
+
+    /**
+     * API-related
+     */
+
+    // Returns 
+    function getTrackIDsFromSource() {
         if (props.model.source) { // get tracks from provided source
             // TODO implement
         } else { // get from saved songs
             // TODO implement
-        }
-
-        // temp: set tracks to  the ones from the fixed playlist
-        tracks = fixedPlaylist.tracks;
+        }    
     }
 
-    function filterTracksNotMatchingParams() {
-        let filteredTracks = tracks;
-        
-        // TODO implement
-        /*
-         remove all songs that falls outside of set parameters
-         * genres
-         * excluded artists
+    function getTrackAudioFeatures() {
+        // TODO
+        // should use trackIDs to set trackAudioFeatures
+    }
+
+    function getTracksFromFilteredIDs() {
+        // TODO
+        // should use trackIDs to set trackInformation
+    }
+
+
+    /**
+     * Filter functions
+     */
+    function filterOnAudioFeatParams() {
+        // TODO
+       /* 
+        filter trackAudioFeatures from all songs that fall outside of set parameters
          * tempo (range)
          * loudness (range)
          * instrumentalness (range)
          * danceable (switch, decide threshhold)
          * acoustic (switch, decide threshhold)
-        */
         
-        tracks = filteredTracks;
+        update trackIDs to only include trackIDs left in trackAudioFeatures
+        */
+    }
+
+    function filterOnGenreAndExclArtist() {
+        // TODO
+        /* 
+         filter trackInformation from all songs that fall outside of set parameters
+         * genres
+         * excluded artists
+        */
     }
 
     function setTracksBasedOnIncludedArtists() {
         // TODO implement
         /*
-        create the following lists 
+        create the following lists based on (the now filtered) trackInformation
         * a list with only tracks from wanted artists, max 3 tracks from each wanted artist
         * a list with only tracks from neutral artists, scrambled (excluded artist should have been removed in filterTracksNotMatchingParams)
         
-        if list with included artists has > 50 tracks, scramble and return the 50 first
+        if list with included artists has > 50 tracks, scramble and set tracks to the 50 first
         if list with included artists has < 50 tracks, add from other list so that we have 50. Scramble and return.
         */
     }
