@@ -22,7 +22,7 @@ function getSavedTracks() {
 }
 async function getTracksPlaylist(playlist) {  // Get from playlist
   const fields = "?fields=items(track(name, id))"; // Adjust what is retrieved here
-  return generalAPI('/playlists/' + playlist + '/tracks' + fields);
+  return await generalAPI('/playlists/' + playlist + '/tracks' + fields);
 }
 async function getTracks(idlist) {
   const ids = "?ids=" + idlist.join();

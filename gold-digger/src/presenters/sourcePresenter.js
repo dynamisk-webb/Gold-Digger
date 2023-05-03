@@ -50,20 +50,7 @@ function Source(props) {
   function setPlaylistIDACB(playlistID) {
     
     // Use API call 'getTracksPlaylist' to check if URL leads to an exisiting playlist
-    
-    /*
-    BEFORE: try-catch
-    PROBLEM: not async, we need the promise chain!
-    try {
-      // using a promise chain so that we wait for getTracksPlaylist to return, THEN set the source.
-      getTracksPlaylist(playlistID).then(setValidSourceACB);
-    } catch {
-      // send popup to user
-      alert("Oops! That URL doesn't go to a Spotify playlist. Try again!");
-    }
-    */
     getTracksPlaylist(playlistID).then(setValidSourceACB).catch(invalidSourceACB);
-
 
     /*
       Helper function. Sets the playlist as the source once we know it's a valid source.
