@@ -2,9 +2,11 @@ import LoadingView from "../views/loadingView";
 import AudioPlayer from "../views/audioPlayView";
 
 import { useState, useEffect } from "react";
+import { getSavedTracks, getTracksParams, getTracksPlaylist, getTracks } from "../spotifySource.js";
 
 // temp import
 import fixedPlaylist from "../test/fixedList";
+import fixedFeatures from "../test/fixedFeatures";
 
 function Loading(props) {
     // state for visual feedback when loading is done
@@ -30,7 +32,7 @@ function Loading(props) {
         // create and save generated list from source
         /* 
         * get list of ids from source
-        * get audiofeatures for those ids
+        * get audio features for those ids
         * filter ids based on audiofeatures
         * 
         * get trackinformation based on filtered ids
@@ -67,19 +69,26 @@ function Loading(props) {
     function getTrackIDsFromSource() {
         if (props.model.source) { // get tracks from provided source
             // TODO implement
+            // getTracksPlaylist
         } else { // get from saved songs
             // TODO implement
+            // getSavedTracks
         }    
     }
 
     function getTrackAudioFeatures() {
         // TODO
         // should use trackIDs to set trackAudioFeatures
+        // getTracksParams(idList), takes an array of track ids in string format
+
+        // temp:
+        let trackAudioFeatures = fixedFeatures;
     }
 
     function getTracksFromFilteredIDs() {
         // TODO
         // should use trackIDs to set trackInformation
+        // getTracks(idList)
     }
 
 

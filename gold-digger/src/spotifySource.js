@@ -12,8 +12,7 @@ async function getProfile() {
     return response;
 }
 
-// TODO: Set limits
-/* Getter */
+/* GET-functions */
 function getSavedTracks() { 
   // Add limit and offset to pick out parts or limit amount of tracks
   let response = generalAPI('/me/tracks');
@@ -27,13 +26,36 @@ async function getTracksPlaylist(playlist) {  // Get from playlist
 async function getTracks(idlist) {
   const ids = "?ids=" + idlist.join();
   return await generalAPI('/tracks' + ids);
+  /*.map((track) => {
+    return {
+      // TODO: Filter what comes through
+    }
+  });
+  */
 }
 async function getTrackParam(id) {
-  return await generalAPI('/audio-features/' + id);
+  let response = await generalAPI('/audio-features/' + id);
+  const trackFiltered = {
+    acousticness: response.acousticness,
+    danceability: reponse.danceability,
+    instrumentalness: response.instrumentalness,
+    loudness: response.loudness,
+    tempo: response.tempo
+  };
+  return trackFiltered;
 }
 async function getTracksParams(idlist) {
   const ids = "?ids=" + idlist.join();
-  return await generalAPI('/audio-features' + ids);
+  return await generalAPI('/audio-features' + ids).map((track) => {
+    return {
+      danceability: track.danceability,
+      loudness: track.loudness,
+      acousticness: track.acousticness,
+      instrumentalness: track.instrumentalness,
+      tempo: track.tempo,
+      id: track.id,
+    }
+  });
 }
 async function getGenres() {
   const response = await generalAPI('/recommendations/available-genre-seeds');
@@ -42,7 +64,7 @@ async function getGenres() {
 async function getArtists(playlist) {
   const fields = "?fields=items(track(artists(name, id)))"; // Adjust what is retrieved here
   const response = await generalAPI('/playlists/' + playlist + '/tracks' + fields); // Returns a list of tracks with list of artists for each
-  return response.items.flat();
+  return response.items.flat(); // Flattens list so it should only be artists
 }
 async function getArtist(id) {  // By Spotify ID
   return await generalAPI('/artists/' + id);
@@ -128,4 +150,4 @@ async function generalAPI(endpoint, method="GET", body=null) {
   }
 }
 
-export {getProfile, getSavedTracks, getTracks, getTracksPlaylist, getTrackParam, getTracksParams, getGenres, getArtists, getArtist, searchArtist, createPlaylist, addTracks, changePlaylistName, useTrack, removeTrack};
+export {getProfile, getSavedTracks, getTracks, getTracksPlaylist, getTrackParam, getTracksParams, getTrackAnalysis,getGenres, getArtists, getArtist, searchArtist, createPlaylist, addTracks, changePlaylistName, useTrack, removeTrack};
