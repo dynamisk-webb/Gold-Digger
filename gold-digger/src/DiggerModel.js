@@ -17,7 +17,7 @@ class DiggerModel{
 
         this.tempo = {min: 0, max: 300}; // {min:, max}, set to default or limits
         this.loudness = {min: -60, max: 0};
-        this.instrumentalness = {min: 0, max: 1};
+        this.instrumentalness = {min: 0, max: 100};
         this.danceable = danceable; // Set directly true or false
         this.acoustic = acoustic;
 
