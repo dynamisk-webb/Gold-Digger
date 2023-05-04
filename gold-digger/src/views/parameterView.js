@@ -65,7 +65,7 @@ function ParameterView(props){
             <Tooltip title={<p style={TooltipStyle}>Overall estimated tempo in beats per minute (BPM)</p>}>
                 <div className="parameterTitle">
                     <h2 className='white paddingLess'>Tempo</h2>
-                    <p className='gray'>(BMP)</p>
+                    <p className='gray'>(BPM)</p>
                 </div>
             </Tooltip>
             
