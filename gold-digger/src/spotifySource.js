@@ -37,7 +37,7 @@ async function getTrackParam(id) {
   let response = await generalAPI('/audio-features/' + id);
   const trackFiltered = {
     acousticness: response.acousticness,
-    danceability: reponse.danceability,
+    danceability: response.danceability,
     instrumentalness: response.instrumentalness,
     loudness: response.loudness,
     tempo: response.tempo
