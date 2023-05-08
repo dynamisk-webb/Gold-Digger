@@ -56,7 +56,10 @@ function App() {
 
   // Detect login and restrict access based on login status
   useEffect(() => {
-    if (isLoggedIn === "true") {
+    if (isLoggedIn == null) {
+      localStorage.setItem("isLoggedIn", "false");
+    }
+    else if (isLoggedIn === "true") {
       getUserID();
       if (window.location.pathname === "/redirect") {
         navigate("/");
