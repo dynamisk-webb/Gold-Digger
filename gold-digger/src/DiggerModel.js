@@ -177,7 +177,7 @@ class DiggerModel{
         this.excludedArtists = [];
         this.tempo = {min: 0, max: 300}; // {min:, max}, set to default or limits
         this.loudness = {min: -60, max: 0};
-        this.instrumentalness = {min: 0, max: 1};
+        this.instrumentalness = {min: 0, max: 100};
         this.danceable = false;
         this.acoustic = false;
     }
@@ -228,7 +228,6 @@ class DiggerModel{
         try {
             return requestAccessToken();
         } catch (error) {
-            // TODO fix logic so this error is actually caught here and not before
             this.setLogin("false");
             localStorage.setItem("isLoggedIn", "false");
             alert("Error logging in.");
