@@ -150,4 +150,4 @@ async function generalAPI(endpoint, method="GET", body=null) {
   }
 }
 
-export {getProfile, getSavedTracks, getTracks, getTracksPlaylist, getTrackParam, getTracksParams, getTrackAnalysis,getGenres, getArtists, getArtist, searchArtist, createPlaylist, addTracks, changePlaylistName, useTrack, removeTrack};
+export {getProfile, getSavedTracks, getTracks, getTracksPlaylist, getTrackParam, getTracksParams,getGenres, getArtists, getArtist, searchArtist, createPlaylist, addTracks, changePlaylistName, useTrack, removeTrack};
