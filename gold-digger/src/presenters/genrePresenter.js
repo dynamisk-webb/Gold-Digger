@@ -8,42 +8,75 @@ import resolvePromise from "../resolvePromise.js";
 
 function Genres(props) {
    
+    //state for list of generes
     const [promiseState, setState] = useState({});
+    const [filteredState, setFilteredState] = useState([])
+    const [genreListState, setGenreListState] = useState([]);
+    const [searchState, setSearchState] = useState("");
+   
     useEffect(()=>{    
         async function getGenreACB() {
+            // Get all genres from Spotify
             resolvePromise(getGenres(), promiseState, setState);
-            
-            // resolve promise with sort function, promiseState and setPromise
-            // resolvePromise(filterGenreACB, promiseState, setPromise);
-        } 
+        }
+
         getGenreACB();
     }, []);
+    
+    useEffect(() =>{
+        if(promiseState.data != null){
+            // transfer results from promisestate into genreList
+            let genreList = promiseState.data.map(x => {return {genre: x, checked: false}})
+            genreList.forEach(element => {
+                if(props.model.genres.includes(element.genre))
+                    element.checked = true;
+                })
 
-    function getGenreACB() {}
+            // transfer results from genreList into filteredState and genreListState
+            setFilteredState(genreList);
+            setGenreListState(genreList);
+            
+        }
+    }, [promiseState, setState])
 
-    // TODO: sort function. Sort the chosen genres to display. Sort based on... what?
-    function filterGenreACB() {
-        // filter out everything that matches the searchTerm from the list of genres
+    function filterGenre(searchTerm) {
+        // filter and include everything that matches the searchTerm from the list of genres
+        setFilteredState(genreListState.filter(element => element.genre.includes (searchTerm)));
+    }
 
+    function searchGenreACB(searchData){
+        // filter based on the search term
+        filterGenre(searchData);
+        // save the search term
+        setSearchState(searchData);
     }
 
     // Add some loading
     return (
         <div id="genreMainGrid">
-            <SearchView id="search"></SearchView>
-            {promiseNoData(promiseState) || <GenreResultView id="genreResults" genreResults={promiseState.data} setSelectDeselect={setSelectDeselectACB}></GenreResultView>}
+            <SearchView id="search" search={searchGenreACB}></SearchView>
+            {promiseNoData(promiseState) || <GenreResultView id="genreResults" genreResults={filteredState} setSelectDeselect={setSelectDeselectACB}></GenreResultView>}
             <FilterView filterType="genre" title="Select Genres" nextTitle="Next" ></FilterView>
         </div>
     );
 
     function setSelectDeselectACB(genre , mode) {
+        
+        let genreList = genreListState;
         if(mode === 1) {
             props.model.addGenre(genre);
+            genreList.find(element => {return element.genre == genre}).checked = true;
+            
+            
         } else if(mode === -1) {
             props.model.removeGenre(genre);
+            genreList.find(element => {return element.genre == genre}).checked = false;
         }
+        setGenreListState(genreList);
+
+        // Re-render the filtered list with updated states
+        filterGenre(searchState);
     }
 }
 
-// TODO: export searchTerm and setSearch to genreView
 export default Genres;
