@@ -86,7 +86,7 @@ function Loading(props) {
         // getTracksParams(idList), takes an array of track ids in string format
 
         // temp:
-        let trackAudioFeatures = fixedFeatures;
+        trackAudioFeatures = fixedFeatures;
     }
 
     function getTracksFromFilteredIDs() {
@@ -112,7 +112,6 @@ function Loading(props) {
         update trackIDs to only include trackIDs left in trackAudioFeatures
 
         */
-
         function chosenParamsACB(track) {
             // Our decided thresholds
             const danceMinValue = 0.75;
@@ -143,11 +142,11 @@ function Loading(props) {
                     includeBasedOnDanceability && includeBasedOnAcousticness);
         }
 
-        function keepChosenTrackIDsACB() {
-            return;
+        function keepChosenTrackIDsACB(track) {
+            return track.id;
         }
 
-        let result = trackAudioFeatures.filter(chosenParamsACB).map(keepChosenTrackIDsACB);
+        trackIDs = trackAudioFeatures.filter(chosenParamsACB).map(keepChosenTrackIDsACB);
     }
 
     function filterOnGenreAndExclArtist() {
@@ -157,6 +156,34 @@ function Loading(props) {
          * genres
          * excluded artists
         */
+
+        // return false if artist is unwanted. 
+        function markUnwantedArtistsACB(artist) {
+            if (props.model.excludedArtists.includes(artist))
+                return false;
+            return true;
+        }
+
+        // return true if genre is wanted
+        function markWantedGenreACB(genre) {
+            return props.model.genres.includes(genre);         
+        }
+
+        /* filter for each current track */
+        function filterGenreAndArtistACB(currentTrack) {
+            // go through genres
+            let wantedStatusOfGenres = currentTrack.track.genres.map(markWantedGenreACB);
+            let trackContainsWantedGenre = wantedStatusOfGenres.includes(true);
+
+            // go through artist array
+            let wantedStatusofArtists = currentTrack.track.artists.map(markUnwantedArtistsACB);
+            let trackContainsUnwantedArtist = wantedStatusofArtists.includes(false);
+
+
+            return (!trackContainsUnwantedArtist && trackContainsWantedGenre);
+        }
+        
+        trackInformation = trackInformation.filter(filterGenreAndArtistACB);
     }
 
     function setTracksBasedOnIncludedArtists() {
