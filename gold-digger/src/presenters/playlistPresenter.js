@@ -17,6 +17,10 @@ import resolvePromise from "../resolvePromise.js";
 import waitForFirebase from "../views/waitForFirebase.js";
 
 
+// temp import
+import fixedList from "../test/fixedList.js";
+
+
 /**
  * Sends a playlist containing all tracks to props.
  * Will present the "finished" playlist to the user. I.e. send the generated playlist to the PlaylistView
@@ -24,18 +28,21 @@ import waitForFirebase from "../views/waitForFirebase.js";
 
 function Playlist (props) {
 
-    let tracks = props.model.generated.tracks;
+    //let tracks = props.model.generated.tracks;
     let playlistName = props.model.generated.playlistName;
+
+    let tracks = fixedList.tracks;
+    //let playlistName = fixedList.playlistName;
 
     const [playlistPromiseState, setPlaylistPromiseState] = useState({});
 
-    useEffect (onMountedACB, []);
+    useEffect (onMountedACB, [props.model]);
+    useEffect (onResolvedFirebaseACB, [playlistPromiseState, setPlaylistPromiseState]);
 
     // Lifecycle
     function onMountedACB(){
 
         // Resolve promise. Get all data in generated playlist from firebase, add it to model.
-        // NOTE TO SELF: add this back in.
         resolvePromise (generatedListPromise (props.model, props.model.generated.firebaseKey), playlistPromiseState, setPlaylistPromiseState);
 
         // Lifecycle: GET the playlist. Set name to new input name
@@ -46,6 +53,11 @@ function Playlist (props) {
                     // album
                     // time
         return;
+    }
+
+    function onResolvedFirebaseACB() {
+      tracks = props.model.generated.tracks;
+      playlistName = props.model.generated.playlistName;
     }
 
 
@@ -103,7 +115,7 @@ function Playlist (props) {
     PUT /playlists/{playlist_id}/images
     */
     
-    
+    // TODO test: make this display current model state in some way
     alert("Should add playlist to users Spotify account (not implemented yet)");
   }
 }

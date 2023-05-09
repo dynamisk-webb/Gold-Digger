@@ -8,6 +8,11 @@ import { getSavedTracks, getTracksParams, getTracksPlaylist, getTracks } from ".
 import fixedPlaylist from "../test/fixedList";
 import fixedFeatures from "../test/fixedFeatures";
 
+
+import { flushSync } from 'react-dom';
+
+
+
 function Loading(props) {
     // state for visual feedback when loading is done
     const [loadingDone, setloadingDone] = useState(false);
@@ -19,7 +24,7 @@ function Loading(props) {
     let trackAudioFeatures = {}; // info includes tempo, loudness etc
     let newGenerated = {};
 
-    useEffect(onMountedACB, [props.model]);
+    useEffect(onMountedACB, []);
 
     return (
         <div>
@@ -47,16 +52,15 @@ function Loading(props) {
         getTracksFromFilteredIDs();
         filterOnGenreAndExclArtist();
         setTracksBasedOnIncludedArtists();
-
+        
         setNewGenerated();
 
-        // ==================
-        // temp: set tracks to  the ones from the fixed playlist
-        tracks = fixedPlaylist.tracks;
-        // ==================
-    
-        // loading done
+        //loading done
         props.model.resetParams();
+
+        // TODO async fn, make sure it actually updates before navigation
+        props.setModel(props.model);
+
         setloadingDone(true);
     }
 
@@ -131,8 +135,19 @@ function Loading(props) {
     }
 
     function setNewGenerated() {
-        newGenerated.tracks = tracks;
+        newGenerated.tracks = fixedPlaylist.tracks; // TODO set to actual tracks
         newGenerated.playlistName = 'Default Playlist';
+       
+        // Set firebasekey based on the current highest key
+        // NOTE: if we implement a restore fn it needs to sort prevPlaylist based on firebaseKey
+        if (props.model.prevPlaylists.length) {
+            let playlistWithCurrentHighestKey = props.model.prevPlaylists[props.model.prevPlaylists.length-1];
+            newGenerated.firebaseKey = playlistWithCurrentHighestKey.firebaseKey + 1;
+        } else {
+            newGenerated.firebaseKey = 0;
+        }
+
+        props.model.addToPrevPlaylists({playlistName:newGenerated.playlistName, firebaseKey:newGenerated.firebaseKey}); 
         props.model.setGenerated(newGenerated);
     }
 }

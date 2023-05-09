@@ -120,16 +120,16 @@ function App() {
       
         <Route path="/" element={waitForFirebase(firebasePromiseState) || <Layout model={dModel} isLoggedIn={true} />}>
 
-          {/* Default route for / path */}
-          <Route index element={<Home model={dModel} />} />
-          <Route path="artist" element={<Artist model={dModel} />} />
-          <Route path="genre" element={<Genres model={dModel} />} />
-          <Route path="parameter" element={<Parameter model={dModel} />} />
-          <Route path="playlist" element={<Playlist model={dModel} />} />
-          <Route path="source" element={<Source model={dModel} />} />
-          <Route path="loading" element={<Loading model={dModel} />} />
-          <Route path="test" element={<LoggedInTest model={dModel} />} />
-        </Route>
+        {/* Default route for / path */}
+        <Route index element={<Home model={dModel} />} />
+        <Route path="artist" element={<Artist model={dModel} />} />
+        <Route path="genre" element={<Genres model={dModel} />} />
+        <Route path="parameter" element={<Parameter model={dModel} />} />
+        <Route path="playlist" element={<Playlist model={dModel} />} />
+        <Route path="source" element={<Source model={dModel} />} />
+        <Route path="loading" element={<Loading model={dModel} setModel={setDmodel}/>} />
+        <Route path="test" element={<LoggedInTest model={dModel} />} />
+      </Route>
       <Route
         path="*"
         element={
