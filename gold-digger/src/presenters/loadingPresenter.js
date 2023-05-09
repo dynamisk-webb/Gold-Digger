@@ -93,6 +93,7 @@ function Loading(props) {
         // TODO
         // should use trackIDs to set trackInformation
         // getTracks(idList)
+        trackInformation = fixedPlaylist.tracks;
     }
 
 

@@ -10,10 +10,16 @@ function Genres(props) {
    
     //state for list of generes
     const [promiseState, setState] = useState({});
+<<<<<<< Updated upstream
     const [filteredState, setFilteredState] = useState([])
     const [genreListState, setGenreListState] = useState([]);
     const [searchState, setSearchState] = useState("");
    
+=======
+    const genres = [];
+    const sentGenres = [];
+    let searchTerm = ""; // TODO: ta in vad användaren skriver
+>>>>>>> Stashed changes
     useEffect(()=>{    
         async function getGenreACB() {
             // Get all genres from Spotify
@@ -32,6 +38,7 @@ function Genres(props) {
                     element.checked = true;
                 })
 
+<<<<<<< Updated upstream
             // transfer results from genreList into filteredState and genreListState
             setFilteredState(genreList);
             setGenreListState(genreList);
@@ -49,14 +56,38 @@ function Genres(props) {
         filterGenre(searchData);
         // save the search term
         setSearchState(searchData);
+=======
+    useEffect (convertACB, [promiseState]);
+
+    /* Convert to variable so that we minmise number of expensive API calls */
+    function convertACB () {
+        // om genres är undefined, kasta error? Annars, ansätt till variabler så vi slipper göra många API calls.
+        if (!promiseState.data)
+            console.log("promiseState.data is undefined");
+
+        genres = promiseState.data;
+        sentGenres = genres;
+    }
+
+    /* TODO: sort function. Sort the chosen genres to display.
+    Filter out everything that matches the searchTerm from the list of genres */
+    function filterGenreACB() {
+        sentGenres = genres.filter (searchTerm);
+>>>>>>> Stashed changes
     }
 
     // Add some loading
     return (
         <div id="genreMainGrid">
+<<<<<<< Updated upstream
             <SearchView id="search" search={searchGenreACB}></SearchView>
             {promiseNoData(promiseState) || <GenreResultView id="genreResults" genreResults={filteredState} setSelectDeselect={setSelectDeselectACB}></GenreResultView>}
             <FilterView filterType="genre" title="Select Genres" noTitle="Step 2 of 4" nextTitle="Next" ></FilterView>
+=======
+            <SearchView id="search"></SearchView>
+            {promiseNoData(promiseState) || <GenreResultView id="genreResults" genreResults={sentGenres} setSelectDeselect={setSelectDeselectACB}></GenreResultView>}
+            <FilterView filterType="genre" title="Select Genres" nextTitle="Next" ></FilterView>
+>>>>>>> Stashed changes
         </div>
     );
 
