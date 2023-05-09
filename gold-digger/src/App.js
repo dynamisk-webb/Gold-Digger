@@ -106,8 +106,10 @@ function App() {
   // Routes
   return (
     <Routes>
-      <Route exact path="/login" element={isLoggedIn === "true" ? <Navigate to="/" /> : <Login model={dModel} />}/>
       <Route exact path="/redirect" element={<Redirect model={dModel} />} />
+      <Route element={<Layout model={dModel} isLoggedIn={false} />}>
+        <Route exact path="/login" element={isLoggedIn === "true" ? <Navigate to="/" /> : <Login model={dModel} />}/>
+      </Route>
       
       {/*
       Handles firebasepromise if login-status changes
@@ -115,18 +117,19 @@ function App() {
       <Route path="/" element={<Layout model={dModel} />}>
       Manually typing the url you want to go to might also work as a temp fix
       */}
-      <Route path="/" element={waitForFirebase(firebasePromiseState) || <Layout model={dModel} />}>
+      
+        <Route path="/" element={waitForFirebase(firebasePromiseState) || <Layout model={dModel} isLoggedIn={true} />}>
 
-        {/* Default route for / path */}
-        <Route index element={<Home model={dModel} />} />
-        <Route path="artist" element={<Artist model={dModel} />} />
-        <Route path="genre" element={<Genres model={dModel} />} />
-        <Route path="parameter" element={<Parameter model={dModel} />} />
-        <Route path="playlist" element={<Playlist model={dModel} />} />
-        <Route path="source" element={<Source model={dModel} />} />
-        <Route path="loading" element={<Loading model={dModel} />} />
-        <Route path="test" element={<LoggedInTest model={dModel} />} />
-      </Route>
+          {/* Default route for / path */}
+          <Route index element={<Home model={dModel} />} />
+          <Route path="artist" element={<Artist model={dModel} />} />
+          <Route path="genre" element={<Genres model={dModel} />} />
+          <Route path="parameter" element={<Parameter model={dModel} />} />
+          <Route path="playlist" element={<Playlist model={dModel} />} />
+          <Route path="source" element={<Source model={dModel} />} />
+          <Route path="loading" element={<Loading model={dModel} />} />
+          <Route path="test" element={<LoggedInTest model={dModel} />} />
+        </Route>
       <Route
         path="*"
         element={

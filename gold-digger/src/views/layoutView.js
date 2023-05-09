@@ -8,12 +8,18 @@ function LayoutView(props){
   return (
     <div id="layout">
       <img src={spotifyLogo} id="spotifyLogo" ></img>
-      <button id="logOut" onClick={logOutACB}></button>
+      {renderLogOut()}
       <button id="openAbout" onClick={openAboutACB}></button>
 
       <Outlet />
     </div>
   )
+
+  function renderLogOut(){
+    if(props.isLoggedIn){
+      return <button id="logOut" onClick={logOutACB}></button>;
+    }
+  }
 
   // TODO: make sure login button isn't rendered when the user is logged out
 
