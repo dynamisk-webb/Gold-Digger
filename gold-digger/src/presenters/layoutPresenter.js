@@ -19,13 +19,15 @@ function Layout(props) {
 
     function openAboutACB(){
         document.getElementById("aboutUsContainer").style.width = "100%";
-        document.getElementById("aboutUs").style.width = "600px";
+        document.getElementById("aboutUs").style.width = "700px";
+        document.getElementById("closeField").style.width = "100%";
         setAboutOpen(true);
     }
 
     function closeAboutACB(){
         document.getElementById("aboutUsContainer").style.width = "0%";
         document.getElementById("aboutUs").style.width = "0px";
+        document.getElementById("closeField").style.width = "0%";
         setAboutOpen(false);
     }
 }
