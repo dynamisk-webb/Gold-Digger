@@ -20,8 +20,8 @@ function Loading(props) {
     // Objects to save tracks from Spotify in
     let tracks = {}; // final tracklist
     let trackIDs = []; // keep track of ids when filtering
-    let trackInformation = {}; // info includes artist, genre etc
-    let trackAudioFeatures = {}; // info includes tempo, loudness etc
+    let trackInformation = []; // info includes artist, genre etc
+    let trackAudioFeatures = []; // info includes tempo, loudness etc
     let newGenerated = {};
 
     useEffect(onMountedACB, []);
