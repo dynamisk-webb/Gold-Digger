@@ -106,11 +106,48 @@ function Loading(props) {
          * tempo (range)
          * loudness (range)
          * instrumentalness (range)
-         * danceable (switch, decide threshhold)
-         * acoustic (switch, decide threshhold)
+         * danceability (switch, decide threshhold)    0.75<
+         * acousticness threshhold)     0.75<
         
         update trackIDs to only include trackIDs left in trackAudioFeatures
+
         */
+
+        function chosenParamsACB(track) {
+            // Our decided thresholds
+            const danceMinValue = 0.75;
+            const acousticMinValue = 0.75;
+
+            let includeBasedOnAcousticness = true;
+            let includeBasedOnDanceability = true;
+
+            // If user wants a danceable list, only include danceable songs. Else, include full range. 
+            if (props.model.danceable) {
+                includeBasedOnDanceability = (track.danceability >= danceMinValue);
+            }
+
+            // If user wants an acoustic list, only include such songs. Else, include full range. 
+            if (props.model.acoustic) {
+                includeBasedOnAcousticness = (track.acousticness >= acousticMinValue);
+            }
+            
+            // FixedFeatures on the left, compare with values from Diggermodel on the right.
+            // important: danceability, acousticness in FixedFeatures
+            //            danceable, acoustic in DiggerModel
+            return (track.tempo >= props.model.tempo.min &&
+                    track.tempo <= props.model.tempo.min &&
+                    track.loudness >= props.model.loudness.min &&
+                    track.loudness <= props.model.louness.max &&
+                    track.instrumentalness >= props.model.instrumentalness.min &&
+                    track.instrumentalness <= props.model.instrumentalness.max &&
+                    includeBasedOnDanceability && includeBasedOnAcousticness);
+        }
+
+        function keepChosenTrackIDsACB() {
+            return;
+        }
+
+        let result = trackAudioFeatures.filter(chosenParamsACB).map(keepChosenTrackIDsACB);
     }
 
     function filterOnGenreAndExclArtist() {
