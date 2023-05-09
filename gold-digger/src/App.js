@@ -33,6 +33,7 @@ import waitForFirebase from "./views/waitForFirebase.js";
 // TEMPORARY IMPORTS
 import fixedPlaylist from "./test/fixedList.js";
 import LoggedInTest from "./test/loggedInTestPresenter";
+import Randomm from "./Randomm";
 
 /**
  *  Main App rendering all components
@@ -46,6 +47,7 @@ function App() {
   const [dModel, setDmodel] = useState(
     new DiggerModel(isLoggedIn, setLoggedIn)
   );
+  const [randomm, setRandomm] = useState(new Randomm());
 
   // Temporary fixed generated playlist for testing purposes
   dModel.generated = fixedPlaylist;
@@ -107,7 +109,7 @@ function App() {
   return (
     <Routes>
       <Route exact path="/login" element={isLoggedIn === "true" ? <Navigate to="/" /> : <Login model={dModel} />}/>
-      <Route exact path="/redirect" element={<Redirect model={dModel} />} />
+      <Route exact path="/redirect" element={<Redirect model={dModel}/>} />
       
       {/*
       Handles firebasepromise if login-status changes
@@ -122,9 +124,9 @@ function App() {
         <Route path="artist" element={<Artist model={dModel} />} />
         <Route path="genre" element={<Genres model={dModel} />} />
         <Route path="parameter" element={<Parameter model={dModel} />} />
-        <Route path="playlist" element={<Playlist model={dModel} />} />
+        <Route path="playlist" element={<Playlist model={dModel} randomm={randomm} />} />
         <Route path="source" element={<Source model={dModel} />} />
-        <Route path="loading" element={<Loading model={dModel} />} />
+        <Route path="loading" element={<Loading model={dModel} setModel={setDmodel} randomm={randomm} setRandomm={setRandomm}/>} />
         <Route path="test" element={<LoggedInTest model={dModel} />} />
       </Route>
       <Route

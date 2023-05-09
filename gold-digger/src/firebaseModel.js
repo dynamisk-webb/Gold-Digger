@@ -156,16 +156,16 @@ function firebaseModelPromise(model, setModel) {
             if(payload.key === "modelParams" && payload.param === "generated") {
                 if (payload.specs === "newList") {
                     
-                    // Set firebasekey based on the current highest key
-                    // NOTE: if we implement a restore fn it needs to sort prevPlaylist based on firebaseKey
-                    if (model.prevPlaylists.length) {
-                        let playlistWithCurrentHighestKey = model.prevPlaylists[model.prevPlaylists.length-1];
-                        model.generated.firebaseKey = playlistWithCurrentHighestKey.firebaseKey + 1;
-                    } else {
-                        model.generated.firebaseKey = 0;
-                    }
+                    // // Set firebasekey based on the current highest key
+                    // // NOTE: if we implement a restore fn it needs to sort prevPlaylist based on firebaseKey
+                    // if (model.prevPlaylists.length) {
+                    //     let playlistWithCurrentHighestKey = model.prevPlaylists[model.prevPlaylists.length-1];
+                    //     model.generated.firebaseKey = playlistWithCurrentHighestKey.firebaseKey + 1;
+                    // } else {
+                    //     model.generated.firebaseKey = 0;
+                    // }
                 
-                    model.addToPrevPlaylists({playlistName:model.generated.playlistName, firebaseKey:model.generated.firebaseKey});
+                    // model.addToPrevPlaylists({playlistName:model.generated.playlistName, firebaseKey:model.generated.firebaseKey});
                 }
                 //set(ref(db, userPATH+"modelParams"), modelParamsToPersistence(model));
                 set(ref(db, userPATH+"lists/"+"generatedList_" + model.generated.firebaseKey), generatedListToPersistence(model));

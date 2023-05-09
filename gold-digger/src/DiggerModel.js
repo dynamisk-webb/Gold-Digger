@@ -69,7 +69,7 @@ class DiggerModel{
         }
     }
 
-    setGenerated(generate) { // Sets generated playlist (should only be called when creating a new playlist, firebaseKey will be assigned when persisting)
+    setGenerated(generate) { // Sets generated playlist
         this.generated = generate;
         this.notifyObservers({key:"modelParams", param:"generated", specs:"newList"});
     }
@@ -109,6 +109,7 @@ class DiggerModel{
             const prev = [...this.prevPlaylists, newPlaylist];
             this.setPrevPlaylists(prev);   
         }
+        this.notifyObservers({key: "modelParams", param: "addNewToPrev"});
     }
 
     addTracks(idlist) {   // Add multiple tracks to generated playlist
@@ -171,7 +172,7 @@ class DiggerModel{
 
     resetParams() { // Set to default values for params
         this.source = null;
-        this.generated = {playlistName: 'Default playlist', playlistId: null, firebaseKey: null, tracks: []};
+        //this.generated = {playlistName: 'Default playlist', playlistId: null, firebaseKey: null, tracks: []};
         this.genres = [];   // String values
         this.includedArtists = [];
         this.excludedArtists = [];
