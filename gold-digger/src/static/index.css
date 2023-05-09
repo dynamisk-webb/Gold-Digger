@@ -312,15 +312,23 @@ input:focus {
   width: 100%;
   height: 100%;
   display: grid;
-  grid-template-columns: 1fr 2fr 1fr;
-  grid-template-rows: 2fr 1fr 1fr 1fr 2fr;
+  grid-template-columns: 1fr 600px 1fr;
+  grid-template-rows: 2fr 140px 100px 100px 2fr;
+}
+
+#sourceNoTitle{
+  grid-row: 2 / span 1;
+  grid-column: 2 / span 1;
+  justify-self: center;
+  align-self: start;
+  margin: 0 0 0 0;
 }
 
 #sourceTitle{
   grid-row: 2 / span 1;
   grid-column: 2 / span 1;
   justify-self: center;
-  align-self: start;
+  align-self: center;
   margin: 0 0 0 0;
 }
 
@@ -427,11 +435,11 @@ input[type=text] {
   height: 100%;
   display: grid;
   grid-template-columns: 100PX 1fr 200PX;
-  grid-template-rows: 200px 2fr 100PX;
+  grid-template-rows: 80px 120px 2fr 100PX;
 }
 
 #filterReturnButton{
-  grid-row: 1 / span 1;
+  grid-row: 1 / span 2;
   grid-column: 1 / span 1;
 
 
@@ -446,13 +454,20 @@ input[type=text] {
 }
 
 #filterForwardButton{
-  grid-row: 3 / span 1;
+  grid-row: 4 / span 1;
   grid-column: 3 / span 1;
   margin: 10% 5% 10% 5%;
 }
 
-#filterTitle{
+#filterNoTitle{
   grid-row: 1 / span 1;
+  grid-column: 2 / span 1;
+  justify-self: center;
+  align-self: center;
+}
+
+#filterTitle{
+  grid-row: 1 / span 2;
   grid-column: 2 / span 1;
   justify-self: center;
   align-self: center;
@@ -642,7 +657,7 @@ input[type=text] {
   opacity: 40%;
   right: 0px;
   bottom: 0px;
-  height: 70%;
+  height: 700px;
 }
 
 #spotifyLogo{

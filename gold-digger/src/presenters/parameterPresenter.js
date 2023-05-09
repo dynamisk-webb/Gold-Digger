@@ -5,7 +5,7 @@ function Parameters (props) {
 
     return (
         <div id="parameterMainGrid">
-            <FilterView filterType="parameter" title="Additional Parameters" nextTitle="Generate"></FilterView>
+            <FilterView filterType="parameter" title="Additional Parameters" noTitle="Step 4 of 4" nextTitle="Generate"></FilterView>
             <ParameterView id="parameterGridPlacement" model={props.model} changeTempo={changeTempoACB} changeLoudness={changeLoudnessACB} changeInstrumentalness={changeInstrumentalnessACB} changeDanceable={changeDanceableACB} changeAcoustic={changeAcousticACB}></ParameterView>
         </div>
     );

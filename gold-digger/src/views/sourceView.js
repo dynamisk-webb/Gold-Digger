@@ -13,6 +13,7 @@ function SourceView(props){
       }, [props.validURL]);
 
     return (<div id="sourceGrid">
+            <h2 id="sourceNoTitle">Step 1 of 4</h2>
             <h1 id="sourceTitle">Select a source</h1>
             <h2 id="sourceSubTitle">to generate a playlist from</h2>
             {input  ?<input id="sourceInputPlaylist" onKeyDown={setSourcePlaylistACB} type="text" placeholder="https://open.spotify.com/playlist/.."></input>

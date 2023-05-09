@@ -8,6 +8,7 @@ function FilterView(props){
     return(
         <div id="filterGrid">
             <button id="filterReturnButton" onClick={returnACB}></button>
+            <h2 id="filterNoTitle">{props.noTitle}</h2>
             <h1 id="filterTitle">{props.title}</h1>
             <button id="filterForwardButton" onClick={continueACB}>{props.nextTitle}</button>
         </div>

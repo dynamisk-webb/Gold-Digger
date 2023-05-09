@@ -35,7 +35,7 @@ function Artists(props) {
 
     return (
         <div>
-            <FilterView filterType="artist" title="Include or Exclude Artists" nextTitle="Next"></FilterView>
+            <FilterView filterType="artist" title="Include or Exclude Artists" noTitle="Step 3 of 4" nextTitle="Next"></FilterView>
             <SearchView></SearchView>
             <ArtistResultView artistResults={artist} setExcludeInclude={setExcludeIncludeACB}></ArtistResultView>
         </div>
