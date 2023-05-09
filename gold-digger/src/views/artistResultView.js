@@ -3,8 +3,12 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
+import Tooltip from '@mui/material/Tooltip';
+
 import artistImg from "./../img/genericArtistIcon.png";
 import { orange, grey } from '@mui/material/colors';
+
+// Icon Import
 import SentimentVerySatisfiedIcon from '@mui/icons-material/SentimentVerySatisfied';
 import SentimentSatisfiedIcon from '@mui/icons-material/SentimentSatisfied';
 import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
@@ -13,9 +17,17 @@ import SentimentSatisfiedTwoToneIcon from '@mui/icons-material/SentimentSatisfie
 import SentimentVeryDissatisfiedTwoToneIcon from '@mui/icons-material/SentimentVeryDissatisfiedTwoTone';
 
 function ArtistResultView(props){
+    const TooltipStyle = {
+        color: "white",
+        marginTop: 0,
+        top: 0,
+        paddingTop: 0
+      };
+
     return (<div className="scrollable" id="artistResults">
         {props.artistResults.map(getArtistACB)}
     </div>);
+    
 
     function getArtistACB(result){
 
@@ -37,6 +49,7 @@ function ArtistResultView(props){
                         value={props.value}
                         onChange={handleChange}
                         >
+                             <Tooltip title={<p style={TooltipStyle}>Include artist if possible</p>}>
                             <FormControlLabel value="include" control={<Radio 
                                 className="radioButton"
                                 icon={<SentimentVerySatisfiedIcon className="smileyIcon"/>}
@@ -47,6 +60,8 @@ function ArtistResultView(props){
                                 color: orange[900],
                                 },
                           }}/>} />
+                            </Tooltip>
+                            <Tooltip title={<p style={TooltipStyle}>No preference</p>}>
                             <FormControlLabel value="neutral" control={<Radio 
                             className="radioButton"
                             icon={<SentimentSatisfiedIcon className="smileyIcon"/>}
@@ -57,6 +72,8 @@ function ArtistResultView(props){
                               color: orange[900],
                             },
                           }}/>} />
+                          </Tooltip>
+                          <Tooltip title={<p style={TooltipStyle}>Exclude artist</p>}>
                             <FormControlLabel value="exclude" control={<Radio 
                             className="radioButton"
                             icon={<SentimentVeryDissatisfiedIcon className="smileyIcon"/>}
@@ -67,6 +84,7 @@ function ArtistResultView(props){
                               color: orange[900],
                             },
                           }}/>} />
+                          </Tooltip>
                         
                         </RadioGroup>
                     </FormControl>
