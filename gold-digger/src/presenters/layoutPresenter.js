@@ -9,7 +9,7 @@ function Layout(props) {
 
     return <div>
             <AboutUsView closeAbout={closeAboutACB}></AboutUsView>
-            <LayoutView logOut={logOutACB} openAbout={openAboutACB}></LayoutView>
+            <LayoutView logOut={logOutACB} openAbout={openAboutACB} isLoggedIn={props.isLoggedIn}></LayoutView>
         </div>;
 
     function logOutACB(){

@@ -17,7 +17,7 @@ function PrevlistView(props){
         }
 
         return (
-            <button onClick={setCurrentPlaylistACB} id="prevList" >
+            <button onClick={setCurrentPlaylistACB} id="prevList" key={playlist.firebaseKey}>
                 {playlist.playlistName}
             </button>);
     }

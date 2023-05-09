@@ -262,7 +262,7 @@ input:focus {
 
   z-index: 100;
   position: absolute;
-  top: 14px;
+  top: 18px;
   right: 230px;
 }
 
@@ -680,7 +680,7 @@ input[type=text] {
   margin: 0px 0px 0px 0px; 
   z-index: 200;
   position:fixed;
-  top:14px;
+  top:18px;
   right:170px;
   
 }
