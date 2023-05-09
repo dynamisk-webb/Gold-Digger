@@ -75,7 +75,6 @@ input:focus {
 /* GENERIC CLASSES */
 
 .scrollable{
-  cursor: grab;
   overflow-y: scroll;
   overflow-x: hidden ;
 }
@@ -88,6 +87,7 @@ input:focus {
   grid-column: 3 / span 1;
   
   color:#FF6B35;
+  margin-left: 5vw;
   width:80%;
 }
 
@@ -103,6 +103,7 @@ input:focus {
 .parameterSwitch{
   grid-column: 3 / span 1;
   color:#FF6B35;
+  margin-left: 5vw;
 }
 
 .parameterSubTitle{
@@ -429,8 +430,8 @@ input[type=text] {
   top:0;
   left:0;
   top:150px;
-  left:200px;
-  right: 200px;
+  left:100px;
+  right: 100px;
   bottom: 100px;
 
   display: grid;
@@ -769,7 +770,7 @@ input[type=text] {
 #artistResult{
   height: 100px;
   display: grid;
-  grid-template-columns: 100px 1fr 50px 50px;
+  grid-template-columns: 100px 1fr 200px;
   grid-template-rows: 100px;
 }
 
@@ -778,4 +779,20 @@ input[type=text] {
   grid-row: 1/span 1;
   width: 80px;
 
+}
+
+#includeExcludeButtons{
+  grid-column: 3/span 1;
+  grid-row: 1/span 1;
+}
+
+.smileyIcon{
+  transform: scale(1.7);
+}
+
+.radioButton{
+  width:50px;
+  height:50px;
+  margin: 0;
+  padding: 0;
 }

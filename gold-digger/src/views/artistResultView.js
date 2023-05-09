@@ -4,6 +4,13 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import artistImg from "./../img/genericArtistIcon.png";
+import { orange, grey } from '@mui/material/colors';
+import SentimentVerySatisfiedIcon from '@mui/icons-material/SentimentVerySatisfied';
+import SentimentSatisfiedIcon from '@mui/icons-material/SentimentSatisfied';
+import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
+import SentimentVerySatisfiedTwoToneIcon from '@mui/icons-material/SentimentVerySatisfiedTwoTone';
+import SentimentSatisfiedTwoToneIcon from '@mui/icons-material/SentimentSatisfiedTwoTone';
+import SentimentVeryDissatisfiedTwoToneIcon from '@mui/icons-material/SentimentVeryDissatisfiedTwoTone';
 
 function ArtistResultView(props){
     return (<div className="scrollable" id="artistResults">
@@ -21,20 +28,49 @@ function ArtistResultView(props){
             <div id="artistResult" key={result.name}>
                 <img src={artistImg} id="artistImg"></img>
                 <p>{result.name /*IDK IF THIS IS CORRECT*/}</p>
-            <div> 
-                <FormControl>
-                <FormLabel id="demo-radio-buttons-group-label">{result.title}</FormLabel>
-                    <RadioGroup
-                    aria-labelledby="demo-controlled-radio-buttons-group"
-                    name="controlled-radio-buttons-group"
-                    value={props.value}
-                    onChange={handleChange}>
-                        <FormControlLabel value="include" control={<Radio />} label="include" />
-                        <FormControlLabel value="neutral" control={<Radio />} label="neutral" />
-                        <FormControlLabel value="exclude" control={<Radio />} label="exclude" />
-                    </RadioGroup>
-                </FormControl>
-            </div>
+                <div id="includeExcludeButtons"> 
+                    <FormControl>
+                    <FormLabel id="demo-radio-buttons-group-label">{result.title}</FormLabel>
+                        <RadioGroup
+                        row
+                        name="controlled-radio-buttons-group"
+                        value={props.value}
+                        onChange={handleChange}
+                        >
+                            <FormControlLabel value="include" control={<Radio 
+                                className="radioButton"
+                                icon={<SentimentVerySatisfiedIcon className="smileyIcon"/>}
+                                checkedIcon={<SentimentVerySatisfiedTwoToneIcon className="smileyIcon"/>}
+                                sx={{
+                                color: grey[800],
+                                '&.Mui-checked': {
+                                color: orange[900],
+                                },
+                          }}/>} />
+                            <FormControlLabel value="neutral" control={<Radio 
+                            className="radioButton"
+                            icon={<SentimentSatisfiedIcon className="smileyIcon"/>}
+                            checkedIcon={<SentimentSatisfiedTwoToneIcon className="smileyIcon"/>}
+                            sx={{   
+                            color: grey[800],
+                            '&.Mui-checked': {
+                              color: orange[900],
+                            },
+                          }}/>} />
+                            <FormControlLabel value="exclude" control={<Radio 
+                            className="radioButton"
+                            icon={<SentimentVeryDissatisfiedIcon className="smileyIcon"/>}
+                            checkedIcon={<SentimentVeryDissatisfiedTwoToneIcon className="smileyIcon"/>}
+                            sx={{
+                            color: grey[800],
+                            '&.Mui-checked': {
+                              color: orange[900],
+                            },
+                          }}/>} />
+                        
+                        </RadioGroup>
+                    </FormControl>
+                </div>
             </div>
         );
     }
