@@ -6,7 +6,7 @@ import FormLabel from '@mui/material/FormLabel';
 import artistImg from "./../img/genericArtistIcon.png";
 
 function ArtistResultView(props){
-    return (<div class="scrollable" id="artistResults">
+    return (<div className="scrollable" id="artistResults">
         {props.artistResults.map(getArtistACB)}
     </div>);
 
@@ -18,12 +18,12 @@ function ArtistResultView(props){
 
         // TODO: add buttons to include/exclude artists
         return (
-            <div id="artistResult">
+            <div id="artistResult" key={result.name}>
                 <img src={artistImg} id="artistImg"></img>
                 <p>{result.name /*IDK IF THIS IS CORRECT*/}</p>
             <div> 
                 <FormControl>
-                <FormLabel id="demo-radio-buttons-group-label">result.title</FormLabel>
+                <FormLabel id="demo-radio-buttons-group-label">{result.title}</FormLabel>
                     <RadioGroup
                     aria-labelledby="demo-controlled-radio-buttons-group"
                     name="controlled-radio-buttons-group"
