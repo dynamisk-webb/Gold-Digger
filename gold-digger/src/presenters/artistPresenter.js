@@ -18,12 +18,10 @@ function Artists(props) {
     // TODO: get all artists from *saved tracks* or a *chosen playlist*
     // Right now: gets them all from Spotify(?) from a playlist. Unclear if this API call works. 
     async function getArtistsACB() {
-      let playlist = props.model.playlist; // TODO: is this the right way to get the playlist in here? 
-
+      let playlist = props.model.source; // TODO: is this the right way to get the playlist in here? 
       // Check if a saved playlist exists before getting the artists from it
       if (playlist) {
         resolvePromise(getArtists(playlist), promiseState, setState);
-        alert("I'm done getting the artists from a playlist");
       }
     }
     getArtistsACB();
@@ -37,28 +35,26 @@ function Artists(props) {
     // TODO: gör sedan det igenom listan ExcludedArtists (kolla DiggerModel) och markera alla med value:"exclude"
 
     /* retrieve from model and mark artists as Exclude or Include values*/
-    function getIncludeOrExcludeACB(x) {
+    function getIncludeOrExcludeACB(artist) {
       // default
-      let artistObject = {artist: x, value: "neutral"};
+      //let artistObject = {artist: x, value: "neutral"};
       
       // filter on included artists
-      if(props.model.includedArtists.includes(x.id))
-        artistObject.value = "include";
+      if(props.model.includedArtists.find(element => element == artist.id))
+        artist.value = "include";
 
       // filter on excluded artists
-      if(props.model.excludedArtists.includes(x.id))
-        artistObject.value = "exclude";
+      if(props.model.excludedArtists.find(element => element == artist.id))
+        artist.value = "exclude";
     }
 
 
-    if (promiseState.data != null) {
-      // transfer results from promiseState into artistList
-      let artistList = promiseState.data.map(x => { return { getIncludeOrExcludeACB } }) 
-  
-      artistList.forEach(element => {
-        if (props.model.artist.includes(element.artist)) // TODO: kan man skriva såhär..?
-          element.checked = true;
-      })
+    if (promiseState.data != null) {      
+      // Transfer results from promiseState into artistList
+      // Make use the values are unique
+      let artistList = promiseState.data.map(obj => ({ ...obj, value: 'neutral' }));
+      
+      artistList.forEach(getIncludeOrExcludeACB)
 
       // transfer results from artistList into filteredState and artistListState
       setFilteredState(artistList);
@@ -76,7 +72,7 @@ function Artists(props) {
 
   // Filter
   function filterArtist (searchTerm) {
-    setFilteredState(artistListState.filter(element => element.includes (searchTerm))); // TODO: eller element.artist.includes (searchTerm) ?
+    setFilteredState(artistListState.filter(element => element.name.toLowerCase().includes(searchTerm.toLowerCase()))); // TODO: eller element.artist.includes (searchTerm) ?
   }
 
 
@@ -127,15 +123,15 @@ function Artists(props) {
     let artistList = artistListState;
     if (type === "include") {
       props.model.includeArtist(id);
-      artistList.find(element => { return element == artist }).checked = "include";  // TODO: element.artist == artist elllerrrr element == artist (?)
+      artistList.find(element => element.id == id ).value = "include";  // TODO: element.artist == artist elllerrrr element == artist (?)
 
     } else if (type === "neutral") {
       props.model.removeArtist(id);
-      artistList.find(element => { return element == artist }).checked = "neutral";  
+      artistList.find(element => element.id == id ).value = "neutral";  
 
     } else if (type === "exclude") {
       props.model.excludeArtist(id);
-      artistList.find(element => { return element == artist }).checked = "exclude";
+      artistList.find(element => element.id == id).value = "exclude";
     }
 
     setArtistListState(artistList);

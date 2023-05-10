@@ -27,7 +27,7 @@ async function getSavedTracks() { // Get all of user's saved tracks
 async function getTracksPlaylist(playlist) {  // Get tracks from playlist
   const id = convertURLtoID(playlist);
   const fields = "?limit=50&fields=next,items(track(album(id, images),artists(genres,id,name,images),name,id))"; // Adjust what is retrieved here
-  let response = await generalAPI('/playlists/' + id + '/tracks' + fields);
+  let response = await generalAPI('/playlists/' + playlist + '/tracks' + fields);
   const tracks = response.items;
 
   while(response.next) {  // If there is more to retrieve
@@ -91,17 +91,18 @@ async function getGenres() {  // Returns list of all genres
   return response.genres;
 }
 async function getArtists(playlist) { // Returns list of all artists in a playlist
-  const list = getTracksPlaylist(playlist);
+  const list = await getTracksPlaylist(playlist);
   const artistList = [];
-
-  // Add all artists for each track to the list
+  
   list.forEach((track) => {  
     const artists = track.track.artists;
     artists.forEach((artist) => { // Don't allow repeats
-      if(!artistList.includes(artist))
+      if(!artistList.find(element => element.id == artist.id))
         artistList.push(artist);
     });
   });
+
+  return artistList;
 }
 
 async function getArtist(id) {  // Get Artist by Spotify ID
