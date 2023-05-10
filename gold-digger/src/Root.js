@@ -87,7 +87,8 @@ function Root(props) {
 
   return (
     <div>
-     {waitForFirebase(firebasePromiseState) || <App model={props.model}/>}
+      {/** only wait for firebase if user is logged in and a promise will be requested */}
+     {isLoggedIn === "true" ? (waitForFirebase(firebasePromiseState) || <App model={props.model}/>) : <App model={props.model}/>}
     </div>
   );
 }
