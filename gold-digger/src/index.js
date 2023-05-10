@@ -1,14 +1,20 @@
 import { BrowserRouter } from 'react-router-dom';
 import React from 'react';
+import { useEffect, useState } from "react";
 import ReactDOM from 'react-dom/client';
 import './static/index.css';
-import App from './App';
+import Root from './Root';
 import reportWebVitals from './reportWebVitals';
+import DiggerModel from './DiggerModel';
+
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
+
+const model = new DiggerModel({});
+
 root.render(
   <BrowserRouter>
-      <App />
+    <Root model={model}/>
   </BrowserRouter>
 );
 

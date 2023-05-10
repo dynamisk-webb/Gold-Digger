@@ -1,7 +1,30 @@
 import FilterView from "../views/filterView";
 import ParameterView from "../views/parameterView";
+import { useEffect, useState } from "react";
 
 function Parameters (props) {
+    // debug
+    // props.model.debugModelState("/parameter init");
+
+    // add observer for notifications for state changes
+    useEffect(addObserverOnCreatedACB, [])
+    const [, forceReRender ]= useState(); 
+
+    function addObserverOnCreatedACB() {
+        props.model.addObserver(notifyACB);
+
+        function removeObserverOnDestroyACB() {
+            props.model.removeObserver(notifyACB);
+        }
+        return removeObserverOnDestroyACB;
+    }
+
+    // rerender on state change
+    function notifyACB() {
+        forceReRender({});
+        //props.model.debugModelState("/parameter rerender");
+    }
+
 
     return (
         <div id="parameterMainGrid">

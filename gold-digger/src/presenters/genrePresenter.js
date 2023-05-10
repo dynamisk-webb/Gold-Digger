@@ -5,15 +5,39 @@ import { getGenres } from "../spotifySource.js";
 import { useEffect, useState } from "react";
 import promiseNoData from "../views/promiseNoData.js";
 import resolvePromise from "../resolvePromise.js";
+import React from "react";
 
 function Genres(props) {
-   
+    // debug
+    // props.model.debugModelState("/genre init");
+
+    // add observer for notifications for state changes
+    useEffect(addObserverOnCreatedACB, [])
+    const [, forceReRender ]= useState(); 
+
+    function addObserverOnCreatedACB() {
+        props.model.addObserver(notifyACB);
+
+        function removeObserverOnDestroyACB() {
+            props.model.removeObserver(notifyACB);
+        }
+        return removeObserverOnDestroyACB;
+    }
+
+    // rerender on state change
+    function notifyACB() {
+        forceReRender({});
+        //props.model.debugModelState("/genre rerender");
+    }
+
+
     //state for list of generes
     const [promiseState, setState] = useState({});
     const [filteredState, setFilteredState] = useState([])
     const [genreListState, setGenreListState] = useState([]);
     const [searchState, setSearchState] = useState("");
-   
+
+    // get genres
     useEffect(()=>{    
         async function getGenreACB() {
             // Get all genres from Spotify
@@ -23,6 +47,7 @@ function Genres(props) {
         getGenreACB();
     }, []);
     
+    // fill genrelist
     useEffect(() =>{
         if(promiseState.data != null){
             // transfer results from promisestate into genreList
