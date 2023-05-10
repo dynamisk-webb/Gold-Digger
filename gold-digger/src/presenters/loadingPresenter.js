@@ -194,7 +194,7 @@ function Loading(props) {
         /* filter for each current track */
         function filterGenreAndArtistACB(currentTrack) {
             // go through genres
-            let wantedStatusOfGenres = currentTrack.track.genres.map(markWantedGenreACB);
+            let wantedStatusOfGenres = [true] // TODO currentTrack.track.genres.map(markWantedGenreACB);
             let trackContainsWantedGenre = wantedStatusOfGenres.includes(true);
 
             // go through artist array
@@ -222,9 +222,7 @@ function Loading(props) {
 
     function setNewGenerated() {
         const newGenerated = {};
-        newGenerated.tracks = fixedPlaylist.tracks; // TODO set to actual tracks
-        newGenerated.playlistName = 'Default Playlist';
-       
+        
         // Set firebasekey based on the current highest key
         if (props.model.prevPlaylists.length) {
             // NOTE: if restore fn is implemented it needs to sort prevPlaylist based on firebaseKey
@@ -233,6 +231,9 @@ function Loading(props) {
         } else {
             newGenerated.firebaseKey = 0;
         }
+
+        newGenerated.tracks = fixedPlaylist.tracks; // TODO set to actual tracks
+        newGenerated.playlistName = 'Playlist #' + newGenerated.firebaseKey;
 
         props.model.addToPrevPlaylists({playlistName:newGenerated.playlistName, firebaseKey:newGenerated.firebaseKey}); 
         //props.model.setGenerated(newGenerated);
