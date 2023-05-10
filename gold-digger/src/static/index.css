@@ -570,6 +570,8 @@ input[type=text] {
   color: whitesmoke;
   font-weight: bold;
   font-size: 60px;
+  margin-left:0;
+  padding-left: 0;
 }
 
 #playlistTitle:focus { 
@@ -582,10 +584,20 @@ input[type=text] {
 #addPlaylistButton{
   grid-row: 3 / span 1;
   grid-column: 1 / span 1;
-  width: 200px;
+  width: 150px;
   margin-top: 30px;
   margin-bottom: 30px;
 
+
+}
+
+#deletePLaylistButton{
+  grid-row: 3 / span 1;
+  grid-column: 1 / span 1;
+  width: 150px;
+  margin-left: 170px;
+  margin-top: 30px;
+  margin-bottom: 30px;
 }
 
 #trackContainer{
@@ -768,7 +780,7 @@ input[type=text] {
 /*ARTIST RESULT VIEW*/
 
 #artistResult{
-  height: 100px;
+  height: 120px;
   display: grid;
   grid-template-columns: 100px 1fr 200px;
   grid-template-rows: 100px;
@@ -777,13 +789,14 @@ input[type=text] {
 #artistImg{
   grid-column: 1/span 1;
   grid-row: 1/span 1;
-  width: 80px;
+  width: 95px;
 
 }
 
 #includeExcludeButtons{
   grid-column: 3/span 1;
   grid-row: 1/span 1;
+  margin-top: 15px;
 }
 
 .smileyIcon{

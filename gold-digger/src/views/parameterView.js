@@ -16,8 +16,8 @@ function ParameterView(props){
     const TooltipStyle = {
         color: "white",
         marginTop: 0,
-        top: 0,
-        paddingTop: 0
+        marginBottom: 0,
+        top: 0
       };
 
       const finalTheme = createTheme({

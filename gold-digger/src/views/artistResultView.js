@@ -20,8 +20,8 @@ function ArtistResultView(props){
     const TooltipStyle = {
         color: "white",
         marginTop: 0,
-        top: 0,
-        paddingTop: 0
+        marginBottom: 0,
+        top: 0
       };
 
     return (<div className="scrollable" id="artistResults">
