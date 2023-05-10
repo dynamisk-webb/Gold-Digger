@@ -37,32 +37,24 @@ function Artists(props) {
     // TODO: gör sedan det igenom listan ExcludedArtists (kolla DiggerModel) och markera alla med value:"exclude"
 
     /* retrieve from model and mark artists as Exclude or Include values*/
-    function updateIncludeOrExcludeACB(x) {
+    function getIncludeOrExcludeACB(x) {
       // default
       let artistObject = {artist: x, value: "neutral"};
       
       // filter on included artists
-      if()
-        artistObject = {artist: x, value: "include"};
+      if(props.model.includedArtists.includes(x.id))
+        artistObject.value = "include";
 
       // filter on excluded artists
-      if()
-        artistObject = {artist: x, value: "exclude"};
-
-      // filter example for the syntax challenged, can be removed later
-      artistListState.filter(element => element.includes (searchTerm))
-
+      if(props.model.excludedArtists.includes(x.id))
+        artistObject.value = "exclude";
     }
 
 
     if (promiseState.data != null) {
       // transfer results from promiseState into artistList
-      let artistList = promiseState.data.map(x => { return { artist: x, value: "neutral" } }) // filtrera på include, neutral, exclude. 
-      
-      // TODO: är det här som vi först gör på IncludedArtist listan i diggermodel?
-      // TODO: ...och sen 
-
-
+      let artistList = promiseState.data.map(x => { return { getIncludeOrExcludeACB } }) 
+  
       artistList.forEach(element => {
         if (props.model.artist.includes(element.artist)) // TODO: kan man skriva såhär..?
           element.checked = true;
