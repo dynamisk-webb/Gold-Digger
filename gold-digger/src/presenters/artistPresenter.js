@@ -3,7 +3,7 @@ import SearchView from "../views/searchView.js";
 import ArtistResultView from "../views/artistResultView.js";
 import promiseNoData from "../views/promiseNoData.js";
 import resolvePromise from "../resolvePromise.js";
-import { getArtist } from "../spotifySource.js";
+import { getArtists, getArtist } from "../spotifySource.js";
 import { useEffect, useState } from "react";
 
 function Artists(props) {
@@ -15,20 +15,54 @@ function Artists(props) {
   const [searchState, setSearchState] = useState("");
 
   useEffect(() => {
-    // TODO: get all artists from saved tracks or a chosen playlist
-
-    // Right now: gets them all from Spotify(?)
+    // TODO: get all artists from *saved tracks* or a *chosen playlist*
+    // Right now: gets them all from Spotify(?) from a playlist. Unclear if this API call works. 
     async function getArtistsACB() {
-      resolvePromise(getArtist(), promiseState, setState);
+      let playlist = props.model.playlist; // TODO: is this the right way to get the playlist in here? 
+
+      // Check if a saved playlist exists before getting the artists from it
+      if (playlist) {
+        resolvePromise(getArtists(playlist), promiseState, setState);
+        alert("I'm done getting the artists from a playlist");
+      }
     }
     getArtistsACB();
 
   }, []);
 
   useEffect(() => {
+
+    // TODO: vi ska bara kolla på *intressanta* artister, dvs include och exclude.
+    // TODO: filtrera först igenom listan IncludedArtists (kolla DiggerModel) och markera alla med value:"include"
+    // TODO: gör sedan det igenom listan ExcludedArtists (kolla DiggerModel) och markera alla med value:"exclude"
+
+    /* retrieve from model and mark artists as Exclude or Include values*/
+    function updateIncludeOrExcludeACB(x) {
+      // default
+      let artistObject = {artist: x, value: "neutral"};
+      
+      // filter on included artists
+      if()
+        artistObject = {artist: x, value: "include"};
+
+      // filter on excluded artists
+      if()
+        artistObject = {artist: x, value: "exclude"};
+
+      // filter example for the syntax challenged, can be removed later
+      artistListState.filter(element => element.includes (searchTerm))
+
+    }
+
+
     if (promiseState.data != null) {
-      // transfer results from promisestate into artistList
-      let artistList = promiseState.data.map(x => { return { artist: x, checked: false } })
+      // transfer results from promiseState into artistList
+      let artistList = promiseState.data.map(x => { return { artist: x, value: "neutral" } }) // filtrera på include, neutral, exclude. 
+      
+      // TODO: är det här som vi först gör på IncludedArtist listan i diggermodel?
+      // TODO: ...och sen 
+
+
       artistList.forEach(element => {
         if (props.model.artist.includes(element.artist)) // TODO: kan man skriva såhär..?
           element.checked = true;
@@ -37,7 +71,6 @@ function Artists(props) {
       // transfer results from artistList into filteredState and artistListState
       setFilteredState(artistList);
       setArtistListState(artistList);
-
     }
   }, [promiseState, setState])
 
@@ -92,12 +125,11 @@ function Artists(props) {
       <FilterView filterType="artist" title="Include/Exclude Artists" noTitle="Step 3 of 4" nextTitle="Next"></FilterView>
       <SearchView id="search" search={searchArtistACB}></SearchView>
       {promiseNoData(promiseState) || <ArtistResultView artistResults={filteredState} setExcludeInclude={setExcludeIncludeACB}></ArtistResultView>}
-      {/*promiseNoData(promiseState) || <ArtistResultView artistResults={artist} setExcludeInclude={setExcludeIncludeACB}></ArtistResultView>*/}
-
     </div>
   );
 
-  // Update state based on user input (artist selection)
+  /* Update state based on user input (artist selection)
+  */
   function setExcludeIncludeACB(id, type) {
 
     let artistList = artistListState;
@@ -107,7 +139,7 @@ function Artists(props) {
 
     } else if (type === "neutral") {
       props.model.removeArtist(id);
-      artistList.find(element => { return element == artist }).checked = "neutral";   // TODO: does it need to be a String?
+      artistList.find(element => { return element == artist }).checked = "neutral";  
 
     } else if (type === "exclude") {
       props.model.excludeArtist(id);
