@@ -17,18 +17,8 @@ import Source from "./presenters/sourcePresenter.js";
 import Loading from "./presenters/loadingPresenter.js";
 import Redirect from "./presenters/redirectPresenter.js";
 
-// MODEL
-import DiggerModel from "./DiggerModel.js";
-import resolvePromise from "./resolvePromise.js";
-
-// API AND AUTHENTICATION
-import { getProfile } from "./spotifySource";
-import { refreshAccessToken } from "./authentication";
-
 // FIREBASE
 import "./firebaseModel.js";
-import { firebaseModelPromise } from "./firebaseModel.js";
-import waitForFirebase from "./views/waitForFirebase.js";
 
 // TEMPORARY IMPORTS
 import fixedPlaylist from "./test/fixedList.js";
@@ -38,102 +28,26 @@ import LoggedInTest from "./test/loggedInTestPresenter";
  *  Main App rendering all components
  */
 
-function App() {
-  const navigate = useNavigate();
-  const [isLoggedIn, setLoggedIn] = useState(
-    localStorage.getItem("isLoggedIn")
-  );
-  const [dModel, setDmodel] = useState(
-    new DiggerModel(isLoggedIn, setLoggedIn)
-  );
-
-  // Temporary fixed generated playlist for testing purposes
-  dModel.generated = fixedPlaylist;
-
-  // Init states to resolve promises
-  const [firebasePromiseState, setFirebasePromiseState] = useState({});
-  const [profilePromiseState, setProfilePromiseState] = useState({});
-
-  // Detect login and restrict access based on login status
-  useEffect(() => {
-    if (isLoggedIn == null) {
-      localStorage.setItem("isLoggedIn", "false");
-    }
-    else if (isLoggedIn === "true") {
-      getUserID();
-      if (window.location.pathname === "/redirect") {
-        navigate("/");
-      }
-    
-    } else if (isLoggedIn === "false") {
-      navigate("/login");
-    
-    } else if (isLoggedIn === "pending") {
-      if (window.location.pathname !== "/redirect" &&
-          window.location.pathname !== "/login") {
-        navigate("/login");
-      }
-    }
-  }, [isLoggedIn, setLoggedIn]);
-
-  // Set userID in model on login
-  function getUserID() {
-    function getUserIDACB() {
-      resolvePromise(getProfile(), profilePromiseState, setProfilePromiseState);
-    }
-
-    // check if we timed out during the time browser was closed
-    const currentTime = new Date().getTime();
-    if (currentTime > localStorage.getItem("expire-time")) {
-      refreshAccessToken().then(getUserIDACB);
-    } else {
-      getUserIDACB();
-    }
-  }
-
-  // Resolve firebasepromise after userid-promise has resolved
-  useEffect(() => {
-    if (profilePromiseState.data && isLoggedIn === "true") {
-      dModel.setUserID(profilePromiseState.data.id);
-      resolvePromise(
-        firebaseModelPromise(dModel, setDmodel),
-        firebasePromiseState,
-        setFirebasePromiseState
-      );
-    }
-  }, [profilePromiseState, setProfilePromiseState]);
-
-  // Routes
+function App(props) {
   return (
     <Routes>
-      <Route exact path="/redirect" element={<Redirect model={dModel} />} />
-      <Route element={<Layout model={dModel} isLoggedIn={false} />}>
-        <Route exact path="/login" element={isLoggedIn === "true" ? <Navigate to="/" /> : <Login model={dModel} />}/>
-      </Route>
-      
-      {/*
-      Handles firebasepromise if login-status changes
-      If you are stuck on cat, use the following instead:
-      <Route path="/" element={<Layout model={dModel} />}>
-      Manually typing the url you want to go to might also work as a temp fix
-      */}
-      
-        <Route path="/" element={waitForFirebase(firebasePromiseState) || <Layout model={dModel} isLoggedIn={true} />}>
-
-        {/* Default route for / path */}
-        <Route index element={<Home model={dModel} />} />
-        <Route path="artist" element={<Artist model={dModel} />} />
-        <Route path="genre" element={<Genres model={dModel} />} />
-        <Route path="parameter" element={<Parameter model={dModel} />} />
-        <Route path="playlist" element={<Playlist model={dModel} />} />
-        <Route path="source" element={<Source model={dModel} />} />
-        <Route path="loading" element={<Loading model={dModel} setModel={setDmodel}/>} />
-        <Route path="test" element={<LoggedInTest model={dModel} />} />
+      <Route exact path="/login" element={props.model.isLoggedIn === "true" ? (<Navigate to="/" />) : (<Login model={props.model} />)}/>
+      <Route exact path="/redirect" element={<Redirect model={props.model} />}/>
+        {/*<Route element={<Layout model={dModel} isLoggedIn={false} />}></Route>*/}
+      <Route path="/" element={<Layout model={props.model} />}>
+        <Route index element={<Home model={props.model} />} />
+        <Route path="artist" element={<Artist model={props.model} />} />
+        <Route path="genre" element={<Genres model={props.model} />} />
+        <Route path="parameter" element={<Parameter model={props.model} />} />
+        <Route path="playlist" element={<Playlist model={props.model} />} />
+        <Route path="source" element={<Source model={props.model} />} />
+        <Route path="loading" element={<Loading model={props.model} />} />
+        <Route path="test" element={<LoggedInTest model={props.model} />} />
       </Route>
       <Route
         path="*"
         element={
-          isLoggedIn === "true" ? <Navigate to="/" /> : <Navigate to="/login" />
+          props.model.isLoggedIn === "true" ? (<Navigate to="/" />) : (<Navigate to="/login" />)
         }
       />
     </Routes>
