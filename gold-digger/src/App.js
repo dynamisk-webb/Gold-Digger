@@ -31,10 +31,14 @@ import LoggedInTest from "./test/loggedInTestPresenter";
 function App(props) {
   return (
     <Routes>
-      <Route exact path="/login" element={props.model.isLoggedIn === "true" ? (<Navigate to="/" />) : (<Login model={props.model} />)}/>
+
       <Route exact path="/redirect" element={<Redirect model={props.model} />}/>
+      <Route element={<Layout model={props.model} isLoggedIn={false} />}>
+        <Route exact path="/login" element={props.model.isLoggedIn === "true" ? <Navigate to="/" /> : <Login model={props.model} />}/>
+      </Route>
+
         {/*<Route element={<Layout model={dModel} isLoggedIn={false} />}></Route>*/}
-      <Route path="/" element={<Layout model={props.model} />}>
+      <Route path="/" element={<Layout model={props.model} isLoggedIn={true} />}>
         <Route index element={<Home model={props.model} />} />
         <Route path="artist" element={<Artist model={props.model} />} />
         <Route path="genre" element={<Genres model={props.model} />} />
