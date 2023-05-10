@@ -41,12 +41,21 @@ function Artists(props) {
     }
   }, [promiseState, setState])
 
+
   function searchArtistACB(searchData) {
     // filter based on the search term
     filterArtist(searchData);
     // save the search term
     setSearchState(searchData);
   }
+
+  // Filter
+  function filterArtist (searchTerm) {
+    setFilteredState(artistListState.filter(element => element.includes (searchTerm))); // TODO: eller element.artist.includes (searchTerm) ?
+  }
+
+
+  // For testing
   const artist = [{
     id: "4UXqAaa6dQYAk18Lv7PEgX",
     name: "Fall Out Boy"
@@ -92,15 +101,15 @@ function Artists(props) {
   function setExcludeIncludeACB(id, type) {
 
     let artistList = artistListState;
-    if (type === include) {
+    if (type === "include") {
       props.model.includeArtist(id);
       artistList.find(element => { return element == artist }).checked = "include";  // TODO: element.artist == artist elllerrrr element == artist (?)
 
-    } else if (type === neutral) {
+    } else if (type === "neutral") {
       props.model.removeArtist(id);
       artistList.find(element => { return element == artist }).checked = "neutral";   // TODO: does it need to be a String?
 
-    } else if (type === exclude) {
+    } else if (type === "exclude") {
       props.model.excludeArtist(id);
       artistList.find(element => { return element == artist }).checked = "exclude";
     }
