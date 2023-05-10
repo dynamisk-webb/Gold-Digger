@@ -66,7 +66,7 @@ function Genres(props) {
 
     function filterGenre(searchTerm) {
         // filter and include everything that matches the searchTerm from the list of genres
-        setFilteredState(genreListState.filter(element => element.genre.includes (searchTerm)));
+        setFilteredState(genreListState.filter(element => element.genre.toLowerCase().includes (searchTerm.toLowerCase())));
     }
 
     function searchGenreACB(searchData){

@@ -34,10 +34,10 @@ function AboutUsView(props){
     } 
 
     return (<div id="aboutUsContainer">
+        <button id="closeField" onClick={closeAboutCB}></button>
         <div id="aboutUs">
-        <h1 >About the authors</h1>
-        {authors.map(displayInfoCB)}
-        <button id="closeButton" onClick={closeAboutCB}>X</button>
+            <h1 id="aboutTitle">About the authors</h1>
+            {authors.map(displayInfoCB)}
         </div>
     </div>);
 

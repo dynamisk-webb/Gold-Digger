@@ -1,5 +1,5 @@
 import { Checkbox } from "@mui/material";
-import { orange } from '@mui/material/colors';
+import { orange, grey } from '@mui/material/colors';
 import Favorite from '@mui/icons-material/Favorite';
 import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
 
@@ -25,9 +25,9 @@ function GenreResultView(props){
                     checkedIcon={<Favorite />}
                     checked={result.checked}
                     sx={{
-                        color: 'white',
+                        color: grey[700],
                         '&.Mui-checked': {
-                            color: orange[800],
+                            color: orange[900],
                         },
                         '& .MuiSvgIcon-root': { fontSize: 32 }
                     }}

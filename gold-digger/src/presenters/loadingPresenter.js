@@ -2,7 +2,7 @@ import LoadingView from "../views/loadingView";
 import AudioPlayer from "../views/audioPlayView";
 
 import { useState, useEffect } from "react";
-import { getSavedTracks, getTracksParams, getTracksPlaylist, getTracks } from "../spotifySource.js";
+import { getSavedTracks, getTracksParams, getTracksPlaylist, getAllTracks } from "../spotifySource.js";
 
 // temp import
 import fixedPlaylist from "../test/fixedList";
@@ -44,8 +44,8 @@ function Loading(props) {
     // Objects to save tracks from Spotify in
     let tracks = {}; // final tracklist
     let trackIDs = []; // keep track of ids when filtering
-    let trackInformation = {}; // info includes artist, genre etc
-    let trackAudioFeatures = {}; // info includes tempo, loudness etc
+    let trackInformation = []; // info includes artist, genre etc
+    let trackAudioFeatures = []; // info includes tempo, loudness etc
     let newGenerated = {};
 
     
@@ -106,13 +106,14 @@ function Loading(props) {
         // getTracksParams(idList), takes an array of track ids in string format
 
         // temp:
-        let trackAudioFeatures = fixedFeatures;
+        trackAudioFeatures = fixedFeatures;
     }
 
     function getTracksFromFilteredIDs() {
         // TODO
         // should use trackIDs to set trackInformation
-        // getTracks(idList)
+        // getAllTracks(idList)
+        trackInformation = fixedPlaylist.tracks;
     }
 
 
@@ -126,12 +127,48 @@ function Loading(props) {
          * tempo (range)
          * loudness (range)
          * instrumentalness (range)
-         * danceable (switch, decide threshhold)
-         * acoustic (switch, decide threshhold)
+         * danceability (switch, decide threshhold)    0.75<
+         * acousticness threshhold)     0.75<
         
         update trackIDs to only include trackIDs left in trackAudioFeatures
-        
+
+
         */
+        function chosenParamsACB(track) {
+            // Our decided thresholds
+            const danceMinValue = 0.75;
+            const acousticMinValue = 0.75;
+
+            let includeBasedOnAcousticness = true;
+            let includeBasedOnDanceability = true;
+
+            // If user wants a danceable list, only include danceable songs. Else, include full range. 
+            if (props.model.danceable) {
+                includeBasedOnDanceability = (track.danceability >= danceMinValue);
+            }
+
+            // If user wants an acoustic list, only include such songs. Else, include full range. 
+            if (props.model.acoustic) {
+                includeBasedOnAcousticness = (track.acousticness >= acousticMinValue);
+            }
+            
+            // FixedFeatures on the left, compare with values from Diggermodel on the right.
+            // important: danceability, acousticness in FixedFeatures
+            //            danceable, acoustic in DiggerModel
+            return (track.tempo >= props.model.tempo.min &&
+                    track.tempo <= props.model.tempo.min &&
+                    track.loudness >= props.model.loudness.min &&
+                    track.loudness <= props.model.louness.max &&
+                    track.instrumentalness >= props.model.instrumentalness.min &&
+                    track.instrumentalness <= props.model.instrumentalness.max &&
+                    includeBasedOnDanceability && includeBasedOnAcousticness);
+        }
+
+        function keepChosenTrackIDsACB(track) {
+            return track.id;
+        }
+
+        trackIDs = trackAudioFeatures.filter(chosenParamsACB).map(keepChosenTrackIDsACB);
     }
 
     function filterOnGenreAndExclArtist() {
@@ -141,6 +178,34 @@ function Loading(props) {
          * genres
          * excluded artists
         */
+
+        // return false if artist is unwanted. 
+        function markUnwantedArtistsACB(artist) {
+            if (props.model.excludedArtists.includes(artist))
+                return false;
+            return true;
+        }
+
+        // return true if genre is wanted
+        function markWantedGenreACB(genre) {
+            return props.model.genres.includes(genre);         
+        }
+
+        /* filter for each current track */
+        function filterGenreAndArtistACB(currentTrack) {
+            // go through genres
+            let wantedStatusOfGenres = currentTrack.track.genres.map(markWantedGenreACB);
+            let trackContainsWantedGenre = wantedStatusOfGenres.includes(true);
+
+            // go through artist array
+            let wantedStatusofArtists = currentTrack.track.artists.map(markUnwantedArtistsACB);
+            let trackContainsUnwantedArtist = wantedStatusofArtists.includes(false);
+
+
+            return (!trackContainsUnwantedArtist && trackContainsWantedGenre);
+        }
+        
+        trackInformation = trackInformation.filter(filterGenreAndArtistACB);
     }
 
     function setTracksBasedOnIncludedArtists() {
