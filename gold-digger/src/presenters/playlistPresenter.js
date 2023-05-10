@@ -15,7 +15,7 @@ import { useEffect, useState } from "react";
 import { generatedListPromise } from "../firebaseModel.js";
 import resolvePromise from "../resolvePromise.js";
 import waitForFirebase from "../views/waitForFirebase.js";
-
+import { createPlaylist, addTracks } from "../spotifySource.js";
 
 // temp import
 import fixedList from "../test/fixedList.js";
@@ -35,6 +35,7 @@ function Playlist (props) {
     //let playlistName = fixedList.playlistName;
 
     const [playlistPromiseState, setPlaylistPromiseState] = useState({});
+    const [playlistCreatePromiseState, setPlaylistCreatePromiseState] = useState({});
 
     useEffect (onMountedACB, [props.model]);
     useEffect (onResolvedFirebaseACB, [playlistPromiseState, setPlaylistPromiseState]);
@@ -73,15 +74,15 @@ function Playlist (props) {
           setPlaylistName={setPlaylistNameACB}
           returnHome={returnHomeACB}
           savePlaylistToSpotify={savePlaylistToSpotifyACB}
+          removePlaylist={removePlaylistACB}
         ></PlaylistView>}
       </div>
     );
 
     
     /* Event: onClick REMOVE /playlists/{playlist_id}/tracks */
-  function removeTrackACB() {
-    // TODO;
-    // props.model.removeTrack;
+  function removeTrackACB(id) {
+    props.model.removeTrack(id);
   }
 
   /* Event: onClick Get playlist url and copy to clipboard */
@@ -116,7 +117,15 @@ function Playlist (props) {
     */
     
     // TODO test: make this display current model state in some way
-    alert("Should add playlist to users Spotify account (not implemented yet)");
+
+    resolvePromise(createPlaylist(props.model.userid, "test"), playlistCreatePromiseState, setPlaylistCreatePromiseState);
+    //addTracks(idList, tracks.map(track => track.id));
+    //alert("Should add playlist to users Spotify account (not implemented yet)");
+  }
+
+  function removePlaylistACB(){
+    console.log(props.model.generated.firebaseKey);
+    props.model.removePrevPlaylist(props.model.generated.firebaseKey)
   }
 }
 

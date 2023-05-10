@@ -118,15 +118,13 @@ class DiggerModel{
     }
 
     removeTrack(trackID) {  // Removes a specific track from the already generated list
-        this.generated.tracks = this.generated.tracks(tr => tr.id !== trackID);
+        this.generated.tracks = this.generated.tracks.filter(tr => tr.track.id != trackID);
         this.notifyObservers({key:"modelParams", param:"generated", specs:"removeTrack", firebaseKey:this.generated.firebaseKey});
     }
 
-    removePrevPlaylist(playlist) {  // Removes a previous playlist id 
-        if(this.prevPlaylists.includes(playlist)) {
-            this.prevPlaylists = this.prevPlaylists.filter(elem => elem.playlistId !== playlist);
-            this.notifyObservers({key:"modelParams", param:"removePrevPlaylist"});
-        }
+    removePrevPlaylist(firebaseKey) {  // Removes a previous playlist id 
+        this.prevPlaylists = this.prevPlaylists.filter(elem => elem.firebaseKey != firebaseKey);
+        this.notifyObservers({key:"modelParams", param:"removePrevPlaylist"});
     }
 
     addGenre(genre) {   // Add to included genres

@@ -173,6 +173,7 @@ function Loading(props) {
         /* filter for each current track */
         function filterGenreAndArtistACB(currentTrack) {
             // go through genres
+            /*
             let wantedStatusOfGenres = currentTrack.track.genres.map(markWantedGenreACB);
             let trackContainsWantedGenre = wantedStatusOfGenres.includes(true);
 
@@ -182,6 +183,7 @@ function Loading(props) {
 
 
             return (!trackContainsUnwantedArtist && trackContainsWantedGenre);
+            */
         }
         
         trackInformation = trackInformation.filter(filterGenreAndArtistACB);
