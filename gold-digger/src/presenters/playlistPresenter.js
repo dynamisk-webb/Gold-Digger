@@ -39,6 +39,14 @@ function Playlist (props) {
 
     useEffect (onMountedACB, [props.model]);
     useEffect (onResolvedFirebaseACB, [playlistPromiseState, setPlaylistPromiseState]);
+    
+    
+    useEffect(() =>{
+      if(playlistCreatePromiseState.data != null){
+        let ids = tracks.map(elem => elem.track.id);
+        addTracks(playlistCreatePromiseState.data.id, ids);
+      }
+    }, [playlistCreatePromiseState, setPlaylistCreatePromiseState]);
 
     // Lifecycle
     function onMountedACB(){
@@ -118,8 +126,9 @@ function Playlist (props) {
     
     // TODO test: make this display current model state in some way
 
-    resolvePromise(createPlaylist(props.model.userid, "test"), playlistCreatePromiseState, setPlaylistCreatePromiseState);
-    //addTracks(idList, tracks.map(track => track.id));
+  
+    resolvePromise(createPlaylist(props.model.userid, playlistName), playlistCreatePromiseState, setPlaylistCreatePromiseState);
+    
     //alert("Should add playlist to users Spotify account (not implemented yet)");
   }
 
