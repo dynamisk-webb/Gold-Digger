@@ -103,15 +103,16 @@ async function getGenres() {  // Returns list of all genres
 async function getArtistsPlaylist(playlist) { // Returns list of all artists in a playlist
   const list = getTracksPlaylist(playlist);
   const artistList = [];
-
-  // Add all artists for each track to the list
+  
   list.forEach((track) => {  
     const artists = track.track.artists;
     artists.forEach((artist) => { // Don't allow repeats
-      if(!artistList.includes(artist))
+      if(!artistList.find(element => element.id == artist.id))
         artistList.push(artist);
     });
   });
+
+  return artistList;
 }
 
 // TODO getArtists from saved

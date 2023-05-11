@@ -161,7 +161,7 @@ class DiggerModel{
     includeArtist(artist) {   // Include artist, always added in generated list
         if(!this.includedArtists.includes(artist)) {
             this.removeArtist(artist);
-            this.includedArtists = [...this.includeArtists, artist];
+            this.includedArtists = [...this.includedArtists, artist];
             this.notifyObservers({key:"modelParams", param:"addToIncludeArtist"});
 
         }

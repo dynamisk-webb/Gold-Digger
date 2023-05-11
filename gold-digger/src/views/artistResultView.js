@@ -46,7 +46,7 @@ function ArtistResultView(props){
                         <RadioGroup
                         row
                         name="controlled-radio-buttons-group"
-                        value={props.value}
+                        value={result.value}
                         onChange={handleChange}
                         >
                              <Tooltip title={<p style={TooltipStyle}>Include artist if possible</p>}>
