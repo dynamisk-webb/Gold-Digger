@@ -83,12 +83,12 @@ async function getGenres() {  // Returns list of all genres
   return response.genres;
 }
 
-async function getArtistsPlaylist(playlist) { // Returns list of all artists in a playlist
+function getArtistsPlaylist(playlist) { // Returns list of all artists in a playlist
   const list = getTracksPlaylist(playlist).then(tracksToArtistList);;
   return list;
 }
 
-async function getArtistsSaved() {
+function getArtistsSaved() {
   const list = getSavedTracks().then(tracksToArtistList);
   return list;
 }
