@@ -1,16 +1,4 @@
-/*
-TODO
-
-Lifecycle: GET the playlist
-Event: onInput PUT /playlist/{playlist_id}
-Set name to new input name
-
-
-
-*/
-
 import PlaylistView from "../views/playlistView.js";
-import { redirect } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { generatedListPromise } from "../firebaseModel.js";
 import resolvePromise from "../resolvePromise.js";

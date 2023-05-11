@@ -1,6 +1,5 @@
 // REACT
-import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 // VIEW
 import "./static/App.css";

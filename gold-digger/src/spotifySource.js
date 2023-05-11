@@ -7,8 +7,8 @@ https://developer.spotify.com/documentation/web-api/tutorials/code-pkce-flow
 Current access token is available in localStorage
 */
 async function getProfile() {
-    let response = await generalAPI('/me');
-    return response;
+  let response = await generalAPI('/me');
+  return response;
 }
 
 /* GET-functions */
@@ -142,14 +142,14 @@ async function createPlaylist(userid, name) {
     "description": "Playlist Generated through Gold Digger",
     "public": false
   };
-  return temporaryAPI('/users/' + userid + '/playlists', "POST", body);  // Returns the new playlist id
+  return generalAPI('/users/' + userid + '/playlists', "POST", JSON.stringify(body));  // Returns the new playlist id
 }
 async function addTracks(playlist, idlist) {  // Adds several tracks to one playlist based on id, max 100
   const uris = idlist.map(convertIDtoURI);
   const body = {
     "uris": uris
   };
-  temporaryAPI('/playlists/' + playlist + '/tracks', "POST", body);
+  generalAPI('/playlists/' + playlist + '/tracks', "POST", JSON.stringify(body));
 }
 async function changePlaylistName(playlist, name) { // Changes playlist name by playlist id
   const body = {
@@ -178,54 +178,20 @@ async function generalAPI(endpoint, method="GET", body=null) {
 
     
     let accessToken = localStorage.getItem('access-token');
-      const response = await fetch('https://api.spotify.com/v1' + endpoint, {
+    const response = await fetch('https://api.spotify.com/v1' + endpoint, {
       method:method,  
       headers: {
-          Authorization: 'Bearer ' + accessToken,
-        },
+        Authorization: 'Bearer ' + accessToken,
+      },
       body:body
-      });
-      
-      // TODO throws error too late to catch XHR errors
-      if (!response.ok) {
-        throw new Error('HTTP status ' + response.status);
-      } 
-
-      if(method == "GET")
-        return await response.json();
-  }
-}
-
-async function temporaryAPI(endpoint, method="GET", body=null) {
-  
-  if (localStorage.getItem('expire-time') != null) {
-
-    // check if access token needs to be refreshed
-    const currentTime = new Date().getTime();
-    if (currentTime > localStorage.getItem('expire-time')) {
-      console.log("refresh!");
-      refreshAccessToken();
-    }
-
+    });
     
-    let accessToken = localStorage.getItem('access-token');
-      const response = await fetch('https://api.spotify.com/v1' + endpoint, {
-      method:method,  
-      headers: {
-          'Authorization': 'Bearer ' + accessToken,
-          'Content-Type': 'application/json'
-        },
-      body:JSON.stringify(body)
-      });
-      
-      // TODO throws error too late to catch XHR errors
       if (!response.ok) {
         throw new Error('HTTP status ' + response.status);
       } 
 
-      if(method == "GET" || method == "POST"){
+      if(method === "GET" || method === "POST")
         return await response.json();
-      }
   }
 }
 

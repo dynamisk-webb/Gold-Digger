@@ -1,5 +1,4 @@
-// MODEL
-import DiggerModel from "./DiggerModel.js";
+// RESOLVE PROMISE
 import resolvePromise from "./resolvePromise.js";
 
 // API AND AUTHENTICATION
@@ -13,7 +12,6 @@ import waitForFirebase from "./views/waitForFirebase.js";
 
 // REACT
 import {useState, useEffect} from 'react';
-import { BrowserRouter } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
 
 // OTHER
