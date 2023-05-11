@@ -689,13 +689,6 @@ input[type=text] {
   height: 700px;
 }
 
-#spotifyLogo{
-  position: absolute;
-  top: 0px;
-  right: 0px;
-  height: 40px;
-  margin: 1% 1% 1% 1%;
-}
 
 #openAbout{
   
@@ -742,6 +735,22 @@ input[type=text] {
   position: absolute;
   top: 18px;
   right: 225px;
+
+  margin: 0px 0px 0px 0px; 
+}
+
+#spotifyLogo{
+  height: 80px;
+  width:140px;
+  background-image: url("./../img/spotifyLogo.png"); /* 16px x 16px */
+  background-color:transparent;
+  background-repeat: no-repeat;  /* make the background image appear only once */
+  background-size: contain;
+  
+  z-index: 100;
+  position: absolute;
+  top: 16px;
+  right: 10px;
 
   margin: 0px 0px 0px 0px; 
 }

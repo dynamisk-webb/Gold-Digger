@@ -7,13 +7,17 @@ function LayoutView(props){
 
   return (
     <div id="layout">
-      <img src={spotifyLogo} id="spotifyLogo" ></img>
+      <button id="spotifyLogo" onClick={openSpotifyACB}></button>
       {renderLogOut()}
       {renderHome()}
       <button id="openAbout" onClick={openAboutACB}></button>
       <Outlet />
     </div>
   )
+
+  function openSpotifyACB(){
+    window.open("https://www.spotify.com/us/about-us/contact/","_blank");
+  }
 
   function renderLogOut(){
     if(props.isLoggedIn){
