@@ -17,8 +17,7 @@ function getSavedTracks() { // Get all of user's saved tracks
   let tracks = [];
   return generalAPI('/me/tracks' + field).then(filterACB);
   
-  function filterACB(response) {  
-    console.log(tracks);
+  function filterACB(response) { 
     tracks = tracks.concat(response.items.map(savedTrackToFormatCB));
     if(response.next !== null) {  // If there is more to retrieve
       return generalAPI(apiToEndpoint(response.next)).then(filterACB);
@@ -101,9 +100,8 @@ async function getGenres() {  // Returns list of all genres
 }
 
 async function getArtistsPlaylist(playlist) { // Returns list of all artists in a playlist
-  const list = getTracksPlaylist(playlist);
+  const list = await getTracksPlaylist(playlist);
   const artistList = [];
-  
   list.forEach((track) => {  
     const artists = track.track.artists;
     artists.forEach((artist) => { // Don't allow repeats
