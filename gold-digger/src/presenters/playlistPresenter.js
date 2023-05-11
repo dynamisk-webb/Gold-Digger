@@ -15,7 +15,7 @@ import { useEffect, useState } from "react";
 import { generatedListPromise } from "../firebaseModel.js";
 import resolvePromise from "../resolvePromise.js";
 import waitForFirebase from "../views/waitForFirebase.js";
-
+import { createPlaylist, addTracks } from "../spotifySource.js";
 
 // temp import
 import fixedList from "../test/fixedList.js";
@@ -27,6 +27,30 @@ import fixedList from "../test/fixedList.js";
  */
 
 function Playlist (props) {
+    // debug
+    // props.model.debugModelState("/playlist init");
+
+    // add observer for notifications for state changes
+    useEffect(addObserverOnCreatedACB, [])
+    const [, forceReRender ]= useState(); 
+
+    function addObserverOnCreatedACB() {
+
+        props.model.addObserver(notifyACB);
+
+        function removeObserverOnDestroyACB() {
+
+            props.model.removeObserver(notifyACB);
+        }
+        return removeObserverOnDestroyACB;
+    }
+
+    // rerender on state change
+    function notifyACB() {
+        forceReRender({});
+        //props.model.debugModelState("/playlist rerender");
+    }
+
 
     //let tracks = props.model.generated.tracks;
     let playlistName = props.model.generated.playlistName;
@@ -35,9 +59,23 @@ function Playlist (props) {
     //let playlistName = fixedList.playlistName;
 
     const [playlistPromiseState, setPlaylistPromiseState] = useState({});
+    const [playlistCreatePromiseState, setPlaylistCreatePromiseState] = useState({});
 
     useEffect (onMountedACB, [props.model]);
-    useEffect (onResolvedFirebaseACB, [playlistPromiseState, setPlaylistPromiseState]);
+
+    //useEffect (onResolvedFirebaseACB, [playlistPromiseState, setPlaylistPromiseState]);
+    
+    
+    useEffect(() =>{
+      if(playlistCreatePromiseState.data != null){
+        let ids = tracks.map(elem => elem.track.id);
+        addTracks(playlistCreatePromiseState.data.id, ids);
+      }
+    }, [playlistCreatePromiseState, setPlaylistCreatePromiseState]);
+
+    //useEffect (onResolvedFirebaseACB, [playlistPromiseState, setPlaylistPromiseState]);
+    //useEffect ( () => {console.log("model " )}, [props.model]);
+
 
     // Lifecycle
     function onMountedACB(){
@@ -55,15 +93,17 @@ function Playlist (props) {
         return;
     }
 
+    /*
     function onResolvedFirebaseACB() {
       tracks = props.model.generated.tracks;
       playlistName = props.model.generated.playlistName;
     }
+    */
 
 
     return (
       <div>
-        {waitForFirebase(playlistPromiseState) ||
+        {/*waitForFirebase(playlistPromiseState) ||*/
         <PlaylistView
           generatedTracks={tracks}
           generatedName={playlistName}
@@ -73,15 +113,15 @@ function Playlist (props) {
           setPlaylistName={setPlaylistNameACB}
           returnHome={returnHomeACB}
           savePlaylistToSpotify={savePlaylistToSpotifyACB}
+          removePlaylist={removePlaylistACB}
         ></PlaylistView>}
       </div>
     );
 
     
     /* Event: onClick REMOVE /playlists/{playlist_id}/tracks */
-  function removeTrackACB() {
-    // TODO;
-    // props.model.removeTrack;
+  function removeTrackACB(id) {
+    props.model.removeTrack(id);
   }
 
   /* Event: onClick Get playlist url and copy to clipboard */
@@ -116,7 +156,16 @@ function Playlist (props) {
     */
     
     // TODO test: make this display current model state in some way
-    alert("Should add playlist to users Spotify account (not implemented yet)");
+
+  
+    resolvePromise(createPlaylist(props.model.userid, playlistName), playlistCreatePromiseState, setPlaylistCreatePromiseState);
+    
+    //alert("Should add playlist to users Spotify account (not implemented yet)");
+  }
+
+  function removePlaylistACB(){
+    console.log(props.model.generated.firebaseKey);
+    props.model.removePrevPlaylist(props.model.generated.firebaseKey)
   }
 }
 

@@ -9,6 +9,7 @@ function LoadingView(props){
     </div>);
 
     function viewPlaylistACB(){
+        props.viewPlaylist();
         navigate("/playlist");
     }
     //TODO: add loading thing

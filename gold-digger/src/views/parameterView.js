@@ -16,8 +16,8 @@ function ParameterView(props){
     const TooltipStyle = {
         color: "white",
         marginTop: 0,
-        top: 0,
-        paddingTop: 0
+        marginBottom: 0,
+        top: 0
       };
 
       const finalTheme = createTheme({
@@ -62,7 +62,7 @@ function ParameterView(props){
         <ThemeProvider theme={finalTheme}>
         <div id="parameterGrid">
         <div className="parameterSlider" id="tempoSlider">
-            <Tooltip title={<p style={TooltipStyle}>Overall estimated tempo in beats per minute (BPM)</p>}>
+            <Tooltip title={<p style={TooltipStyle}>Overall estimated tempo in beats per minute (BPM). Average is 90-99 BPM. </p>}>
                 <div className="parameterTitle">
                     <h2 className='white paddingLess'>Tempo</h2>
                     <p className='gray'>(BPM)</p>
@@ -82,7 +82,7 @@ function ParameterView(props){
                 />
         </div>
         <div className="parameterSlider" id="loudSlider">
-            <Tooltip title={<p style={{ color: "white" }}>Overall loudness in decibels (dB)</p>}>
+            <Tooltip title={<p style={TooltipStyle}>Overall loudness in decibels (dB). Average is -14 dB</p>}>
                 <div className="parameterTitle">
                     <h2 className='white'>Noisiness</h2>
                     <p className='gray'>(dB)</p>
@@ -98,7 +98,7 @@ function ParameterView(props){
                     valueLabelDisplay="auto" />
         </div>
         <div className="parameterSlider" id="instrSlider">
-            <Tooltip title={<p style={{ color: "white" }}>Overall amount of vocals in the song</p>}>
+            <Tooltip title={<p style={TooltipStyle}>Overall likelyhood of vocals in the song. Rap or spoken word tracks are clearly “vocal”.</p>}>
                 <div className="parameterTitle">
                 <h2 className='white'>Amount of vocals</h2>
                 <p className='gray'>(Percent)</p>
@@ -115,13 +115,13 @@ function ParameterView(props){
                     />
         </div>
         <div className = "parameterSwitch">
-            <Tooltip title={<p style={{ color: "white" }}>Whether or not a song is suitable for dancing</p>}>
+            <Tooltip title={<p style={TooltipStyle}>Whether or not a song is suitable for dancing. If you choose danceable, you will only get danceable music. If not, you will get a mix.</p>}>
                 <h2 className='white'>Danceable</h2>
             </Tooltip>
             <Switch checked={props.checked} onChange={onChangeDanceableACB}/>
         </div>
         <div className = "parameterSwitch">
-            <Tooltip title={<p style={{ color: "white" }}>Whether or not a song only contains acoustic instruments</p>}>
+            <Tooltip title={<p style={TooltipStyle}>Whether or not a song only contains acoustic instruments. If you choose acoustic, you will only get acoustic music. If not, you will get a mix.</p>}>
                 <h2 className='white'>Acoustic</h2>
             </Tooltip>
             <Switch checked={props.checked} onChange={onChangeAcousticACB}/>

@@ -1,7 +1,29 @@
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 function Redirect (props) {
+    // debug
+    // props.model.debugModelState("/redirect init");
+
+    // add observer for notifications for state changes
+    useEffect(addObserverOnCreatedACB, [])
+    const [, forceReRender ]= useState(); 
+
+    function addObserverOnCreatedACB() {
+        props.model.addObserver(notifyACB);
+
+        function removeObserverOnDestroyACB() {
+            props.model.removeObserver(notifyACB);
+        }
+        return removeObserverOnDestroyACB;
+    }
+
+    // rerender on state change
+    function notifyACB() {
+        forceReRender({});
+        //props.model.debugModelState("/redirect rerender");
+    }
+
 
     useEffect(onMountedACB, [props.model]);
 
