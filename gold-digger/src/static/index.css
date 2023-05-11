@@ -722,7 +722,7 @@ input[type=text] {
 
 #openAbout{
   
-  background-image: url("./../img/aboutUsIcon.png"); /* 16px x 16px */
+  background-image: url("./../img/infoIcon.png"); /* 16px x 16px */
   background-color:transparent;
   background-repeat: no-repeat;  /* make the background image appear only once */
   width: 40px;
