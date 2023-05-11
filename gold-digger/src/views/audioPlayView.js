@@ -18,16 +18,16 @@ function AudioPlayer(props){
             play={props.play}
             magnifySliderOnHover={true}
             styles={{
-                activeColor: '#ffffff',
-                altColor: "#ffffff",
+                activeColor: '#ff6b35',
+                altColor: '#ffffff',
                 bgColor: '#202020',
-                color: "#ff6b35",
+                color: "#C0C0C0",
                 loaderColor: '#fff',
                 sliderColor: "#ff6b35",
-                sliderHandleColor: "#ffffff",
                 sliderTrackColor: "#4d4d4d",
+                sliderHandleColor: "#ffffff",
                 trackArtistColor: '#b8b8b8',
-                trackNameColor: '#ffffff',
+                trackNameColor: '#ffffffff',
               }}
         />
         </div>

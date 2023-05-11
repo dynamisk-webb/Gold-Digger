@@ -114,8 +114,6 @@ function Playlist (props) {
       const list = tracks.map((element => {
           return "spotify:track:" + element.track.id;
       }));
-
-      console.log(list);
       return list;
   }
   

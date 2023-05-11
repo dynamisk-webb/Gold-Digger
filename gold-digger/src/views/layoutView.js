@@ -1,4 +1,4 @@
-import { Outlet, Link} from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import spotifyLogo from "./../img/spotifyLogo.png";
 import {useNavigate} from "react-router-dom";
 

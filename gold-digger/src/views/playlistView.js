@@ -46,7 +46,7 @@ function PlaylistView(props){
         }
 
         return (<div id="trackInfo" key={item.track.name}>
-            <img id="trackImg" src={albumImg}></img>
+            <img id="trackImg" src={albumImg} alt="albumImg"></img>
             {/*Should display more info in the future*/}
             <h2 id="trackName">{item.track.name}</h2>
             <p id="trackArtist">{item.track.artists.map(getArtistsACB)}</p>

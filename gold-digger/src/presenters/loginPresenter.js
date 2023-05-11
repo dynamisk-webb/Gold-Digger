@@ -1,5 +1,4 @@
 import LoginView from "../views/loginView.js";
-import {redirect} from "react-router-dom";
 import { useState, useEffect } from "react";
 
 
