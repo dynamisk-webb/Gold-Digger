@@ -136,14 +136,14 @@ async function createPlaylist(userid, name) {
     "description": "Playlist Generated through Gold Digger",
     "public": false
   };
-  return generalAPI2('/users/' + userid + '/playlists', "POST", body);  // Returns the new playlist id
+  return temporaryAPI('/users/' + userid + '/playlists', "POST", body);  // Returns the new playlist id
 }
 async function addTracks(playlist, idlist) {  // Adds several tracks to one playlist based on id, max 100
   const uris = idlist.map(convertIDtoURI);
   const body = {
     "uris": uris
   };
-  generalAPI2('/playlists/' + playlist + '/tracks', "POST", body);
+  temporaryAPI('/playlists/' + playlist + '/tracks', "POST", body);
 }
 async function changePlaylistName(playlist, name) { // Changes playlist name by playlist id
   const body = {
@@ -190,7 +190,7 @@ async function generalAPI(endpoint, method="GET", body=null) {
   }
 }
 
-async function generalAPI2(endpoint, method="GET", body=null) {
+async function temporaryAPI(endpoint, method="GET", body=null) {
   
   if (localStorage.getItem('expire-time') != null) {
 
