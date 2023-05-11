@@ -27,6 +27,30 @@ import fixedList from "../test/fixedList.js";
  */
 
 function Playlist (props) {
+    // debug
+    // props.model.debugModelState("/playlist init");
+
+    // add observer for notifications for state changes
+    useEffect(addObserverOnCreatedACB, [])
+    const [, forceReRender ]= useState(); 
+
+    function addObserverOnCreatedACB() {
+
+        props.model.addObserver(notifyACB);
+
+        function removeObserverOnDestroyACB() {
+
+            props.model.removeObserver(notifyACB);
+        }
+        return removeObserverOnDestroyACB;
+    }
+
+    // rerender on state change
+    function notifyACB() {
+        forceReRender({});
+        //props.model.debugModelState("/playlist rerender");
+    }
+
 
     //let tracks = props.model.generated.tracks;
     let playlistName = props.model.generated.playlistName;
@@ -38,6 +62,7 @@ function Playlist (props) {
     const [playlistCreatePromiseState, setPlaylistCreatePromiseState] = useState({});
 
     useEffect (onMountedACB, [props.model]);
+
     useEffect (onResolvedFirebaseACB, [playlistPromiseState, setPlaylistPromiseState]);
     
     
@@ -47,6 +72,10 @@ function Playlist (props) {
         addTracks(playlistCreatePromiseState.data.id, ids);
       }
     }, [playlistCreatePromiseState, setPlaylistCreatePromiseState]);
+
+    //useEffect (onResolvedFirebaseACB, [playlistPromiseState, setPlaylistPromiseState]);
+    //useEffect ( () => {console.log("model " )}, [props.model]);
+
 
     // Lifecycle
     function onMountedACB(){
@@ -64,15 +93,17 @@ function Playlist (props) {
         return;
     }
 
+    /*
     function onResolvedFirebaseACB() {
       tracks = props.model.generated.tracks;
       playlistName = props.model.generated.playlistName;
     }
+    */
 
 
     return (
       <div>
-        {waitForFirebase(playlistPromiseState) ||
+        {/*waitForFirebase(playlistPromiseState) ||*/
         <PlaylistView
           generatedTracks={tracks}
           generatedName={playlistName}

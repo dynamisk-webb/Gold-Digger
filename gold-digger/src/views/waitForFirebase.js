@@ -15,7 +15,7 @@ function waitForFirebase(firebasePromiseState) {
         return false;
     }
     // firebasepromise hasn't been requested yet
-    return <center><img src="https://media.giphy.com/media/VbnUQpnihPSIgIXuZv/giphy.gif"></img></center>
+    return <center><img src="https://media.giphy.com/media/VbnUQpnihPSIgIXuZv/giphy.gif" class="center"></img></center>
 }
 
 export default waitForFirebase;

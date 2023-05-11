@@ -1,8 +1,31 @@
 import FilterView from "../views/filterView.js";
 import SearchView from "../views/searchView.js";
 import ArtistResultView from "../views/artistResultView.js";
+import { useEffect, useState } from "react";
 
 function Artists(props) {
+    // debug
+    // props.model.debugModelState("/artist init");
+
+    // add observer for notifications for state changes
+    useEffect(addObserverOnCreatedACB, [])
+    const [, forceReRender ]= useState(); 
+
+    function addObserverOnCreatedACB() {
+        props.model.addObserver(notifyACB);
+
+        function removeObserverOnDestroyACB() {
+            props.model.removeObserver(notifyACB);
+        }
+        return removeObserverOnDestroyACB;
+    }
+
+    // rerender on state change
+    function notifyACB() {
+        forceReRender({});
+        //props.model.debugModelState("/artist rerender");
+    }
+
     const artist = [{
           id: "4UXqAaa6dQYAk18Lv7PEgX",
           name: "Fall Out Boy"

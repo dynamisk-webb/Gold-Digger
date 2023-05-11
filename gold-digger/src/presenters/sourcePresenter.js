@@ -1,37 +1,31 @@
-/*
-____________________________________________________________________________________________
-
-
-Hur man skriver en presenter Maria <3
-EX: SidebarPresenter
-
-import SidebarView from "../views/sidebarView";
-
-function Sidebar (props) {
-    return (
-        <SidebarView number={props.model.numberOfGuests} dishes={props.model.dishes} onNumberChange={numChangedACB} userWantsToViewDish={viewDishACB} onDishRemoved={dishRemovedACB}/>
-    );
-
-    function numChangedACB(num){
-        props.model.setNumberOfGuests(num);
-    }
-    function viewDishACB(dish){
-        props.model.setCurrentDish(dish.id);
-    }
-    function dishRemovedACB(dish){
-        props.model.removeFromMenu(dish);
-    }
-}
-export default Sidebar;
-
-*/
-
 import SourceView from "../views/sourceView";
 import { getTracksPlaylist } from "../spotifySource";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import resolvePromise from "../resolvePromise";
 
 function Source(props) {
+  // debug
+  // props.model.debugModelState("/source init");
+
+  // add observer for notifications for state changes
+  useEffect(addObserverOnCreatedACB, [])
+  const [, forceReRender ]= useState(); 
+
+  function addObserverOnCreatedACB() {
+      props.model.addObserver(notifyACB);
+
+      function removeObserverOnDestroyACB() {
+          props.model.removeObserver(notifyACB);
+      }
+      return removeObserverOnDestroyACB;
+  }
+
+  // rerender on state change
+  function notifyACB() {
+      forceReRender({});
+      //props.model.debugModelState("/source rerender");
+  }
+
   const [validURL, setValidURL] = useState(false);
   const [promiseState, setState] = useState({});
 

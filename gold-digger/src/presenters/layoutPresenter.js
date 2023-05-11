@@ -4,6 +4,28 @@ import AboutUsView from "../views/aboutUsView.js";
 import { useEffect, useState } from "react";
 
 function Layout(props) {
+    // debug
+    // props.model.debugModelState("/layout init");
+
+    // add observer for notifications for state changes
+    useEffect(addObserverOnCreatedACB, [])
+    const [, forceReRender ]= useState(); 
+
+    function addObserverOnCreatedACB() {
+        props.model.addObserver(notifyACB);
+
+        function removeObserverOnDestroyACB() {
+            props.model.removeObserver(notifyACB);
+        }
+        return removeObserverOnDestroyACB;
+    }
+
+    // rerender on state change
+    function notifyACB() {
+        forceReRender({});
+        //props.model.debugModelState("/layout rerender");
+    }
+
     const [aboutOpen, setAboutOpen] = useState(false);
     useEffect(() => console.log('test'),[aboutOpen, setAboutOpen]);
 

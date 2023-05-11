@@ -10,10 +10,34 @@ import fixedFeatures from "../test/fixedFeatures";
 
 
 import { flushSync } from 'react-dom';
+import DiggerModel from "../DiggerModel";
 
 
 
 function Loading(props) {
+    // debug
+    // props.model.debugModelState("/loading init");
+
+    // add observer for notifications for state changes
+    useEffect(addObserverOnCreatedACB, [])
+    const [, forceReRender ]= useState(); 
+
+    function addObserverOnCreatedACB() {
+        props.model.addObserver(notifyACB);
+
+        function removeObserverOnDestroyACB() {
+            props.model.removeObserver(notifyACB);
+        }
+        return removeObserverOnDestroyACB;
+    }
+
+    // rerender on state change
+    function notifyACB() {
+        forceReRender({});
+        //props.model.debugModelState("/loading rerender");
+    }
+
+
     // state for visual feedback when loading is done
     const [loadingDone, setloadingDone] = useState(false);
 
@@ -24,11 +48,12 @@ function Loading(props) {
     let trackAudioFeatures = []; // info includes tempo, loudness etc
     let newGenerated = {};
 
+    
     useEffect(onMountedACB, []);
 
     return (
         <div>
-            <LoadingView loadingState={loadingDone}/>
+            <LoadingView loadingState={loadingDone} viewPlaylist={viewPlaylistACB}/>
             <AudioPlayer/>
         </div>
     );
@@ -52,15 +77,10 @@ function Loading(props) {
         getTracksFromFilteredIDs();
         filterOnGenreAndExclArtist();
         setTracksBasedOnIncludedArtists();
-        
+
         setNewGenerated();
 
         //loading done
-        props.model.resetParams();
-
-        // TODO async fn, make sure it actually updates before navigation
-        props.setModel(props.model);
-
         setloadingDone(true);
     }
 
@@ -111,6 +131,7 @@ function Loading(props) {
          * acousticness threshhold)     0.75<
         
         update trackIDs to only include trackIDs left in trackAudioFeatures
+
 
         */
         function chosenParamsACB(track) {
@@ -173,8 +194,8 @@ function Loading(props) {
         /* filter for each current track */
         function filterGenreAndArtistACB(currentTrack) {
             // go through genres
-            /*
-            let wantedStatusOfGenres = currentTrack.track.genres.map(markWantedGenreACB);
+
+            let wantedStatusOfGenres = [true] // TODO currentTrack.track.genres.map(markWantedGenreACB);
             let trackContainsWantedGenre = wantedStatusOfGenres.includes(true);
 
             // go through artist array
@@ -183,7 +204,7 @@ function Loading(props) {
 
 
             return (!trackContainsUnwantedArtist && trackContainsWantedGenre);
-            */
+            
         }
         
         trackInformation = trackInformation.filter(filterGenreAndArtistACB);
@@ -202,20 +223,30 @@ function Loading(props) {
     }
 
     function setNewGenerated() {
-        newGenerated.tracks = fixedPlaylist.tracks; // TODO set to actual tracks
-        newGenerated.playlistName = 'Default Playlist';
-       
+        const newGenerated = {};
+        
         // Set firebasekey based on the current highest key
-        // NOTE: if we implement a restore fn it needs to sort prevPlaylist based on firebaseKey
         if (props.model.prevPlaylists.length) {
+            // NOTE: if restore fn is implemented it needs to sort prevPlaylist based on firebaseKey
             let playlistWithCurrentHighestKey = props.model.prevPlaylists[props.model.prevPlaylists.length-1];
             newGenerated.firebaseKey = playlistWithCurrentHighestKey.firebaseKey + 1;
         } else {
             newGenerated.firebaseKey = 0;
         }
 
+        newGenerated.tracks = fixedPlaylist.tracks; // TODO set to actual tracks
+        newGenerated.playlistName = 'Playlist #' + newGenerated.firebaseKey;
+
         props.model.addToPrevPlaylists({playlistName:newGenerated.playlistName, firebaseKey:newGenerated.firebaseKey}); 
-        props.model.setGenerated(newGenerated);
+        //props.model.setGenerated(newGenerated);
+        //props.model.generated = newGenerated;
+        props.model.generated.playlistName = newGenerated.playlistName;
+        props.model.generated.tracks = newGenerated.tracks;
+        props.model.generated.firebaseKey = newGenerated.firebaseKey;
+    }
+
+    function viewPlaylistACB() {
+        props.model.resetParams();
     }
 }
 

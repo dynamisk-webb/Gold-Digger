@@ -6,25 +6,40 @@ import { getProfile } from "./spotifySource.js";
  * Model keeps abstract data
  */
 class DiggerModel{
-    constructor(state, setState, userid=null, prevPlaylists=[], acoustic=false, danceable=false) {
+    constructor({isLoggedIn = null,
+                setLogin = null,
+                userid = null,
+                source = null,
+                generated = {playlistName: 'Default playlist', playlistId: null, firebaseKey: null, tracks: []},
+                genres = [],
+                includedArtists = [],
+                excludedArtist = [],
+                prevPlaylists = [],
+                tempo = {min: 0, max: 300},
+                loudness = {min: -60, max: 0},
+                instrumentalness = {min: 0, max: 100},
+                danceable = false,
+                acoustic = false,
+                observers = []}) {
         this.userid = userid;
-        this.source = null;
-        this.generated = {playlistName: 'Default playlist', playlistId: null, firebaseKey: null, tracks: []};
-        this.genres = [];   // String values
-        this.includedArtists = [];  // Spotify ID
-        this.excludedArtists = [];
+        this.source = source;
+        this.generated = generated;
+        this.genres = genres;   // String values
+        this.includedArtists = includedArtists;  // Spotify ID
+        this.excludedArtists = excludedArtist;
         this.prevPlaylists = prevPlaylists; // [{name, playlistId, firebaseKey: }, ...]
 
-        this.tempo = {min: 0, max: 300}; // {min:, max}, set to default or limits
-        this.loudness = {min: -60, max: 0};
-        this.instrumentalness = {min: 0, max: 100};
+        this.tempo = tempo; // {min:, max}, set to default or limits
+        this.loudness = loudness;
+        this.instrumentalness = instrumentalness;
         this.danceable = danceable; // Set directly true or false
         this.acoustic = acoustic;
 
-        this.observers = [];
-        this.setLogin = setState;
-        this.isLoggedIn = state;
+        this.observers = observers;
+        this.setLogin = setLogin;
+        this.isLoggedIn = isLoggedIn;
     }
+    
 
     /**
      *  Setters, notifiers observers of changes
@@ -69,8 +84,9 @@ class DiggerModel{
         }
     }
 
-    setGenerated(generate) { // Sets generated playlist
-        this.generated = generate;
+    setGenerated(generated) { // Sets generated playlist
+        this.generated = generated;
+        console.log("in setGenerated");
         this.notifyObservers({key:"modelParams", param:"generated", specs:"newList"});
     }
 
@@ -137,6 +153,7 @@ class DiggerModel{
     removeGenre(genre) {    // Exclude from genres
         if(this.genres.includes(genre)) {
             this.genres = this.genres.filter(elem => elem !== genre);
+            console.log("remove genre");
             this.notifyObservers({key:"modelParams", param:"removeGenre"});
         }
     }
@@ -174,7 +191,8 @@ class DiggerModel{
         this.genres = [];   // String values
         this.includedArtists = [];
         this.excludedArtists = [];
-        this.tempo = {min: 0, max: 300}; // {min:, max}, set to default or limits
+        this.tempo.min = 0;
+        this.tempo.max = 300; // = {min: 0, max: 300}; // {min:, max}, set to default or limits
         this.loudness = {min: -60, max: 0};
         this.instrumentalness = {min: 0, max: 100};
         this.danceable = false;
@@ -243,11 +261,18 @@ class DiggerModel{
         this.notifyObservers({key:"logout"});
     }
 
-    /**
-     * Example API-call
+    /** 
+     * Debug functions
      */
-    requestGetProfile() { 
-        getProfile();
+
+    // prints all fields of model
+    debugModelState(caller="unspecified caller") {
+        let currentModel = Object.keys(this).reduce((total, current) => {
+            total[current] = this[current];
+            return total;
+            }, {});
+        
+        console.log("[Model] ", caller, currentModel);
     }
 }
 
