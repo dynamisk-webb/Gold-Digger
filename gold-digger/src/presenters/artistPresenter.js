@@ -3,10 +3,28 @@ import SearchView from "../views/searchView.js";
 import ArtistResultView from "../views/artistResultView.js";
 import promiseNoData from "../views/promiseNoData.js";
 import resolvePromise from "../resolvePromise.js";
-import { getArtistsPlaylist } from "../spotifySource.js";
+import { getArtistsPlaylist, getArtistsSaved} from "../spotifySource.js";
 import { useEffect, useState } from "react";
 
 function Artists(props) {
+
+  useEffect(addObserverOnCreatedACB, [])
+    const [, forceReRender ]= useState(); 
+
+    function addObserverOnCreatedACB() {
+        props.model.addObserver(notifyACB);
+
+        function removeObserverOnDestroyACB() {
+            props.model.removeObserver(notifyACB);
+        }
+        return removeObserverOnDestroyACB;
+    }
+
+    // rerender on state change
+    function notifyACB() {
+        forceReRender({});
+        //props.model.debugModelState("/genre rerender");
+    }
 
   // State for list of artists
   const [promiseState, setState] = useState({});
@@ -22,22 +40,21 @@ function Artists(props) {
       // Check if a saved playlist exists before getting the artists from it
       if (playlist) {
         resolvePromise(getArtistsPlaylist(playlist), promiseState, setState);
+        console.log(promiseState.promise);
+      }else {
+        resolvePromise(getArtistsSaved(), promiseState, setState);
+        console.log(promiseState.promise);
       }
     }
     getArtistsACB();
+    notifyACB();
 
   }, []);
 
   useEffect(() => {
 
-    // TODO: vi ska bara kolla på *intressanta* artister, dvs include och exclude.
-    // TODO: filtrera först igenom listan IncludedArtists (kolla DiggerModel) och markera alla med value:"include"
-    // TODO: gör sedan det igenom listan ExcludedArtists (kolla DiggerModel) och markera alla med value:"exclude"
-
     /* retrieve from model and mark artists as Exclude or Include values*/
     function getIncludeOrExcludeACB(artist) {
-      // default
-      //let artistObject = {artist: x, value: "neutral"};
       
       // filter on included artists
       if(props.model.includedArtists.find(element => element == artist.id))
@@ -49,7 +66,8 @@ function Artists(props) {
     }
 
 
-    if (promiseState.data != null) {      
+    if (promiseState.data != null) {     
+      console.log(promiseState.promise);
       // Transfer results from promiseState into artistList
       // Make use the values are unique
       let artistList = promiseState.data.map(obj => ({ ...obj, value: 'neutral' }));
@@ -64,8 +82,15 @@ function Artists(props) {
 
 
   function searchArtistACB(searchData) {
-    // filter based on the search term
-    filterArtist(searchData);
+    if(searchData != ""){
+      // filter based on the search term
+      filterArtist(searchData);
+    }else{
+      console.log("quick");
+      setFilteredState(artistListState);
+    }
+    notifyACB();
+    
     // save the search term
     setSearchState(searchData);
   }
@@ -75,42 +100,10 @@ function Artists(props) {
     setFilteredState(artistListState.filter(element => element.name.toLowerCase().includes(searchTerm.toLowerCase()))); // TODO: eller element.artist.includes (searchTerm) ?
   }
 
-
-  // For testing
-  const artist = [{
-    id: "4UXqAaa6dQYAk18Lv7PEgX",
-    name: "Fall Out Boy"
-  },
-  {
-    id: "0gxyHStUsqpMadRV0Di1Qt",
-    name: "Rick Astley"
-  },
-  {
-    id: "6goK4KMSdP4A8lw8jk4ADk",
-    name: "Pokémon"
-  },
-  {
-    id: "04gDigrS5kc9YWfZHwBETP",
-    name: "Maroon 5"
-  },
-  {
-    id: "137W8MRPWKqSmrBGDBFSop",
-    name: "Wiz Khalifa"
-  },
-  {
-    id: "5HZsYhRCMH3zR0yndRcLVw",
-    name: "MOB CHOIR"
-  },
-  {
-    id: "74XFHRwlV6OrjEM0A2NCMF",
-    name: "Paramore"
-  }
-  ];
-
   // Show loading, then search results
   return (
     <div>
-      <FilterView filterType="artist" title="Include/Exclude Artists" noTitle="Step 3 of 4" nextTitle="Next"></FilterView>
+      <FilterView filterType="artist" title= "Select Artists" noTitle="Step 3 of 4" nextTitle="Next"></FilterView>
       <SearchView id="search" search={searchArtistACB}></SearchView>
       {promiseNoData(promiseState) || <ArtistResultView artistResults={filteredState} setExcludeInclude={setExcludeIncludeACB}></ArtistResultView>}
     </div>

@@ -84,13 +84,13 @@ async function getGenres() {  // Returns list of all genres
 }
 
 async function getArtistsPlaylist(playlist) { // Returns list of all artists in a playlist
-  const list = await getTracksPlaylist(playlist);
-  return tracksToArtistList(list);
+  const list = getTracksPlaylist(playlist).then(tracksToArtistList);;
+  return list;
 }
 
 async function getArtistsSaved() {
-  const list = await getSavedTracks();
-  return tracksToArtistList(list);
+  const list = getSavedTracks().then(tracksToArtistList);
+  return list;
 }
 
 function getArtist(id) {  // Get Artist by Spotify ID

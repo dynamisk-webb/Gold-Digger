@@ -12,7 +12,7 @@ function Genres(props) {
     // props.model.debugModelState("/genre init");
 
     // add observer for notifications for state changes
-    useEffect(addObserverOnCreatedACB, [])
+    useEffect(addObserverOnCreatedACB, []);
     const [, forceReRender ]= useState(); 
 
     function addObserverOnCreatedACB() {
