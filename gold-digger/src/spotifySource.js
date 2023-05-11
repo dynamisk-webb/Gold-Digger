@@ -112,13 +112,13 @@ async function playTracks(tracks) { // Set player to track based on id
     uris:tracks.map(convertIDtoURI)
   }
 
-  getDevices().then(findDeviceCB).then();
+  getDevices().then(findDeviceCB).then(playCB);
 
   function findDeviceCB(response) {
     return response.devices.find(device => device.name === "Gold Digger");
   }
   function playCB(device) {
-    const field = "?=" + device.id;
+    const field = "?device_id=" + device.id;
     generalAPI('/me/player/play' + field, "PUT", JSON.stringify(body));
   }
 
