@@ -121,8 +121,6 @@ async function playTracks(tracks) { // Set player to track based on id
     const field = "?device_id=" + device.id;
     generalAPI('/me/player/play' + field, "PUT", JSON.stringify(body));
   }
-
-  // Handle errors 404
 }
 
 /* Generate Playlist and Add to it */
@@ -134,19 +132,36 @@ async function createPlaylist(userid, name) {
   };
   return generalAPI('/users/' + userid + '/playlists', "POST", JSON.stringify(body));  // Returns the new playlist id
 }
-async function addTracks(playlist, idlist) {  // Adds several tracks to one playlist based on id, max 100
+
+function addTracks(playlist, idlist) {  // Adds several tracks to one playlist based on id, max 100
   const uris = idlist.map(convertIDtoURI);
   const body = {
     "uris": uris
   };
-  generalAPI('/playlists/' + playlist + '/tracks', "POST", JSON.stringify(body));
+  return generalAPI('/playlists/' + playlist + '/tracks', "POST", JSON.stringify(body));
 }
+
+function addAllTracks(playlist, idlist) {
+  const promises = [];
+  let currentIds = [];
+  let leftIds = idlist;
+  if(idlist.length > 0) {
+    for(let i = 0; i < idlist.length/50; i++) {
+      currentIds = leftIds.slice(0,50);
+      leftIds = leftIds.slice(50);
+      promises.push(addTracks(playlist, currentIds));
+    }
+    return Promise.all(promises);
+  }
+}
+
 async function changePlaylistName(playlist, name) { // Changes playlist name by playlist id
   const body = {
     "name": name,
   };
   generalAPI('/playlists/' + playlist, "PUT", body);
 }
+
 async function removeTrack(playlist, track) {
   const body = {
     tracks:[{uri:convertIDtoURI(track)}]
@@ -264,4 +279,4 @@ function apiToEndpoint(url) { // Removes start
   return url.replace("https://api.spotify.com/v1", '');
 }
 
-export {getProfile, getSavedTracks, getTracks, getAllTracks, getTracksPlaylist, getTrackParams, getTracksParams, getAllTracksParams, getGenres, getArtistsPlaylist, getArtistsSaved, getArtist, searchArtist, playTracks, createPlaylist, addTracks, changePlaylistName, removeTrack};
+export {getProfile, getSavedTracks, getTracks, getAllTracks, getTracksPlaylist, getTrackParams, getTracksParams, getAllTracksParams, getGenres, getArtistsPlaylist, getArtistsSaved, getArtist, searchArtist, playTracks, createPlaylist, addTracks, addAllTracks, changePlaylistName, removeTrack};
