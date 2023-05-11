@@ -6,6 +6,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-weight: 700;
+  background: black;
 }
 
 code {
@@ -120,6 +121,14 @@ input:focus {
 
 .paddingLess{
   padding: 0;
+}
+
+.fullLoading{
+  position: absolute;
+  top:30%;
+  left: 40%;
+  width: 300px;
+  height: 300px;
 }
 
 /* ------------------- IDs ------------------- */
@@ -304,6 +313,18 @@ input:focus {
   border-radius: .6rem;
   height:100%;
   width: 500px;
+  overflow-y: scroll;
+  cursor: grab;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+html {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }
 
 #prevList{

@@ -63,7 +63,7 @@ function Playlist (props) {
 
     useEffect (onMountedACB, [props.model]);
 
-    useEffect (onResolvedFirebaseACB, [playlistPromiseState, setPlaylistPromiseState]);
+    //useEffect (onResolvedFirebaseACB, [playlistPromiseState, setPlaylistPromiseState]);
     
     
     useEffect(() =>{
