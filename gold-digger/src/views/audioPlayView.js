@@ -5,17 +5,18 @@ import SpotifyPlayer from 'react-spotify-web-playback'
  */
 
 function AudioPlayer(props){
-    const [access_token, setAccessToken] = useState(localStorage.getItem('access-token'));
+    const [access_token, ] = useState(localStorage.getItem('access-token'));
 
     return (
         <div id="audioPlayer">
         <SpotifyPlayer
             token={access_token}
-            initialVolume={0.5}
-            uris={[props.tracks]}
+            initialVolume={0.4}
+            uris={props.tracks}
             hideAttribution={true}
             name="Gold Digger"
-            play={true}
+            play={props.play}
+            magnifySliderOnHover={true}
             styles={{
                 activeColor: '#fff',
                 bgColor: '#202020',

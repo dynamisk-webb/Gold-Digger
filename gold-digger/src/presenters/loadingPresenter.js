@@ -54,7 +54,7 @@ function Loading(props) {
     return (
         <div>
             <LoadingView loadingState={loadingDone} viewPlaylist={viewPlaylistACB}/>
-            <AudioPlayer/>
+            <AudioPlayer play={true} tracks={["spotify:track:0hl8k492sfcfLQudNctEiR"]}/>
         </div>
     );
 

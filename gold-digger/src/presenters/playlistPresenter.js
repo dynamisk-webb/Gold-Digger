@@ -19,6 +19,7 @@ import { createPlaylist, addTracks } from "../spotifySource.js";
 
 // temp import
 import fixedList from "../test/fixedList.js";
+import AudioPlayer from "../views/audioPlayView.js";
 
 
 /**
@@ -104,21 +105,32 @@ function Playlist (props) {
     return (
       <div>
         {/*waitForFirebase(playlistPromiseState) ||*/
-        <PlaylistView
-          generatedTracks={tracks}
-          generatedName={playlistName}
-          removeTrack={removeTrackACB}
-          getPlaylistURL={getPlaylistURLACB}
-          setAudioPlayerSong={setAudioPlayerSongACB}
-          setPlaylistName={setPlaylistNameACB}
-          returnHome={returnHomeACB}
-          savePlaylistToSpotify={savePlaylistToSpotifyACB}
-          removePlaylist={removePlaylistACB}
-        ></PlaylistView>}
+        <div>
+          <PlaylistView
+            generatedTracks={tracks}
+            generatedName={playlistName}
+            removeTrack={removeTrackACB}
+            getPlaylistURL={getPlaylistURLACB}
+            setAudioPlayerSong={setAudioPlayerSongACB}
+            setPlaylistName={setPlaylistNameACB}
+            returnHome={returnHomeACB}
+            savePlaylistToSpotify={savePlaylistToSpotifyACB}
+            removePlaylist={removePlaylistACB}
+          ></PlaylistView>
+          <AudioPlayer play={false} tracks={tracksToIDList()}/>
+        </div>}
       </div>
     );
-
     
+  function tracksToIDList() {
+      const list = tracks.map((element => {
+          return "spotify:track:" + element.track.id;
+      }));
+
+      console.log(list);
+      return list;
+  }
+  
     /* Event: onClick REMOVE /playlists/{playlist_id}/tracks */
   function removeTrackACB(id) {
     props.model.removeTrack(id);
