@@ -41,11 +41,15 @@ function Source(props) {
     Event: onInput set playlist ID (based on URL)
     User chooses to generate playlist based on a playlist on Spotify
   */
-  function setPlaylistIDACB(playlistID) {
+  function setPlaylistIDACB(url) {
     
-    // Use API call 'getTracksPlaylist' to check if URL leads to an exisiting playlist
-    getTracksPlaylist(playlistID).then(setValidSourceACB).catch(invalidSourceACB);
-
+    if (url.startsWith("http://open.spotify.com/track/") || url.startsWith("https://open.spotify.com/playlist/")) {
+      // Use API call 'getTracksPlaylist' to check if URL leads to an exisiting playlist
+      getTracksPlaylist(url).then(setValidSourceACB).catch(invalidSourceACB);
+    } else {
+      alert("Oops!\nThat doesn't look like a valid Spotify link.\n\nTo get a link, simply right-click any Spotify playlist,\nselect \"Share\" and then \"Copy link to playlist\"");
+    }
+    
     /*
       Helper function. Sets the playlist as the source once we know it's a valid source.
       then passes this state to sourceView so that it can redirect.
@@ -53,16 +57,15 @@ function Source(props) {
     function setValidSourceACB() {
       // make call to reset process parameters
       props.model.resetParams();
-      props.model.setSource(playlistID);
+      props.model.setSource(url);
       setValidURL(true);
     }
 
     /*
       Helper function. Should notify with alert.
     */
-    function invalidSourceACB() {
-      console.log("Caught invalid source error");
-      alert("Oops! That URL doesn't go to a Spotify playlist. Try again!");
+    function invalidSourceACB(err) {
+      alert("Oops!\nThat doesn't look like a valid Spotify link.\n\nTo get a link, simply right-click any Spotify playlist,\nselect \"Share\" and then \"Copy link to playlist\"");
     }
   }
 
