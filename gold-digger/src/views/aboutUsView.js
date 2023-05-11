@@ -36,6 +36,14 @@ function AboutUsView(props){
     return (<div id="aboutUsContainer">
         <button id="closeField" onClick={closeAboutCB}></button>
         <div id="aboutUs">
+            <h1 id="aboutTitle">About Gold Digger</h1>
+            <h2>Refine your listening experience by filtering your <br></br>
+                Spotify playlists by genre, artist and more! </h2>
+            <p>
+               Filter any public playlist, or why not use one from your own library? <br></br>
+               You can even choose to filter your saved songs on the off chance that<br></br>
+               you, like us, have far too many of them.
+            </p>
             <h1 id="aboutTitle">About the authors</h1>
             {authors.map(displayInfoCB)}
         </div>
