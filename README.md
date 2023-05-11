@@ -44,7 +44,7 @@
 
 Our web app will help Spotify users generate new playlists from sections of their pre-existing playlists or saved tracks. The user gets to first either select a playlist or their saved tracks and then their preferences in the app according to their current ~mood or ~feel.
 
-*Go to <a href="progress">Progress</a> amd <a href="plan">Plan</a> to see detailed description of functionality.*
+*Go to <a href="#progress">Progress</a> amd <a href="#plan">Plan</a> to see detailed description of functionality.*
 
 ### Built with
 * [![Javascript][js-shield]][js-url]

@@ -12,7 +12,10 @@ function AudioPlayer(props){
         <SpotifyPlayer
             token={access_token}
             initialVolume={0.5}
-            uris={[props.track]}
+            uris={[props.tracks]}
+            hideAttribution={true}
+            name="Gold Digger"
+            play={true}
             styles={{
                 activeColor: '#fff',
                 bgColor: '#202020',
