@@ -328,6 +328,12 @@ html {
   border-radius: 0;
 }
 
+#prevListText{
+  color:#828282;
+  align-self: center;
+  justify-self: center;
+}
+
 /* S O U R C E */
 
 #sourceGrid{
