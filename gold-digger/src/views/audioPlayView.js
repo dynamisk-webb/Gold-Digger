@@ -20,8 +20,8 @@ function AudioPlayer(props){
                 loaderColor: '#fff',
                 sliderColor: "#ff5533",
                 sliderTrackColor: "#4d4d4d",
-                trackArtistColor: '#ccc',
-                trackNameColor: '#fff',
+                trackArtistColor: '#b8b8b8',
+                trackNameColor: '#ffffffff',
               }}
         />
         </div>
