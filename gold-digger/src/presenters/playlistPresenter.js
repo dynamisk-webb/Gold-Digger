@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { generatedListPromise } from "../firebaseModel.js";
 import resolvePromise from "../resolvePromise.js";
 import waitForFirebase from "../views/waitForFirebase.js";
-import { createPlaylist, addTracks } from "../spotifySource.js";
+import { createPlaylist, addAllTracks } from "../spotifySource.js";
 
 // temp import
 import fixedList from "../test/fixedList.js";
@@ -58,7 +58,7 @@ function Playlist (props) {
     useEffect(() =>{
       if(playlistCreatePromiseState.data != null){
         let ids = tracks.map(elem => elem.track.id);
-        addTracks(playlistCreatePromiseState.data.id, ids);
+        addAllTracks(playlistCreatePromiseState.data.id, ids);
       }
     }, [playlistCreatePromiseState, setPlaylistCreatePromiseState]);
 
