@@ -1,4 +1,5 @@
 import {refreshAccessToken} from "./authentication.js";
+import { spotifyApi } from "react-spotify-web-playback";
 
 /* 
 EXAMPLE FUNCTION FROM SPOTIFYS TUTORIAL
@@ -34,7 +35,6 @@ function getTracksPlaylist(playlist) {  // Get tracks from playlist
   return generalAPI('/playlists/' + id + '/tracks' + fields).then(getNextACB);
 
   function getNextACB(response) {
-    console.log(response);
     tracks = tracks.concat(response.items);
     if(response.next !== null) {  // If there is more to retrieve
       return generalAPI(apiToEndpoint(response.next)).then(getNextACB);
@@ -60,38 +60,22 @@ function getTracks(idlist) {  // Gets maximum of 50 tracks from id list
   )
 }
 
-async function getAllTracks(idlist) { // Gets all tracks from a id list
-  let currentIds = idlist.slice(0, 50);
-  let leftIds = idlist.slice(50);
-  const tracks = await getTracks(currentIds);
-  while(leftIds.length) {
-    currentIds = leftIds.slice(0,50);
-    leftIds = leftIds.slice(50);
-    tracks.concat(await getTracks(currentIds));
-  }
-  return tracks;
+function getAllTracks(idlist) { // Gets all tracks from a id list
+  return fetchAllFromIDList(getTracks, idlist);
 }
 
-async function getTrackParam(id) {  // Gets a tracks audio parameter
+async function getTrackParams(id) {  // Gets a tracks audio parameter
   const response = await generalAPI('/audio-features/' + id);
   return trackParamsToFormatCB(response);
 }
 
-async function getTracksParams(idlist) {  // Gets tracks audio parameters
+function getTracksParams(idlist) {  // Gets tracks audio parameters
   const ids = "?ids=" + idlist.join();
-  return await generalAPI('/audio-features' + ids).map(trackParamsToFormatCB);
+  return generalAPI('/audio-features' + ids).then((response) => {return response.audio_features.map(trackParamsToFormatCB);});
 }
 
-async function getAllTracksParams(idlist) {
-  let currentIds = idlist.slice(0, 100);
-  let leftIds = idlist.slice(100);
-  const tracks = await getTracksParams(currentIds);
-  while(leftIds.length) {
-    currentIds = leftIds.slice(0,100);
-    leftIds = leftIds.slice(100);
-    tracks.concat(await getTracksParams(currentIds));
-  }
-  return tracks;
+function getAllTracksParams(idlist) {
+  return fetchAllFromIDList(getTracksParams, idlist);
 }
 
 async function getGenres() {  // Returns list of all genres
@@ -101,37 +85,44 @@ async function getGenres() {  // Returns list of all genres
 
 async function getArtistsPlaylist(playlist) { // Returns list of all artists in a playlist
   const list = await getTracksPlaylist(playlist);
-  const artistList = [];
-  list.forEach((track) => {  
-    const artists = track.track.artists;
-    artists.forEach((artist) => { // Don't allow repeats
-      if(!artistList.find(element => element.id == artist.id))
-        artistList.push(artist);
-    });
-  });
-
-  return artistList;
+  return tracksToArtistList(list);
 }
 
-// TODO getArtists from saved
+async function getArtistsSaved() {
+  const list = await getSavedTracks();
+  return tracksToArtistList(list);
+}
 
-async function getArtist(id) {  // Get Artist by Spotify ID
-  return await generalAPI('/artists/' + id);
+function getArtist(id) {  // Get Artist by Spotify ID
+  return generalAPI('/artists/' + id);
 }
 
 /* Search */
-async function searchArtist(term) { // By search term, return a list of possible artists
-  return await generalAPI('/search?' + new URLSearchParams("query=" + term + "&type=artist"));
+function searchArtist(term) { // By search term, return a list of possible artists
+  return generalAPI('/search?' + new URLSearchParams("query=" + term + "&type=artist"));
 }
 
 /* Set playback state */
+function getDevices() { // Get available spotify devices 
+  return generalAPI('/me/player/devices');
+}
 
-function playTrack(tracks) { // Set player to track based on id
+async function playTracks(tracks) { // Set player to track based on id
   const body = {
     uris:tracks.map(convertIDtoURI)
   }
 
-  generalAPI('/me/player/play/', "PUT", JSON.stringify(body));
+  getDevices().then(findDeviceCB).then();
+
+  function findDeviceCB(response) {
+    return response.devices.find(device => device.name === "Gold Digger");
+  }
+  function playCB(device) {
+    const field = "?=" + device.id;
+    generalAPI('/me/player/play' + field, "PUT", JSON.stringify(body));
+  }
+
+  // Handle errors 404
 }
 
 /* Generate Playlist and Add to it */
@@ -195,6 +186,35 @@ async function generalAPI(endpoint, method="GET", body=null) {
 }
 
 // Help-functions
+function tracksToArtistList(tracks) {
+  const artistList = [];
+  tracks.forEach((track) => {  
+    const artists = track.track.artists;
+    artists.forEach((artist) => { // Don't allow repeats
+      if(!artistList.find(element => element.id == artist.id))
+        artistList.push(artist);
+    });
+  });
+
+  return artistList;
+}
+
+function fetchAllFromIDList(call, idlist) { // Uses Promise.all to call all promises concurrently
+  const promises = [];
+  let currentIds = [];
+  let leftIds = idlist;
+  if(idlist.length > 0) {
+    for(let i = 0; i < idlist.length/50; i++) {
+      currentIds = leftIds.slice(0,50);
+      leftIds = leftIds.slice(50);
+      promises.push(call(currentIds));
+    }
+    return Promise.all(promises).then((values) => {
+      return values.reduce((response, subArray) => subArray.concat(response), []);
+    })
+  }
+}
+
 function savedTrackToFormatCB(element) {  // Filter what parameters is kept for each track
   return { 
     track: {
@@ -218,6 +238,7 @@ function artistToFormatCB(artist) {
 
 function trackParamsToFormatCB(track) {
   return {
+    id:track.id,
     acousticness: track.acousticness,
     danceability: track.danceability,
     instrumentalness: track.instrumentalness,
@@ -243,4 +264,4 @@ function apiToEndpoint(url) { // Removes start
   return url.replace("https://api.spotify.com/v1", '');
 }
 
-export {getProfile, getSavedTracks, getTracks, getAllTracks, getTracksPlaylist, getTrackParam, getTracksParams, getAllTracksParams, getGenres, getArtistsPlaylist, getArtist, createPlaylist, addTracks, changePlaylistName, playTrack, removeTrack};
+export {getProfile, getSavedTracks, getTracks, getAllTracks, getTracksPlaylist, getTrackParams, getTracksParams, getAllTracksParams, getGenres, getArtistsPlaylist, getArtistsSaved, getArtist, searchArtist, playTracks, createPlaylist, addTracks, changePlaylistName, removeTrack};

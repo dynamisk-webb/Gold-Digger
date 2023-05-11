@@ -11,11 +11,13 @@ function AudioPlayer(props){
         <div id="audioPlayer">
         <SpotifyPlayer
             token={access_token}
+            getPlayer={props.getPlayerACB}
             initialVolume={0.4}
             uris={props.tracks}
             hideAttribution={true}
             name="Gold Digger"
             play={props.play}
+            persistDeviceSelection={true}
             magnifySliderOnHover={true}
             styles={{
                 activeColor: '#ff6b35',
