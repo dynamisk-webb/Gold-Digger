@@ -28,6 +28,13 @@ function getSavedTracks() { // Get all of user's saved tracks
   }
 }
 
+
+async function getPlaylistID(playlist) {  // Get id from playlist
+  const id = convertURLtoID(playlist);
+  return await generalAPI('/playlists/' + id); 
+}
+
+
 function getTracksPlaylist(playlist) {  // Get tracks from playlist
   const id = convertURLtoID(playlist);
   const fields = "?limit=50&fields=next,items(track(album(id, images),artists(genres,id,name,images),name,id))"; // Adjust what is retrieved here
@@ -181,22 +188,27 @@ async function generalAPI(endpoint, method="GET", body=null) {
       refreshAccessToken();
     }
 
-    
-    let accessToken = localStorage.getItem('access-token');
-    const response = await fetch('https://api.spotify.com/v1' + endpoint, {
-      method:method,  
-      headers: {
-        Authorization: 'Bearer ' + accessToken,
-      },
-      body:body
-    });
-    
-      if (!response.ok) {
-        throw new Error('HTTP status ' + response.status);
-      } 
+    try {
+      let accessToken = localStorage.getItem('access-token');
+      const response = await fetch('https://api.spotify.com/v1' + endpoint, {
+        method:method,  
+        headers: {
+          Authorization: 'Bearer ' + accessToken,
+        },
+        body:body
+      });
+      
+        if (!response.ok) {
+          throw new Error('HTTP status ' + response.status);
+        } 
 
-      if(method === "GET" || method === "POST")
-        return await response.json();
+        if(method === "GET" || method === "POST")
+          return await response.json();
+
+    } catch (err) {
+      console.log("Error " + err);
+      throw new Error(err);
+    }
   }
 }
 
@@ -279,4 +291,4 @@ function apiToEndpoint(url) { // Removes start
   return url.replace("https://api.spotify.com/v1", '');
 }
 
-export {getProfile, getSavedTracks, getTracks, getAllTracks, getTracksPlaylist, getTrackParams, getTracksParams, getAllTracksParams, getGenres, getArtistsPlaylist, getArtistsSaved, getArtist, searchArtist, playTracks, createPlaylist, addTracks, addAllTracks, changePlaylistName, removeTrack};
+export {getProfile, getSavedTracks, getTracks, getAllTracks, getPlaylistID, getTracksPlaylist, getTrackParams, getTracksParams, getAllTracksParams, getGenres, getArtistsPlaylist, getArtistsSaved, getArtist, searchArtist, playTracks, createPlaylist, addTracks, addAllTracks, changePlaylistName, removeTrack};

@@ -1,5 +1,5 @@
 import SourceView from "../views/sourceView";
-import { getTracksPlaylist } from "../spotifySource";
+import { getPlaylistID } from "../spotifySource";
 import { useState, useEffect } from "react";
 import resolvePromise from "../resolvePromise";
 
@@ -44,8 +44,8 @@ function Source(props) {
   function setPlaylistIDACB(url) {
     
     if (url.startsWith("http://open.spotify.com/track/") || url.startsWith("https://open.spotify.com/playlist/")) {
-      // Use API call 'getTracksPlaylist' to check if URL leads to an exisiting playlist
-      getTracksPlaylist(url).then(setValidSourceACB).catch(invalidSourceACB);
+      // Use API call 'getPlaylistID' to check if URL leads to an exisiting playlist
+      getPlaylistID(url).then(setValidSourceACB).catch(invalidSourceACB);
     } else {
       alert("Oops!\nThat doesn't look like a valid Spotify link.\n\nTo get a link, simply right-click any Spotify playlist,\nselect \"Share\" and then \"Copy link to playlist\"");
     }
@@ -65,6 +65,7 @@ function Source(props) {
       Helper function. Should notify with alert.
     */
     function invalidSourceACB(err) {
+      console.log("Error from source: " + err);
       alert("Oops!\nThat doesn't look like a valid Spotify link.\n\nTo get a link, simply right-click any Spotify playlist,\nselect \"Share\" and then \"Copy link to playlist\"");
     }
   }
