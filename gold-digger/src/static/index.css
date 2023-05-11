@@ -278,21 +278,7 @@ input:focus {
   font-size: 25px;
 }
 
-#logOut{
-  
-  height: 40px;
-  width: 40px;
-  background-image: url("./../img/logOut.png"); /* 16px x 16px */
-  background-color:transparent;
-  background-repeat: no-repeat;  /* make the background image appear only once */
-  background-position: center; 
-  background-size: contain;
 
-  z-index: 100;
-  position: absolute;
-  top: 18px;
-  right: 230px;
-}
 
 /* PREVLIST */
 
@@ -626,16 +612,7 @@ input[type=text] {
   grid-column: 1 / span 1;
 }
 
-#homeButton{
-  background-image: url("./../img/home.png"); /* 16px x 16px */
-  background-color:transparent;
-  background-repeat: no-repeat;  /* make the background image appear only once */
-  width: 50px;
-  height: 50px;
-  background-size: contain;
-  
-  margin: 0px 0px 0px 0px; 
-}
+
 
 #trackInfo{
   display: grid;
@@ -735,6 +712,38 @@ input[type=text] {
   top:18px;
   right:170px;
   
+}
+
+#logOut{
+  
+  height: 40px;
+  width: 40px;
+  background-image: url("./../img/logOut.png"); /* 16px x 16px */
+  background-color:transparent;
+  background-repeat: no-repeat;  /* make the background image appear only once */
+  background-position: center; 
+  background-size: contain;
+
+  z-index: 100;
+  position: absolute;
+  top: 18px;
+  right: 285px;
+}
+
+#homeButton{
+  height: 41px;
+  width: 41px;
+  background-image: url("./../img/home.png"); /* 16px x 16px */
+  background-color:transparent;
+  background-repeat: no-repeat;  /* make the background image appear only once */
+  background-size: contain;
+  
+  z-index: 100;
+  position: absolute;
+  top: 18px;
+  right: 225px;
+
+  margin: 0px 0px 0px 0px; 
 }
 
 /*GENRE RESULT VIEW*/

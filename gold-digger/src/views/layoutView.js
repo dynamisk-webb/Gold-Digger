@@ -9,8 +9,8 @@ function LayoutView(props){
     <div id="layout">
       <img src={spotifyLogo} id="spotifyLogo" ></img>
       {renderLogOut()}
+      {renderHome()}
       <button id="openAbout" onClick={openAboutACB}></button>
-
       <Outlet />
     </div>
   )
@@ -21,14 +21,21 @@ function LayoutView(props){
     }
   }
 
-  // TODO: make sure login button isn't rendered when the user is logged out
+  function renderHome(){
+    if(props.isLoggedIn){
+      return <button id="homeButton" onClick={returnHomeACB}></button>;
+    }
+  }
+
+  function returnHomeACB(){
+    navigate("/");
+}
 
   function logOutACB(evt){
     props.logOut();
     navigate("/login");
   }
 
-  /* Set the width of the sidebar to 250px and the left margin of the page content to 250px */
   function openAboutACB(evt) {
     props.openAbout();
   }
