@@ -187,7 +187,6 @@ class DiggerModel{
 
     resetParams() { // Set to default values for params
         this.source = null;
-        //this.generated = {playlistName: 'Default playlist', playlistId: null, firebaseKey: null, tracks: []};
         this.genres = [];   // String values
         this.includedArtists = [];
         this.excludedArtists = [];

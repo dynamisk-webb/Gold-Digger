@@ -120,20 +120,18 @@ function Loading(props) {
     /**
      * Filter functions
      */
+
+    /**
+     * filter trackAudioFeatures from all songs that fall outside of set parameters
+     * - tempo (range)
+     * - loudness (range)
+     * - instrumentalness (range)
+     * - danceability (switch, decide threshhold)    0.75<
+     * - acousticness threshhold)     0.75<
+     * 
+     * Updates trackIDs to only include trackIDs left in trackAudioFeatures
+     */
     function filterOnAudioFeatParams() {
-        // TODO
-       /* 
-        filter trackAudioFeatures from all songs that fall outside of set parameters
-         * tempo (range)
-         * loudness (range)
-         * instrumentalness (range)
-         * danceability (switch, decide threshhold)    0.75<
-         * acousticness threshhold)     0.75<
-        
-        update trackIDs to only include trackIDs left in trackAudioFeatures
-
-
-        */
         function chosenParamsACB(track) {
             // Our decided thresholds
             const danceMinValue = 0.75;
@@ -159,26 +157,24 @@ function Loading(props) {
                     track.tempo <= props.model.tempo.min &&
                     track.loudness >= props.model.loudness.min &&
                     track.loudness <= props.model.louness.max &&
-                    track.instrumentalness >= props.model.instrumentalness.min &&
-                    track.instrumentalness <= props.model.instrumentalness.max &&
+                    track.instrumentalness >= props.model.instrumentalness.min/100 && // 0-1 in API, % in model
+                    track.instrumentalness <= props.model.instrumentalness.max/100 &&
                     includeBasedOnDanceability && includeBasedOnAcousticness);
         }
 
-        function keepChosenTrackIDsACB(track) {
+        function extractTrackIDsACB(track) {
             return track.id;
         }
 
-        trackIDs = trackAudioFeatures.filter(chosenParamsACB).map(keepChosenTrackIDsACB);
+        trackIDs = trackAudioFeatures.filter(chosenParamsACB).map(extractTrackIDsACB);
     }
 
+    /** 
+     * filter trackInformation from all songs that fall outside of set parameters
+     * - genres
+     * - excluded artists
+     */
     function filterOnGenreAndExclArtist() {
-        // TODO
-        /* 
-         filter trackInformation from all songs that fall outside of set parameters
-         * genres
-         * excluded artists
-        */
-
         // return false if artist is unwanted. 
         function markUnwantedArtistsACB(artist) {
             if (props.model.excludedArtists.includes(artist))
@@ -194,17 +190,17 @@ function Loading(props) {
         /* filter for each current track */
         function filterGenreAndArtistACB(currentTrack) {
             // go through genres
-
-            let wantedStatusOfGenres = [true] // TODO currentTrack.track.genres.map(markWantedGenreACB);
-            let trackContainsWantedGenre = wantedStatusOfGenres.includes(true);
-
+            let trackContainsWantedGenre = true;
+            if (props.model.genres.length != 0) { // user has selected specific genres
+                let wantedStatusOfGenres = [true] // TODO currentTrack.track.genres.map(markWantedGenreACB);
+                trackContainsWantedGenre = wantedStatusOfGenres.includes(true);
+            }
+           
             // go through artist array
             let wantedStatusofArtists = currentTrack.track.artists.map(markUnwantedArtistsACB);
             let trackContainsUnwantedArtist = wantedStatusofArtists.includes(false);
 
-
             return (!trackContainsUnwantedArtist && trackContainsWantedGenre);
-            
         }
         
         trackInformation = trackInformation.filter(filterGenreAndArtistACB);
@@ -238,11 +234,7 @@ function Loading(props) {
         newGenerated.playlistName = 'Playlist #' + newGenerated.firebaseKey;
 
         props.model.addToPrevPlaylists({playlistName:newGenerated.playlistName, firebaseKey:newGenerated.firebaseKey}); 
-        //props.model.setGenerated(newGenerated);
-        //props.model.generated = newGenerated;
-        props.model.generated.playlistName = newGenerated.playlistName;
-        props.model.generated.tracks = newGenerated.tracks;
-        props.model.generated.firebaseKey = newGenerated.firebaseKey;
+        props.model.setGenerated(newGenerated);
     }
 
     function viewPlaylistACB() {
