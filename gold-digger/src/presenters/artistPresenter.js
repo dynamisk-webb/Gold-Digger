@@ -2,7 +2,6 @@ import FilterView from "../views/filterView.js";
 import SearchView from "../views/searchView.js";
 import ArtistResultView from "../views/artistResultView.js";
 import { useEffect, useState } from "react";
-import AudioPlayer from "../views/audioPlayView.js";
 
 function Artists(props) {
     // debug
@@ -62,7 +61,6 @@ function Artists(props) {
             <FilterView filterType="artist" title="Include/Exclude Artists" noTitle="Step 3 of 4" nextTitle="Next"></FilterView>
             <SearchView></SearchView>
             <ArtistResultView artistResults={artist} setExcludeInclude={setExcludeIncludeACB}></ArtistResultView>
-            <AudioPlayer/>
         </div>
     );
 
