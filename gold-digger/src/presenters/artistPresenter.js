@@ -3,7 +3,7 @@ import SearchView from "../views/searchView.js";
 import ArtistResultView from "../views/artistResultView.js";
 import promiseNoData from "../views/promiseNoData.js";
 import resolvePromise from "../resolvePromise.js";
-import { getArtistsPlaylist, getArtistsSaved} from "../spotifySource.js";
+import { getAllArtistsPlaylist, getAllArtistsSaved} from "../spotifySource.js";
 import { useEffect, useState } from "react";
 
 function Artists(props) {
@@ -39,10 +39,10 @@ function Artists(props) {
       let playlist = props.model.source; // TODO: is this the right way to get the playlist in here? 
       // Check if a saved playlist exists before getting the artists from it
       if (playlist) {
-        resolvePromise(getArtistsPlaylist(playlist), promiseState, setState);
+        resolvePromise(getAllArtistsPlaylist(playlist), promiseState, setState);
         console.log(promiseState.promise);
       }else {
-        resolvePromise(getArtistsSaved(), promiseState, setState);
+        resolvePromise(getAllArtistsSaved(), promiseState, setState);
         console.log(promiseState.promise);
       }
     }

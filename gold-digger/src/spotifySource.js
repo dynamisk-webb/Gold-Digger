@@ -251,7 +251,7 @@ function tracksToArtistList(tracks) { // Retrieve unique artist from list of tra
   tracks.forEach((track) => {  
     const artists = track.track.artists;
     artists.forEach((artist) => { // Don't allow repeats
-      if(!artistList.find(element => element.id == artist.id))
+      if(!artistList.find(element => element == artist.id))
         artistList.push(artist.id);
     });
   });
