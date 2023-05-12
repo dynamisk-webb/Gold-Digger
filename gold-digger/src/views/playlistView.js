@@ -71,10 +71,15 @@ function PlaylistView(props){
             return artist.name + " ";
         }
 
+        function renderImg(){
+            if(item.track.album.images[1]){
+              return <img src={item.track.album.images[1].url} id="trackImg"></img>
+            } else return <img src={albumImg} id="trackImg"></img>
+          }
+
         return (<div id="trackInfo" key={item.track.name}>
             <button id="playButton" onClick={playSongACB}></button>
-            <img id="trackImg" src={albumImg} alt="albumImg"></img>
-            {/*Should display more info in the future*/}
+            {renderImg()}
             <h2 className="cutText" id="trackName">{item.track.name}</h2>
             <p id="trackArtist">{item.track.artists.map(getArtistsACB)}</p>
             <p id="trackAlbum">{item.track.album.name}</p>

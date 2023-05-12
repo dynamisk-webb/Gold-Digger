@@ -610,6 +610,7 @@ input[type=text] {
   display:grid;
   margin-left: 100px;
   margin-right: 200px;
+  height: 100vh;
   grid-template-columns: 1fr;
   grid-template-rows: 100px 100px 100px 1fr 100px;
 }
@@ -732,12 +733,14 @@ input[type=text] {
   background-position: center; 
   background-size: contain;
 
-  margin: 30% 30% 30% 30%;
+  margin: 30% 15% 30% 30%;
 }
 
 #trackImg{
   grid-row: 1 / span 3;
   grid-column: 2 / span 1;
+  height: 90px;
+  width: 90px;
   object-fit: contain;
   align-self: center;
   justify-self: center;
@@ -943,7 +946,9 @@ input[type=text] {
   grid-column: 1/span 1;
   grid-row: 1/span 1;
   width: 95px;
+  height: 95px;
   border-radius: 50%;
+  object-fit: cover;
 
 }
 
