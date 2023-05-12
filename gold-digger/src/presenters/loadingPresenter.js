@@ -109,8 +109,10 @@ function Loading(props) {
         
         if (audioFeaturesPromise.data != null) {
             let tracksWithAudioFeatures = audioFeaturesPromise.data;
+            
             console.log("audioFeaturesPromise.data", tracksWithAudioFeatures);
             let filteredTracks = filterOnAudioFeatParams(tracksWithAudioFeatures);
+            
             console.log("filtered on audio feature params", filteredTracks);
             let trackIDs = filteredTracks.map(extractIdACB);
     
@@ -153,44 +155,48 @@ function Loading(props) {
      * - danceability (switch, decide threshhold)    0.75<
      * - acousticness threshhold)     0.75<
      * 
-     * Updates trackIDs to only include trackIDs left in trackAudioFeatures
+     * returns list of tracks filter from these params
      */
     function filterOnAudioFeatParams(tracksWithAudioFeatures) {
         function chosenParamsACB(track) {
             // Our decided thresholds
-            const danceMinValue = 0.75;
-            const acousticMinValue = 0.75;
+            let includeBasedOnTempo =
+                (track.tempo >= props.model.tempo.min &&
+                 track.tempo <= props.model.tempo.max);
+            let includeBasedOnLoudness =
+                (track.loudness >= props.model.loudness.min &&
+                 track.loudness <= props.model.loudness.max);
+            let includeBasedOnInstrumentalness =
+                (track.instrumentalness >= props.model.instrumentalness.min/100 &&
+                 track.instrumentalness <= props.model.instrumentalness.max/100); // 0-1 in API, % in model
 
             let includeBasedOnAcousticness = true;
             let includeBasedOnDanceability = true;
 
+            const danceMinValue = 0.75;
+            const acousticMinValue = 0.75;
+
             // If user wants a danceable list, only include danceable songs. Else, include full range. 
+            // IMPORTANT danceability in FixedFeatures, danceable in model
             if (props.model.danceable) {
                 includeBasedOnDanceability = (track.danceability >= danceMinValue);
             }
 
             // If user wants an acoustic list, only include such songs. Else, include full range. 
+            // IMPORTANT acousticness in FixedFeatures, acoustic in model
             if (props.model.acoustic) {
                 includeBasedOnAcousticness = (track.acousticness >= acousticMinValue);
             }
-            
-            // FixedFeatures on the left, compare with values from Diggermodel on the right.
-            // important: danceability, acousticness in FixedFeatures
-            //            danceable, acoustic in DiggerModel
-            return (track.tempo >= props.model.tempo.min &&
-                    track.tempo <= props.model.tempo.min &&
-                    track.loudness >= props.model.loudness.min &&
-                    track.loudness <= props.model.louness.max &&
-                    track.instrumentalness >= props.model.instrumentalness.min/100 && // 0-1 in API, % in model
-                    track.instrumentalness <= props.model.instrumentalness.max/100 &&
-                    includeBasedOnDanceability && includeBasedOnAcousticness);
-        }
 
-        function extractTrackIDsACB(track) {
-            return track.id;
+            console.log(includeBasedOnTempo, includeBasedOnLoudness, includeBasedOnInstrumentalness, includeBasedOnDanceability, includeBasedOnAcousticness);
+            return (includeBasedOnTempo &&
+                    includeBasedOnLoudness &&
+                    includeBasedOnInstrumentalness &&
+                    includeBasedOnDanceability &&
+                    includeBasedOnAcousticness);
         }
-
-        return tracksWithAudioFeatures.filter(chosenParamsACB).map(extractTrackIDsACB);
+        
+        return tracksWithAudioFeatures.filter(chosenParamsACB);
     }
 
     /** 
