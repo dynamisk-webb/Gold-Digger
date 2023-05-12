@@ -77,7 +77,7 @@ function getTracks(idlist) {  // Gets maximum of 50 tracks from id list
   return generalAPI('/tracks' + ids).then((response) => response.tracks.map((track) => { 
     return {
       track: {
-        album: {images:track.album.images, name:track.album.naame},
+        album: {images:track.album.images, name:track.album.name},
         artists: track.artists.map(artistToFormatCB),
         id: track.id,
         href: track.href,
