@@ -2,17 +2,12 @@ import LoadingView from "../views/loadingView";
 import AudioPlayer from "../views/audioPlayView";
 
 import { useState, useEffect } from "react";
-import { getSavedTracks, getTracksParams, getTracksPlaylist, getAllTracks } from "../spotifySource.js";
+import { getSavedTracks, getAllTracksParams, getTracksPlaylist, getAllTracks } from "../spotifySource.js";
+import resolvePromise from "../resolvePromise.js";
 
 // temp import
 import fixedPlaylist from "../test/fixedList";
 import fixedFeatures from "../test/fixedFeatures";
-
-
-import { flushSync } from 'react-dom';
-import DiggerModel from "../DiggerModel";
-
-import resolvePromise from "../resolvePromise.js";
 
 
 function Loading(props) {
@@ -42,23 +37,15 @@ function Loading(props) {
     const [loadingDone, setloadingDone] = useState(false);
 
     // states for API calls (trackids, audiofeatures, trackinformation)
-    const [trackIDPromise, setTrackIDPromiseState] = useState({});
+    const [sourceTracksPromise, setSourceTracksPromiseState] = useState({});
     const [audioFeaturesPromise, setAudioFeaturesPromiseState] = useState({});
     const [trackInfoPromise, setTrackInfoPromiseState] = useState({});
 
     // useEffects for API calls
-    useEffect(onResolveTrackIDPromiseACB, [trackIDPromise]);
+    useEffect(onMountedACB, []);
+    useEffect(onResolveSourceTracksPromiseACB, [sourceTracksPromise]);
     useEffect(onResolveAudioFeaturesPromiseACB, [audioFeaturesPromise]);
     useEffect(oneResolveTrackInfoStatePromiseACB, [trackInfoPromise]);
-
-    // Objects to save tracks from Spotify in
-    let tracks = {}; // final tracklist
-    let trackIDs = []; // keep track of ids when filtering
-    let trackInformation = []; // info includes artist, genre etc
-    let trackAudioFeatures = []; // info includes tempo, loudness etc
-
-    
-    useEffect(onMountedACB, []);
 
     return (
         <div>
@@ -67,85 +54,90 @@ function Loading(props) {
         </div>
     );
 
-    function onMountedACB() {
-        // create and save generated list from source
-        /* 
-        * get list of ids from source
-        * get audio features for those ids
-        * filter ids based on audiofeatures
-        * 
-        * get trackinformation based on filtered ids
-        * filter genre and excluded artists
-        * create final playlist with a mix of wanted and neutral artists
-        */
+    /**
+     * useEffect callbacks
+     */
 
-        setTrackIDsFromSource(); // TODO
+    function onMountedACB() {
+
+        /* FLOW STARTING HERE
+         * get list of ids from source (API)
+         * get audio features for those ids (API)
+         * filter ids based on audiofeatures
+         * get trackinformation based on filtered ids (API)
+         * filter genre and excluded artists
+         * create final playlist with a mix of wanted and neutral artists
+         */
+
+        // set trackids from source
+        if (props.model.source) { 
+            console.log("about to resolve gettracksplaylist");
+            // get tracks from provided source URL
+            resolvePromise(getTracksPlaylist(props.model.source), sourceTracksPromise, setSourceTracksPromiseState);
+            
+        } else { 
+            console.log("about to resolve getsavedtracks");
+            // get from saved songs
+            resolvePromise(getSavedTracks(), sourceTracksPromise, setSourceTracksPromiseState);
+        }    
     }
 
-    function onResolveTrackIDPromiseACB() {
-        if (trackIDPromise.data) {
-            let tracksFromSource = trackIDPromise.data;
-            let trackIDs = tracksFromSource.map(extractIdACB);
+    function onResolveSourceTracksPromiseACB() {
+        console.log("in onResolveTrackIDPromiseACB");
+        
+        function extractIdACB (element) {
+            return element.track.id;
+        }
 
-             // TODO
-            // should use trackIDs to set trackAudioFeatures
-            // getTracksParams(idList), takes an array of track ids in string format
-            //resolvePromise(getTrackAudioFeatures(trackIDs), )
+        if (sourceTracksPromise.data != null) {
+            let tracksFromSource = sourceTracksPromise.data;
+            let trackIDs = [...tracksFromSource].map(extractIdACB);
+
+            console.log("sourceTracksPromise.data", tracksFromSource);
+            console.log("ids", trackIDs);
+            // get track audio features from the ids
+            resolvePromise(getAllTracksParams(trackIDs), audioFeaturesPromise, setAudioFeaturesPromiseState)
         } 
+    }
+
+    function onResolveAudioFeaturesPromiseACB() {
+        console.log("in onResolveAudioFeaturesPromiseACB");
 
         function extractIdACB (element) {
             return element.id;
         }
-    }
-
-    function onResolveAudioFeaturesPromiseACB() {
-        filterOnAudioFeatParams(); // DONE
-        getTracksFromFilteredIDs(); // TODO
+        
+        if (audioFeaturesPromise.data != null) {
+            let tracksWithAudioFeatures = audioFeaturesPromise.data;
+            console.log("audioFeaturesPromise.data", tracksWithAudioFeatures);
+            let filteredTracks = filterOnAudioFeatParams(tracksWithAudioFeatures);
+            console.log("filtered on audio feature params", filteredTracks);
+            let trackIDs = filteredTracks.map(extractIdACB);
+    
+            console.log("about to resolve trackinfo", trackIDs);
+            // get track info from ids that are left
+            resolvePromise(getAllTracks(trackIDs), trackInfoPromise, setTrackInfoPromiseState);
+        }
     }
 
     function oneResolveTrackInfoStatePromiseACB() {
-        filterOnGenreAndExclArtist(); // DONE
-        setTracksBasedOnIncludedArtists(); // DONE
+        console.log("in oneResolveTrackInfoStatePromiseACB");
 
-        setNewGenerated(); // DONE
+        if (trackInfoPromise.data != null) {
+            let tracksWithInfo = trackInfoPromise.data;
+            console.log("trackInfoPromise.data", trackInfoPromise.data);
 
-        //loading done
-        setloadingDone(true);
-    }
+            console.log("filter on genre and artists");
+            let filteredTracks = filterOnGenreAndExclArtist(tracksWithInfo);
 
+            console.log("filter by included artist logic");
+            let finalTrackList = setTracksBasedOnIncludedArtists(filteredTracks);
 
-    /**
-     * API-related
-     */
+            setNewGenerated(finalTrackList); 
 
-    // Returns 
-    function setTrackIDsFromSource() {
-        if (props.model.source) { 
-            // get tracks from provided source URL
-            console.log("getTracksplaylist:", getTracksPlaylist);
-            resolvePromise(getTracksPlaylist(props.model.source), trackIDPromise, setTrackIDPromiseState);
-            
-        } else { 
-            // get from saved songs
-            resolvePromise(getSavedTracks());
-        }    
-    }
-
-    // TODO maybe redundant, if so delete
-    function getTrackAudioFeatures() {
-        // TODO
-        // should use trackIDs to set trackAudioFeatures
-        // getTracksParams(idList), takes an array of track ids in string format
-
-        // temp:
-        trackAudioFeatures = fixedFeatures;
-    }
-
-    function getTracksFromFilteredIDs() {
-        // TODO
-        // should use trackIDs to set trackInformation
-        // getAllTracks(idList)
-        trackInformation = fixedPlaylist.tracks;
+            //loading done
+            setloadingDone(true);
+        }
     }
 
 
@@ -163,7 +155,7 @@ function Loading(props) {
      * 
      * Updates trackIDs to only include trackIDs left in trackAudioFeatures
      */
-    function filterOnAudioFeatParams() {
+    function filterOnAudioFeatParams(tracksWithAudioFeatures) {
         function chosenParamsACB(track) {
             // Our decided thresholds
             const danceMinValue = 0.75;
@@ -198,7 +190,7 @@ function Loading(props) {
             return track.id;
         }
 
-        trackIDs = trackAudioFeatures.filter(chosenParamsACB).map(extractTrackIDsACB);
+        return tracksWithAudioFeatures.filter(chosenParamsACB).map(extractTrackIDsACB);
     }
 
     /** 
@@ -206,7 +198,7 @@ function Loading(props) {
      * - genres
      * - excluded artists
      */
-    function filterOnGenreAndExclArtist() {
+    function filterOnGenreAndExclArtist(tracksWithInfo) {
         // return false if artist is unwanted. 
         function markUnwantedArtistsACB(artist) {
             if (props.model.excludedArtists.includes(artist))
@@ -234,17 +226,17 @@ function Loading(props) {
 
             return (!trackContainsUnwantedArtist && trackContainsWantedGenre);
         }
-        console.log("set trackinformation to filtered on genre and artists");
-        trackInformation = trackInformation.filter(filterGenreAndArtistACB);
+
+        return tracksWithInfo.filter(filterGenreAndArtistACB);
     }
 
-    function setTracksBasedOnIncludedArtists() {
+    function setTracksBasedOnIncludedArtists(filteredTracks) {
         
-        let wantedTracks = createListOfWantedArtistsTracks();
+        let wantedTracks = createListOfWantedArtistsTracks(filteredTracks);
         
         // if list with included artists has < 50 tracks, add from other list so that we have 50. Scramble and return.
         if (wantedTracks.length <= 50) {
-            let additionalAcceptableTracks= createListOfAdditionalAcceptableTracks(wantedTracks);
+            let additionalAcceptableTracks= createListOfAdditionalAcceptableTracks(filteredTracks, wantedTracks);
             // plocka ut diffen från additionalAcceptableTracks, lägg till i wantedtracks
             const diff = 50 - wantedTracks.length;
                 if (additionalAcceptableTracks.length > diff) {
@@ -260,13 +252,13 @@ function Loading(props) {
             wantedTracks = [...wantedTracks].slice(49);
         }
 
-        trackInformation = wantedTracks;
+        return wantedTracks;
     }
 
     /**
      * Create a scrambled list of tracks from wanted artists with a maximum of 3 songs from each wanted artist
      */
-    function createListOfWantedArtistsTracks() {
+    function createListOfWantedArtistsTracks(filteredTracks) {
         function markWantedArtistsACB(artist) {
             if (props.model.includedArtists.includes(artist))
                 return true;
@@ -311,7 +303,7 @@ function Loading(props) {
         }
 
         // Extract only wanted artists
-        let onlyWantedArtistsTracks = [...trackInformation].filter(filterOnWantedArtistACB);
+        let onlyWantedArtistsTracks = [...filteredTracks].filter(filterOnWantedArtistACB);
         // Scramble the list
         let scrambledOnlyWanted = scramblePlaylist(onlyWantedArtistsTracks);
         // Create counter for how many song we have looked at so far from each wanted artist
@@ -325,13 +317,13 @@ function Loading(props) {
     /**
      * Create a list of tracks with all acceptable tracks except for given already selected tracks
      */
-    function createListOfAdditionalAcceptableTracks(alreadySelected) {
+    function createListOfAdditionalAcceptableTracks(filteredTracks, alreadySelected) {
         function removeAlreadySelectedACB(track) {
             // if not in selected, it should be in our list
             return (!alreadySelected.includes(track))
         }
 
-        return [...trackInformation].filter(removeAlreadySelectedACB);
+        return [...filteredTracks].filter(removeAlreadySelectedACB);
     }
 
     function scramblePlaylist(playlist) {
@@ -339,7 +331,7 @@ function Loading(props) {
         return [...playlist].sort((a, b) => 0.5 - Math.random());
     }
 
-    function setNewGenerated() {
+    function setNewGenerated(finalTrackList) {
         const newGenerated = {};
         
         // Set firebasekey based on the current highest key
@@ -351,7 +343,7 @@ function Loading(props) {
             newGenerated.firebaseKey = 0;
         }
 
-        newGenerated.tracks = trackInformation; //fixedPlaylist.tracks;
+        newGenerated.tracks = finalTrackList; //fixedPlaylist.tracks;
         newGenerated.playlistName = 'Playlist #' + newGenerated.firebaseKey;
 
         props.model.addToPrevPlaylists({playlistName:newGenerated.playlistName, firebaseKey:newGenerated.firebaseKey}); 

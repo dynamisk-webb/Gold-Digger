@@ -84,7 +84,7 @@ function getAllTracks(idlist) { // Gets all tracks from a id list
   });
 }
 
-function getTrackParams(id) {  // Gets a tracks audio parameter
+function getTrackParams(id) { // Gets a tracks audio parameter
   return generalAPI('/audio-features/' + id).then(trackParamsToFormatCB);
 }
 
