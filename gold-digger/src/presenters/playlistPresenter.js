@@ -36,9 +36,11 @@ function Playlist (props) {
     }
 
     // rerender on state change
-    function notifyACB() {
+    function notifyACB(payload={}) {
+      if (!payload.exclusivelyForPersistence) {
         forceReRender({});
         props.model.debugModelState("/playlist rerender");
+      }
     }
 
     let playlistName = props.model.generated.playlistName;
@@ -116,6 +118,10 @@ function removeTrackACB(id) {
   // Let the user know they have unsaved changes
   setUnsavedChangesState(true);
 
+  // Persist change without triggering rerender
+  props.model.removeTrack(id, true)
+
+  // Rerender based on local change
   notifyACB();
 }
 
@@ -133,7 +139,23 @@ function retrieveTrackACB(){
   
   setChangesState(changes);
 
+  // Rerender based on local change
   notifyACB();
+
+  // Persist retrieved songs without triggering rerender
+  let retrievedTracks = [...tracks].filter(removeRemovedCB);
+  retrievedTracks = [...retrievedTracks].map(removeInclusionStatusCB);
+  props.model.setGenerated({...props.model.generated, tracks:retrievedTracks}, false, true);
+
+  function removeRemovedCB(item) {
+    return item.included;
+  }
+
+  function removeInclusionStatusCB(item) {
+    console.log(item.track);
+    return {track: {album:item.track.album, artists:item.track.artists, id:item.track.id, name:item.track.name, href:item.track.href}};
+  }
+
 }
 
   /* Event: onInput set name of generated list */
