@@ -38,6 +38,7 @@ function modelParamsToPersistence(model){
 }
 
 function generatedListToPersistence(model){
+    //console.log("update whole object");
     return {generated:model.generated};
 }
 
@@ -97,7 +98,8 @@ function persistenceToModelParams(persistedData, model) {
 function persistenceToGeneratedList(persistedData, model) {
     if(persistedData !== null) {
         if (persistedData.generated) {
-            model.generated = persistedData.generated;  
+            //console.log("tracks: ", persistedData.generated.tracks); 
+             model.setGenerated(persistedData.generated, true); 
         } else {
             model.generated = null;
         }
@@ -154,8 +156,10 @@ function firebaseModelPromise(model) {
     // (eg creation, name change, removed track)
     function obsGeneratedListACB(payload){
         if (payload.key && payload.param) {
-            if(payload.key === "modelParams" && payload.param === "generated") {
-                set(ref(db, userPATH+"lists/"+"generatedList_" + model.generated.firebaseKey), generatedListToPersistence(model));
+            if (!payload.updateFromPersistence && !payload.localChange) { 
+                if(payload.key === "modelParams" && payload.param === "generated") {
+                    set(ref(db, userPATH+"lists/"+"generatedList_" + model.generated.firebaseKey), generatedListToPersistence(model));
+                }
             }
         }
     }

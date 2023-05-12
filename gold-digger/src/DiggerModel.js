@@ -84,20 +84,32 @@ class DiggerModel{
         }
     }
 
-    setGenerated(generated) { // Sets generated playlist
+    setGenerated(generated, updateFromPersistence=false) { // Sets generated playlist
         this.generated = generated;
-        console.log("in setGenerated");
-        this.notifyObservers({key:"modelParams", param:"generated", specs:"newList"});
+        if (updateFromPersistence) {
+            this.notifyObservers({key:"modelParams", param:"generated", specs:"wholeObject", updateFromPersistence});
+        } else {
+            this.notifyObservers({key:"modelParams", param:"generated", specs:"wholeObject"});
+        }
     }
 
-    setGeneratedName(name) { // Sets name of current generated playlist
+    setGeneratedName(name, localChange=false) { // Sets name of current generated playlist
         this.generated.playlistName = name;
-        this.notifyObservers({key:"modelParams", param:"generated", specs:"name", firebaseKey:this.generated.firebaseKey});
+        if (localChange) {
+            this.notifyObservers({key:"modelParams", param:"generated", specs:"name", firebaseKey:this.generated.firebaseKey, localChange});
+        } else {
+            this.notifyObservers({key:"modelParams", param:"generated", specs:"name", firebaseKey:this.generated.firebaseKey});
+        }
     }
 
-    setGeneratedFirebaseKey(firebaseKey) { // Sets key of current generated playlist
+    setGeneratedFirebaseKey(firebaseKey, localChange=false) { // Sets key of current generated playlist
         this.generated.firebaseKey = firebaseKey;
-        this.notifyObservers({key:"modelParams", param:"generated", specs:"firebaseKey"});
+        if (localChange) {
+            this.notifyObservers({key:"modelParams", param:"generated", specs:"firebaseKey", firebaseKey:this.generated.firebaseKey, localChange});
+        } else {
+            this.notifyObservers({key:"modelParams", param:"generated", specs:"firebaseKey"});
+        }
+        
     }
 
     setPrevName(name) {   // Sets name of previous playlist by name
@@ -196,6 +208,11 @@ class DiggerModel{
         this.instrumentalness = {min: 0, max: 100};
         this.danceable = false;
         this.acoustic = false;
+        // TODO notify observers with relevant params
+    }
+
+    resetLocalCurrentGenerated() { // should not call notifyObservers, only for local resets
+        this.generated =  {playlistName: 'Default playlist', playlistId: null, firebaseKey: null, tracks: []}
     }
 
     /**
