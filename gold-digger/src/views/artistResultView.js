@@ -31,6 +31,12 @@ function ArtistResultView(props){
 
     function getArtistACB(result){
       
+        function renderImg(){
+          if(result.images[0]){
+            return <img src={result.images[0].url} id="artistImg"></img>
+          } else return <img src={artistImg} id="artistImg"></img>
+        }
+
         function handleChange(evt){
             props.setExcludeInclude(result.id, evt.target.value);
         }
@@ -38,7 +44,7 @@ function ArtistResultView(props){
         // TODO: add buttons to include/exclude artists
         return (
             <div id="artistResult" key={result.name}>
-                <img src={result.images[0].url} id="artistImg"></img>
+                {renderImg()}
                 <p id="artistName">{result.name}</p>
                 <div id="includeExcludeButtons"> 
                     <FormControl>
