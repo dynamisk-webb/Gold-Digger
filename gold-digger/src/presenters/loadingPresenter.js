@@ -50,7 +50,7 @@ function Loading(props) {
     return (
         <div>
             <LoadingView loadingState={loadingDone} viewPlaylist={viewPlaylistACB}/>
-            <AudioPlayer play={true} tracks={["spotify:track:0hl8k492sfcfLQudNctEiR"]}/>
+            <AudioPlayer play={false} tracks={["spotify:track:0hl8k492sfcfLQudNctEiR"]}/>
         </div>
     );
 
@@ -59,8 +59,7 @@ function Loading(props) {
      */
 
     function onMountedACB() {
-
-        /* FLOW STARTING HERE
+        /* FLOW OF GENERATION:
          * get list of ids from source (API)
          * get audio features for those ids (API)
          * filter ids based on audiofeatures

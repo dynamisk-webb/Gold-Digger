@@ -658,6 +658,57 @@ input[type=text] {
   margin-bottom: 30px;
 }
 
+#savePlaylistContainer{
+  
+  grid-row: 3 / span 1;
+  grid-column: 1 / span 1;
+  margin-left: 350px;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  margin-right: 40px;
+  display: flex;
+}
+
+#savePlaylistInfo{
+  top:0;
+  margin-left: 12px;
+  color:#828282;
+}
+
+
+#savePlaylistButton{
+
+  background-image: url("./../img/saveIcon.png"); /* 16px x 16px */
+  background-color:transparent;
+  background-repeat: no-repeat;  /* make the background image appear only once */
+  background-position: center; 
+  background-size: contain;
+
+  width: 50px;
+  height:50px;
+
+}
+
+#undoChangeButton{
+  grid-row: 3 / span 1;
+  grid-column: 1 / span 1;
+  margin-left: auto;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  margin-right: 40px;
+
+
+  background-image: url("./../img/undoIcon.png"); /* 16px x 16px */
+  background-color:transparent;
+  background-repeat: no-repeat;  /* make the background image appear only once */
+  background-position: center; 
+  background-size: contain;
+
+  width: 50px;
+  height:50px;
+
+}
+
 #trackContainer{
   grid-row: 4 / span 1;
   grid-column: 1 / span 1;

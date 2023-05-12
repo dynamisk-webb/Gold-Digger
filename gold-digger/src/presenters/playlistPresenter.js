@@ -20,6 +20,9 @@ function Playlist (props) {
     useEffect(addObserverOnCreatedACB, [])
     const [, forceReRender ]= useState(); 
     const [playTrackState, setPlayTrackState] = useState({play:false, offset:0, tracks:[]});
+    const [tracksState, setTracksState] = useState([]);
+    const [changesState, setChangesState] = useState([]);
+    const [unsavedChangesState, setUnsavedChangesState] = useState(false);
 
     function addObserverOnCreatedACB() {
 
@@ -39,7 +42,6 @@ function Playlist (props) {
     }
 
     let playlistName = props.model.generated.playlistName;
-    let tracks = props.model.generated.tracks;
 
     const [playlistPromiseState, setPlaylistPromiseState] = useState({});
     const [playlistCreatePromiseState, setPlaylistCreatePromiseState] = useState({});
@@ -48,7 +50,7 @@ function Playlist (props) {
 
     useEffect(() =>{
       if(playlistCreatePromiseState.data != null){
-        let ids = tracks.map(elem => elem.track.id);
+        let ids = tracksState.map(elem => elem.track.id);
         addAllTracks(playlistCreatePromiseState.data.id, ids);
         alert("Playlist was added to your account!");
       }
@@ -57,6 +59,7 @@ function Playlist (props) {
     useEffect(() =>{
       if(playlistPromiseState.data != null) {
         setPlayTrackState({play:false,offset:0,tracks:tracksToIDList()});
+        setTracksState(props.model.generated.tracks.map(obj => ({...obj, included:true})));
       }
     }, [playlistPromiseState]);
 
@@ -73,13 +76,17 @@ function Playlist (props) {
         {waitForFirebase(playlistPromiseState) ||
         <div>
           <PlaylistView
-            generatedTracks={tracks}
+            generatedTracks={tracksState}
             generatedName={playlistName}
             removeTrack={removeTrackACB}
+            retrieveTrack={retrieveTrackACB}
+            changesList={changesState}
             setAudioPlayerSong={setAudioPlayerSongACB}
             setPlaylistName={setPlaylistNameACB}
             savePlaylistToSpotify={savePlaylistToSpotifyACB}
             removePlaylist={removePlaylistACB}
+            updatePlaylist={updatePlaylistACB}
+            unsavedChanges={unsavedChangesState}
           ></PlaylistView>
           {!playTrackState.tracks.length || <AudioPlayer play={false} offset={playTrackState.offset} tracks={playTrackState.tracks}/>}
         </div>}
@@ -87,27 +94,64 @@ function Playlist (props) {
     );
     
   function tracksToIDList() {
-      const list = tracks.map((element => {
+      const list = tracksState.map((element => {
           return "spotify:track:" + element.track.id;
       }));
       return list;
   }
   
-    /* Event: onClick REMOVE /playlists/{playlist_id}/tracks */
-  function removeTrackACB(id) {
-    props.model.removeTrack(id);
-  }
+  
+  /* Event: onClick REMOVE /playlists/{playlist_id}/tracks */
+function removeTrackACB(id) {
+  let tracks = tracksState;
+  let foundIndex = tracks.findIndex(x => x.track.id == id);
+  tracks[foundIndex].included = false;
+  setTracksState(tracks);
+
+  // Update the changes list to keep track of removed tracks
+  let changes = changesState;
+  changes.push(tracks[foundIndex].track.id)
+  setChangesState(changes);
+
+  // Let the user know they have unsaved changes
+  setUnsavedChangesState(true);
+
+  notifyACB();
+}
+
+/* Event: onClick REVERT deletion*/
+function retrieveTrackACB(){
+  
+  let id = changesState[changesState.length - 1];
+  
+  let tracks = tracksState;
+  let foundIndex = tracks.findIndex(x => x.track.id == id);
+  tracks[foundIndex].included = true;
+  
+  let changes = changesState;
+  changes.pop();
+  
+  setChangesState(changes);
+
+  notifyACB();
+}
 
   /* Event: onInput set name of generated list */
   function setPlaylistNameACB(input) {
     props.model.setGeneratedName(input);
     props.model.setPrevName(input);
+    setUnsavedChangesState(true);
   }
 
   /* Event: onClick set audio player song */
   function setAudioPlayerSongACB(trackID) {
     const i = playTrackState.tracks.indexOf("spotify:track:"+trackID);
     setPlayTrackState({play:false,offset:i,tracks:tracksToIDList()});
+  }
+
+  /* Event: onClick UPDATE playlist*/
+  function updatePlaylistACB(){
+
   }
 
   function savePlaylistToSpotifyACB() {
