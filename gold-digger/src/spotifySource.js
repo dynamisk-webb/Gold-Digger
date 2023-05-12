@@ -94,7 +94,7 @@ function getAllTracks(idlist) { // Gets all tracks from a id list
   });
 }
 
-function getTrackParams(id) {  // Gets a tracks audio parameter
+function getTrackParams(id) { // Gets a tracks audio parameter
   return generalAPI('/audio-features/' + id).then(trackParamsToFormatCB);
 }
 
@@ -291,11 +291,22 @@ function fetchAllFromIDList(call, idlist) { // Uses Promise.all to call all prom
 }
 
 function artistToFormatCB(artist) { // Compress retrieved artist format to what we need
+  let genres = [];
+  let images = null;
+
+  if (artist.genres) {
+    genres = artist.genres;
+  }
+
+  if (artist.images) {
+    images = artist.images;
+  }
+
   return {
-    genres:artist.genres,
+    genres:genres,
     id:artist.id,
     name:artist.name,
-    images:artist.images
+    images:images
   }
 }
 

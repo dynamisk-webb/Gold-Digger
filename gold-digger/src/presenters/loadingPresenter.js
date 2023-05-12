@@ -2,16 +2,12 @@ import LoadingView from "../views/loadingView";
 import AudioPlayer from "../views/audioPlayView";
 
 import { useState, useEffect } from "react";
-import { getSavedTracks, getTracksParams, getTracksPlaylist, getAllTracks } from "../spotifySource.js";
+import { getSavedTracks, getAllTracksParams, getTracksPlaylist, getAllTracks } from "../spotifySource.js";
+import resolvePromise from "../resolvePromise.js";
 
 // temp import
 import fixedPlaylist from "../test/fixedList";
 import fixedFeatures from "../test/fixedFeatures";
-
-
-import { flushSync } from 'react-dom';
-import DiggerModel from "../DiggerModel";
-
 
 
 function Loading(props) {
@@ -37,19 +33,19 @@ function Loading(props) {
         //props.model.debugModelState("/loading rerender");
     }
 
-
     // state for visual feedback when loading is done
     const [loadingDone, setloadingDone] = useState(false);
 
-    // Objects to save tracks from Spotify in
-    let tracks = {}; // final tracklist
-    let trackIDs = []; // keep track of ids when filtering
-    let trackInformation = []; // info includes artist, genre etc
-    let trackAudioFeatures = []; // info includes tempo, loudness etc
-    let newGenerated = {};
+    // states for API calls (trackids, audiofeatures, trackinformation)
+    const [sourceTracksPromise, setSourceTracksPromiseState] = useState({});
+    const [audioFeaturesPromise, setAudioFeaturesPromiseState] = useState({});
+    const [trackInfoPromise, setTrackInfoPromiseState] = useState({});
 
-    
+    // useEffects for API calls
     useEffect(onMountedACB, []);
+    useEffect(onResolveSourceTracksPromiseACB, [sourceTracksPromise]);
+    useEffect(onResolveAudioFeaturesPromiseACB, [audioFeaturesPromise]);
+    useEffect(oneResolveTrackInfoStatePromiseACB, [trackInfoPromise]);
 
     return (
         <div>
@@ -58,63 +54,91 @@ function Loading(props) {
         </div>
     );
 
-    function onMountedACB() {
-
-        // create and save generated list from source
-        /* 
-        * get list of ids from source
-        * get audio features for those ids
-        * filter ids based on audiofeatures
-        * 
-        * get trackinformation based on filtered ids
-        * filter genre and excluded artists
-        * create final playlist with a mix of wanted and neutral artists
-        */
-
-        getTrackIDsFromSource();
-        getTrackAudioFeatures();
-        filterOnAudioFeatParams();
-
-        getTracksFromFilteredIDs();
-        filterOnGenreAndExclArtist();
-        setTracksBasedOnIncludedArtists();
-
-        setNewGenerated();
-
-        //loading done
-        setloadingDone(true);
-    }
-
-
     /**
-     * API-related
+     * useEffect callbacks
      */
 
-    // Returns 
-    function getTrackIDsFromSource() {
-        if (props.model.source) { // get tracks from provided source
-            // TODO implement
-            // getTracksPlaylist
-        } else { // get from saved songs
-            // TODO implement
-            // getSavedTracks
+    function onMountedACB() {
+        /* FLOW OF GENERATION:
+         * get list of ids from source (API)
+         * get audio features for those ids (API)
+         * filter ids based on audiofeatures
+         * get trackinformation based on filtered ids (API)
+         * filter genre and excluded artists
+         * create final playlist with a mix of wanted and neutral artists
+         */
+
+        // set trackids from source
+        if (props.model.source) { 
+            console.log("about to resolve gettracksplaylist");
+            // get tracks from provided source URL
+            resolvePromise(getTracksPlaylist(props.model.source), sourceTracksPromise, setSourceTracksPromiseState);
+            
+        } else { 
+            console.log("about to resolve getsavedtracks");
+            // get from saved songs
+            resolvePromise(getSavedTracks(), sourceTracksPromise, setSourceTracksPromiseState);
         }    
     }
 
-    function getTrackAudioFeatures() {
-        // TODO
-        // should use trackIDs to set trackAudioFeatures
-        // getTracksParams(idList), takes an array of track ids in string format
+    function onResolveSourceTracksPromiseACB() {
+        console.log("in onResolveTrackIDPromiseACB");
+        
+        function extractIdACB (element) {
+            return element.track.id;
+        }
 
-        // temp:
-        trackAudioFeatures = fixedFeatures;
+        if (sourceTracksPromise.data != null) {
+            let tracksFromSource = sourceTracksPromise.data;
+            let trackIDs = [...tracksFromSource].map(extractIdACB);
+
+            console.log("sourceTracksPromise.data", tracksFromSource);
+            console.log("ids", trackIDs);
+            // get track audio features from the ids
+            resolvePromise(getAllTracksParams(trackIDs), audioFeaturesPromise, setAudioFeaturesPromiseState)
+        } 
     }
 
-    function getTracksFromFilteredIDs() {
-        // TODO
-        // should use trackIDs to set trackInformation
-        // getAllTracks(idList)
-        trackInformation = fixedPlaylist.tracks;
+    function onResolveAudioFeaturesPromiseACB() {
+        console.log("in onResolveAudioFeaturesPromiseACB");
+
+        function extractIdACB (element) {
+            return element.id;
+        }
+        
+        if (audioFeaturesPromise.data != null) {
+            let tracksWithAudioFeatures = audioFeaturesPromise.data;
+            
+            console.log("audioFeaturesPromise.data", tracksWithAudioFeatures);
+            let filteredTracks = filterOnAudioFeatParams(tracksWithAudioFeatures);
+            
+            console.log("filtered on audio feature params", filteredTracks);
+            let trackIDs = filteredTracks.map(extractIdACB);
+    
+            console.log("about to resolve trackinfo", trackIDs);
+            // get track info from ids that are left
+            resolvePromise(getAllTracks(trackIDs), trackInfoPromise, setTrackInfoPromiseState);
+        }
+    }
+
+    function oneResolveTrackInfoStatePromiseACB() {
+        console.log("in oneResolveTrackInfoStatePromiseACB");
+
+        if (trackInfoPromise.data != null) {
+            let tracksWithInfo = trackInfoPromise.data;
+            console.log("trackInfoPromise.data", trackInfoPromise.data);
+
+            console.log("filter on genre and artists");
+            let filteredTracks = filterOnGenreAndExclArtist(tracksWithInfo);
+
+            console.log("filter by included artist logic");
+            let finalTrackList = setTracksBasedOnIncludedArtists(filteredTracks);
+
+            setNewGenerated(finalTrackList); 
+
+            //loading done
+            setloadingDone(true);
+        }
     }
 
 
@@ -130,44 +154,48 @@ function Loading(props) {
      * - danceability (switch, decide threshhold)    0.75<
      * - acousticness threshhold)     0.75<
      * 
-     * Updates trackIDs to only include trackIDs left in trackAudioFeatures
+     * returns list of tracks filter from these params
      */
-    function filterOnAudioFeatParams() {
+    function filterOnAudioFeatParams(tracksWithAudioFeatures) {
         function chosenParamsACB(track) {
             // Our decided thresholds
-            const danceMinValue = 0.75;
-            const acousticMinValue = 0.75;
+            let includeBasedOnTempo =
+                (track.tempo >= props.model.tempo.min &&
+                 track.tempo <= props.model.tempo.max);
+            let includeBasedOnLoudness =
+                (track.loudness >= props.model.loudness.min &&
+                 track.loudness <= props.model.loudness.max);
+            let includeBasedOnInstrumentalness =
+                (track.instrumentalness >= props.model.instrumentalness.min/100 &&
+                 track.instrumentalness <= props.model.instrumentalness.max/100); // 0-1 in API, % in model
 
             let includeBasedOnAcousticness = true;
             let includeBasedOnDanceability = true;
 
+            const danceMinValue = 0.75;
+            const acousticMinValue = 0.75;
+
             // If user wants a danceable list, only include danceable songs. Else, include full range. 
+            // IMPORTANT danceability in FixedFeatures, danceable in model
             if (props.model.danceable) {
                 includeBasedOnDanceability = (track.danceability >= danceMinValue);
             }
 
             // If user wants an acoustic list, only include such songs. Else, include full range. 
+            // IMPORTANT acousticness in FixedFeatures, acoustic in model
             if (props.model.acoustic) {
                 includeBasedOnAcousticness = (track.acousticness >= acousticMinValue);
             }
-            
-            // FixedFeatures on the left, compare with values from Diggermodel on the right.
-            // important: danceability, acousticness in FixedFeatures
-            //            danceable, acoustic in DiggerModel
-            return (track.tempo >= props.model.tempo.min &&
-                    track.tempo <= props.model.tempo.min &&
-                    track.loudness >= props.model.loudness.min &&
-                    track.loudness <= props.model.louness.max &&
-                    track.instrumentalness >= props.model.instrumentalness.min/100 && // 0-1 in API, % in model
-                    track.instrumentalness <= props.model.instrumentalness.max/100 &&
-                    includeBasedOnDanceability && includeBasedOnAcousticness);
+
+            console.log(includeBasedOnTempo, includeBasedOnLoudness, includeBasedOnInstrumentalness, includeBasedOnDanceability, includeBasedOnAcousticness);
+            return (includeBasedOnTempo &&
+                    includeBasedOnLoudness &&
+                    includeBasedOnInstrumentalness &&
+                    includeBasedOnDanceability &&
+                    includeBasedOnAcousticness);
         }
 
-        function extractTrackIDsACB(track) {
-            return track.id;
-        }
-
-        trackIDs = trackAudioFeatures.filter(chosenParamsACB).map(extractTrackIDsACB);
+        return tracksWithAudioFeatures.filter(chosenParamsACB);
     }
 
     /** 
@@ -175,7 +203,7 @@ function Loading(props) {
      * - genres
      * - excluded artists
      */
-    function filterOnGenreAndExclArtist() {
+    function filterOnGenreAndExclArtist(tracksWithInfo) {
         // return false if artist is unwanted. 
         function markUnwantedArtistsACB(artist) {
             if (props.model.excludedArtists.includes(artist))
@@ -203,32 +231,40 @@ function Loading(props) {
 
             return (!trackContainsUnwantedArtist && trackContainsWantedGenre);
         }
-        
-        trackInformation = trackInformation.filter(filterGenreAndArtistACB);
+
+        return tracksWithInfo.filter(filterGenreAndArtistACB);
     }
 
-    function setTracksBasedOnIncludedArtists() {
-        /*
-        create the following lists based on (the now filtered) trackInformation
-        * a list with only tracks from wanted artists, max 3 tracks from each wanted artist
-        * a list with only tracks from neutral artists and wanted (but not those in the previous list), scrambled (excluded artist should have been removed in filterTracksNotMatchingParams)
-        */
-        let wantedTracks = createListOfWantedArtists();
-        let additionalAcceptableTracks= createListOfAdditionalAcceptableTracks(wantedTracks);
+    function setTracksBasedOnIncludedArtists(filteredTracks) {
+        
+        let wantedTracks = createListOfWantedArtistsTracks(filteredTracks);
+        console.log("wanted tracks", wantedTracks);
+        
+        // if list with included artists has < 50 tracks, add from other list so that we have 50. Scramble and return.
+        if (wantedTracks.length <= 50) {
+            let additionalAcceptableTracks= createListOfAdditionalAcceptableTracks(filteredTracks, wantedTracks);
+            // plocka ut diffen från additionalAcceptableTracks, lägg till i wantedtracks
+            const diff = 50 - wantedTracks.length;
+                if (additionalAcceptableTracks.length > diff) {
+                    additionalAcceptableTracks = scramblePlaylist(additionalAcceptableTracks);
+                    additionalAcceptableTracks = [...additionalAcceptableTracks].slice(diff-1);
+                }
+                
+                wantedTracks.push(additionalAcceptableTracks);
+                wantedTracks = scramblePlaylist(wantedTracks);
+                
+        } else {
+            // cut the saved tracks at 50
+            wantedTracks = [...wantedTracks].slice(49);
+        }
 
-        /*
-        if list with included artists has > 50 tracks, set tracks to the 50 first
-        if list with included artists has < 50 tracks, add from other list so that we have 50. Scramble and return.
-        */
-       // TODO
-
-       
+        return wantedTracks;
     }
 
     /**
-     * Create a list of tracks from wanted artists with a maximum of 3 songs from each wanted artist
+     * Create a scrambled list of tracks from wanted artists with a maximum of 3 songs from each wanted artist
      */
-    function createListOfWantedArtists() {
+    function createListOfWantedArtistsTracks(filteredTracks) {
         function markWantedArtistsACB(artist) {
             if (props.model.includedArtists.includes(artist))
                 return true;
@@ -273,7 +309,7 @@ function Loading(props) {
         }
 
         // Extract only wanted artists
-        let onlyWantedArtistsTracks = [...trackInformation].filter(filterOnWantedArtistACB);
+        let onlyWantedArtistsTracks = [...filteredTracks].filter(filterOnWantedArtistACB);
         // Scramble the list
         let scrambledOnlyWanted = scramblePlaylist(onlyWantedArtistsTracks);
         // Create counter for how many song we have looked at so far from each wanted artist
@@ -287,13 +323,13 @@ function Loading(props) {
     /**
      * Create a list of tracks with all acceptable tracks except for given already selected tracks
      */
-    function createListOfAdditionalAcceptableTracks(alreadySelected) {
+    function createListOfAdditionalAcceptableTracks(filteredTracks, alreadySelected) {
         function removeAlreadySelectedACB(track) {
             // if not in selected, it should be in our list
             return (!alreadySelected.includes(track))
         }
 
-        return [...trackInformation].filter(removeAlreadySelectedACB);
+        return [...filteredTracks].filter(removeAlreadySelectedACB);
     }
 
     function scramblePlaylist(playlist) {
@@ -301,7 +337,7 @@ function Loading(props) {
         return [...playlist].sort((a, b) => 0.5 - Math.random());
     }
 
-    function setNewGenerated() {
+    function setNewGenerated(finalTrackList) {
         const newGenerated = {};
         
         // Set firebasekey based on the current highest key
@@ -313,7 +349,8 @@ function Loading(props) {
             newGenerated.firebaseKey = 0;
         }
 
-        newGenerated.tracks = fixedPlaylist.tracks; // TODO set to actual tracks
+        console.log(finalTrackList);
+        newGenerated.tracks = finalTrackList[0];
         newGenerated.playlistName = 'Playlist #' + newGenerated.firebaseKey;
 
         props.model.addToPrevPlaylists({playlistName:newGenerated.playlistName, firebaseKey:newGenerated.firebaseKey}); 
