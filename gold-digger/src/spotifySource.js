@@ -231,6 +231,7 @@ async function generalAPI(endpoint, method="GET", body=null) {
         body:body
       });
       
+      //console.log("Response from fetch: ", response);
         if (!response.ok) {
           throw new Error('HTTP status ' + response.status);
         } 
