@@ -216,10 +216,12 @@ function Loading(props) {
         let additionalAcceptableTracks= createListOfAdditionalAcceptableTracks(wantedTracks);
 
         /*
-        if list with included artists has > 50 tracks, scramble and set tracks to the 50 first
+        if list with included artists has > 50 tracks, set tracks to the 50 first
         if list with included artists has < 50 tracks, add from other list so that we have 50. Scramble and return.
         */
        // TODO
+
+       
     }
 
     /**
@@ -285,13 +287,13 @@ function Loading(props) {
      * Create a list of tracks with all acceptable tracks except for given already selected tracks
      */
     function createListOfAdditionalAcceptableTracks(alreadySelected) {
-        // TODO
-        // trackInformation now is a list with only wanted and neutral tracks
-        // create copy of list but remove selected wanted tracks
+        function removeAlreadySelectedACB(track) {
+            // if not in selected, it should be in our list
+            return (!alreadySelected.includes(track))
+        }
 
-        // TODO return list of additional acceptable tracks
+        return [...trackInformation].filter(removeAlreadySelectedACB);
     }
-
 
     function scramblePlaylist(playlist) {
         // return a scrambled version of playlist
