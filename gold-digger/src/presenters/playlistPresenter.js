@@ -35,7 +35,7 @@ function Playlist (props) {
     // rerender on state change
     function notifyACB() {
         forceReRender({});
-        //props.model.debugModelState("/playlist rerender");
+        props.model.debugModelState("/playlist rerender");
     }
 
     let playlistName = props.model.generated.playlistName;

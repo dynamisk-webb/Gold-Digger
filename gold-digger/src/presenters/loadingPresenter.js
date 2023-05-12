@@ -195,7 +195,7 @@ function Loading(props) {
                     includeBasedOnDanceability &&
                     includeBasedOnAcousticness);
         }
-        
+
         return tracksWithAudioFeatures.filter(chosenParamsACB);
     }
 
@@ -239,6 +239,7 @@ function Loading(props) {
     function setTracksBasedOnIncludedArtists(filteredTracks) {
         
         let wantedTracks = createListOfWantedArtistsTracks(filteredTracks);
+        console.log("wanted tracks", wantedTracks);
         
         // if list with included artists has < 50 tracks, add from other list so that we have 50. Scramble and return.
         if (wantedTracks.length <= 50) {
@@ -349,7 +350,8 @@ function Loading(props) {
             newGenerated.firebaseKey = 0;
         }
 
-        newGenerated.tracks = finalTrackList; //fixedPlaylist.tracks;
+        console.log(finalTrackList);
+        newGenerated.tracks = finalTrackList[0];
         newGenerated.playlistName = 'Playlist #' + newGenerated.firebaseKey;
 
         props.model.addToPrevPlaylists({playlistName:newGenerated.playlistName, firebaseKey:newGenerated.firebaseKey}); 
