@@ -38,7 +38,7 @@ function Artists(props) {
     async function getArtistsACB() {
       let playlist = props.model.source; // TODO: is this the right way to get the playlist in here? 
       // Check if a saved playlist exists before getting the artists from it
-      if (playlist === "") {
+      if (!playlist) {  
         resolvePromise(getAllArtistsSaved(), promiseState, setState);
       }else {
         resolvePromise(getAllArtistsPlaylist(playlist), promiseState, setState);

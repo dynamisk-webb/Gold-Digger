@@ -14,15 +14,20 @@ async function getProfile() {
 /* GET-functions */
 function getSavedTracks() { // Get all of user's saved tracks
   const field = "?limit=50";
-  let tracks = [];
-  return generalAPI('/me/tracks' + field).then(filterACB);
-  
-  function filterACB(response) { 
-    tracks = tracks.concat(response.items.map(savedTrackToFormatCB));
-    if(response.next !== null) {  // If there is more to retrieve
-      return generalAPI(apiToEndpoint(response.next)).then(filterACB);
-    } else {
-      return tracks;
+  return generalAPI('/me/tracks' + field).then(getNextACB);
+
+  function getNextACB(response) {
+    const promises = [];
+
+    if(response.total > 0) {
+      for(let i = 0; i < (Math.ceil(response.total/50)-1); i++) {
+        const offset = (i+1)*50;
+        const field = "?limit=50&fields=items(track(album(id, images),artists(genres,id,name,images),name,id))" + "&offset=" + offset;
+        promises.push(generalAPI('/me/tracks' + field));
+      }
+      return Promise.all(promises).then((values) => {
+        return values.reduce((subArray, response) => subArray.concat(response.items.map(savedTrackToFormatCB)), response.items.map(savedTrackToFormatCB));
+      });
     }
   }
   
@@ -48,18 +53,23 @@ async function getPlaylistID(playlist) {  // Get id from playlist
 
 function getTracksPlaylist(playlist) {  // Get tracks from playlist
   const id = convertURLtoID(playlist);
-  const fields = "?limit=50&fields=next,items(track(album(id, images),artists(genres,id,name,images),name,id))"; // Adjust what is retrieved here
-  let tracks = [];
+  const fields = "?limit=50&fields=total,items(track(album(id, images),artists(genres,id,name,images),name,id))"; // Adjust what is retrieved here
   return generalAPI('/playlists/' + id + '/tracks' + fields).then(getNextACB);
 
   function getNextACB(response) {
-    tracks = tracks.concat(response.items);
-    if(response.next !== null) {  // If there is more to retrieve
-      return generalAPI(apiToEndpoint(response.next)).then(getNextACB);
-    } else {
-      return tracks;
+    const promises = [];
+
+    if(response.total > 0) {
+      for(let i = 0; i < (Math.ceil(response.total/50)-1); i++) {
+        const offset = (i+1)*50;
+        const field = "?limit=50&fields=items(track(album(id, images),artists(genres,id,name,images),name,id))" + "&offset=" + offset;
+        promises.push(generalAPI('/playlists/' + id + '/tracks' + field));
+      }
+      return Promise.all(promises).then((values) => {
+        return values.reduce((subArray, response) => subArray.concat(response.items), response.items);
+      });
     }
-  } 
+  }
 }
 
 function getTracks(idlist) {  // Gets maximum of 50 tracks from id list
@@ -125,7 +135,10 @@ function getAllArtistsPlaylist(playlist) {
   }).then((values) => { // Reduce the list to one
     return values.reduce((subArray, response) => {
       return subArray.concat(response.artists)}, []);
-  }).then((artists) => artists.map(artistToFormatCB));// Compress to important fields
+  }).then((artists) => artists.map(artistToFormatCB) // Compress to important fields
+  ).then((list) => {  // Sort
+    return list.sort((a,b) => a.name > b.name ? 1:-1);
+  });
 }
 
 function getAllArtistsSaved() {
@@ -134,7 +147,10 @@ function getAllArtistsSaved() {
   }).then((values) => { // Reduce the list to one
     return values.reduce((subArray, response) => {
       return subArray.concat(response.artists)}, []);
-  }).then((artists) => artists.map(artistToFormatCB));// Compress to important fields
+  }).then((artists) => artists.map(artistToFormatCB) // Compress to important fields
+  ).then((list) => {  // Sort
+    return list.sort((a,b) => a.name > b.name ? 1:-1);
+  });;
 }
 
 /* Search */
@@ -186,7 +202,7 @@ function addAllTracks(playlist, idlist) {
   let currentIds = [];
   let leftIds = idlist;
   if(idlist.length > 0) {
-    for(let i = 0; i < idlist.length/50; i++) {
+    for(let i = 0; i < Math.ceil(idlist.length/50); i++) {
       currentIds = leftIds.slice(0,50);
       leftIds = leftIds.slice(50);
       promises.push(addTracks(playlist, currentIds));
@@ -247,20 +263,17 @@ async function generalAPI(endpoint, method="GET", body=null) {
 
 // Help-functions
 function tracksToArtistList(tracks) { // Retrieve unique artist from list of tracks
-  const artistList = [];
-  const idlist = [];
+  const artistList = new Set([]);
   tracks.forEach((track) => {  
     const artists = track.track.artists;
     artists.forEach((artist) => { // Don't allow repeats
-      if(artistList.find(element => element.id === artist.id || element.name === artist.name)) {
+      if(artistList.has(artist.id)) {
         return;
       }
-      artistList.push({id:artist.id, name:artist.name});
-      idlist.push(artist.id);
+      artistList.add(artist.id);
     });
   });
-
-  return idlist;
+  return Array.from(artistList);
 }
 
 function fetchAllFromIDList(call, idlist) { // Uses Promise.all to call all promises concurrently
