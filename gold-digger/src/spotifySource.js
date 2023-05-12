@@ -105,7 +105,7 @@ async function getGenres() {  // Returns list of all genres
 }
 
 function getArtistsPlaylist(playlist) { // Returns list of all artists IDs in a playlist
-  const list = getTracksPlaylist(playlist).then(tracksToArtistList);;
+  const list = getTracksPlaylist(playlist).then(tracksToArtistList);
   return list;
 }
 
@@ -232,15 +232,14 @@ async function generalAPI(endpoint, method="GET", body=null) {
       });
       
       //console.log("Response from fetch: ", response);
-        if (!response.ok) {
-          throw new Error('HTTP status ' + response.status);
-        } 
-
+      if (response.ok) {
         if(method === "GET" || method === "POST")
           return await response.json();
-
+      } else {
+        throw new Error('HTTP status ' + response.status);
+      }
     } catch (err) {
-      console.log("Error " + err);
+      console.log(err);
       throw new Error(err);
     }
   }
@@ -249,15 +248,19 @@ async function generalAPI(endpoint, method="GET", body=null) {
 // Help-functions
 function tracksToArtistList(tracks) { // Retrieve unique artist from list of tracks
   const artistList = [];
+  const idlist = [];
   tracks.forEach((track) => {  
     const artists = track.track.artists;
     artists.forEach((artist) => { // Don't allow repeats
-      if(!artistList.find(element => element == artist.id))
-        artistList.push(artist.id);
+      if(artistList.find(element => element.id === artist.id || element.name === artist.name)) {
+        return;
+      }
+      artistList.push({id:artist.id, name:artist.name});
+      idlist.push(artist.id);
     });
   });
 
-  return artistList;
+  return idlist;
 }
 
 function fetchAllFromIDList(call, idlist) { // Uses Promise.all to call all promises concurrently
@@ -276,10 +279,10 @@ function fetchAllFromIDList(call, idlist) { // Uses Promise.all to call all prom
 
 function artistToFormatCB(artist) { // Compress retrieved artist format to what we need
   return {
-    genres: artist.genres,
-    id: artist.id,
-    name: artist.name,
-    images: artist.images
+    genres:artist.genres,
+    id:artist.id,
+    name:artist.name,
+    images:artist.images
   }
 }
 
