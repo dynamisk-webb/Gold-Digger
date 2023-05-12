@@ -881,7 +881,14 @@ input[type=text] {
   grid-column: 1/span 1;
   grid-row: 1/span 1;
   width: 95px;
+  border-radius: 50%;
 
+}
+
+#artistName{
+  font-size: large;
+  align-self: center;
+  margin-left: 20px;
 }
 
 #includeExcludeButtons{

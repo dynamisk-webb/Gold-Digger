@@ -30,7 +30,7 @@ function ArtistResultView(props){
     
 
     function getArtistACB(result){
-
+      
         function handleChange(evt){
             props.setExcludeInclude(result.id, evt.target.value);
         }
@@ -38,8 +38,8 @@ function ArtistResultView(props){
         // TODO: add buttons to include/exclude artists
         return (
             <div id="artistResult" key={result.name}>
-                <img src={artistImg} id="artistImg"></img>
-                <p>{result.name /*IDK IF THIS IS CORRECT*/}</p>
+                <img src={result.images[0].url} id="artistImg"></img>
+                <p id="artistName">{result.name}</p>
                 <div id="includeExcludeButtons"> 
                     <FormControl>
                     <FormLabel id="demo-radio-buttons-group-label">{result.title}</FormLabel>

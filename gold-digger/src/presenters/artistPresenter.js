@@ -40,10 +40,8 @@ function Artists(props) {
       // Check if a saved playlist exists before getting the artists from it
       if (playlist) {
         resolvePromise(getAllArtistsPlaylist(playlist), promiseState, setState);
-        console.log(promiseState.promise);
       }else {
         resolvePromise(getAllArtistsSaved(), promiseState, setState);
-        console.log(promiseState.promise);
       }
     }
     getArtistsACB();
@@ -67,7 +65,6 @@ function Artists(props) {
 
 
     if (promiseState.data != null) {     
-      console.log(promiseState.promise);
       // Transfer results from promiseState into artistList
       // Make use the values are unique
       let artistList = promiseState.data.map(obj => ({ ...obj, value: 'neutral' }));

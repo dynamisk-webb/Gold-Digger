@@ -27,7 +27,6 @@ function Layout(props) {
     }
 
     const [aboutOpen, setAboutOpen] = useState(false);
-    useEffect(() => console.log('test'),[aboutOpen, setAboutOpen]);
 
     return <div>
             <AboutUsView closeAbout={closeAboutACB}></AboutUsView>
