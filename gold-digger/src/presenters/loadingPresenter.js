@@ -207,15 +207,95 @@ function Loading(props) {
     }
 
     function setTracksBasedOnIncludedArtists() {
-        // TODO implement
         /*
         create the following lists based on (the now filtered) trackInformation
         * a list with only tracks from wanted artists, max 3 tracks from each wanted artist
-        * a list with only tracks from neutral artists, scrambled (excluded artist should have been removed in filterTracksNotMatchingParams)
-        
+        * a list with only tracks from neutral artists and wanted (but not those in the previous list), scrambled (excluded artist should have been removed in filterTracksNotMatchingParams)
+        */
+        let wantedTracks = createListOfWantedArtists();
+        let additionalAcceptableTracks= createListOfAdditionalAcceptableTracks(wantedTracks);
+
+        /*
         if list with included artists has > 50 tracks, scramble and set tracks to the 50 first
         if list with included artists has < 50 tracks, add from other list so that we have 50. Scramble and return.
         */
+       // TODO
+    }
+
+    /**
+     * Create a list of tracks from wanted artists with a maximum of 3 songs from each wanted artist
+     */
+    function createListOfWantedArtists() {
+        function markWantedArtistsACB(artist) {
+            if (props.model.includedArtists.includes(artist))
+                return true;
+            return false;
+        }
+
+        /**
+         * return true if artist is wanted and has been included less than 3 times
+         * return false if artist has been included to it's limit, or if it is not a wanted artist
+         */
+        function incrementArtistCounterACB(artist) {
+            if (props.model.includedArtists.includes(artist)) {
+                // find and update counter of artist
+                var foundIndex = artistCounter.findIndex(x => x.artisdID == artist.id);
+                var currentCount = artistCounter[foundIndex].counter;
+
+                if (currentCount < 3) {
+                    artistCounter[foundIndex] = {artistID:artist.id, counter:currentCount+1};
+                    return true;
+                } else {
+                    return false;
+                }
+            } else { // artist not explicitly wanted
+                return false; 
+            } 
+        }
+
+        function filterOnWantedArtistACB(currentTrack) {
+            let wantedStatusofArtists = currentTrack.track.artists.map(markWantedArtistsACB);
+            return wantedStatusofArtists.includes(true);
+        }
+
+        function createArtistCounterACB(artist) {
+            return {artistID:artist.id, counter:0};
+        }
+
+        function limitTracksFromSameArtistACB(currentTrack) {
+            // pick out all wanted artists collaborating on the song
+            let keepBasedOnCounter = currentTrack.track.artists.map(incrementArtistCounterACB);
+            // keep only if there exists a wanted artist on list that needs to be included
+            return (keepBasedOnCounter.contains(true)) 
+        }
+
+        // Extract only wanted artists
+        let onlyWantedArtistsTracks = [...trackInformation].filter(filterOnWantedArtistACB);
+        // Scramble the list
+        let scrambledOnlyWanted = scramblePlaylist(onlyWantedArtistsTracks);
+        // Create counter for how many song we have looked at so far from each wanted artist
+        let artistCounter = [...props.model.includedArtists].map(createArtistCounterACB);
+        // Filter so that max the first 3 songs of each artist remain
+        let limitedScrambledOnlyWanted = scrambledOnlyWanted.filter(limitTracksFromSameArtistACB);
+ 
+        return limitedScrambledOnlyWanted;
+    }
+
+    /**
+     * Create a list of tracks with all acceptable tracks except for given already selected tracks
+     */
+    function createListOfAdditionalAcceptableTracks(alreadySelected) {
+        // TODO
+        // trackInformation now is a list with only wanted and neutral tracks
+        // create copy of list but remove selected wanted tracks
+
+        // TODO return list of additional acceptable tracks
+    }
+
+
+    function scramblePlaylist(playlist) {
+        // return a scrambled version of playlist
+        return [...playlist].sort((a, b) => 0.5 - Math.random());
     }
 
     function setNewGenerated() {
