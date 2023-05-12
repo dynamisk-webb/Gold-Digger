@@ -63,6 +63,7 @@ function Playlist (props) {
     function onMountedACB(){
         // Resolve promise. Get all data in generated playlist from firebase, add it to model.
         resolvePromise (generatedListPromise (props.model, props.model.generated.firebaseKey), playlistPromiseState, setPlaylistPromiseState);
+        setPlayTrackState({play:true,tracks:tracksToIDList()});
         return;
     }
 
