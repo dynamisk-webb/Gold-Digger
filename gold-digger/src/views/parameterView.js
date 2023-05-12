@@ -118,13 +118,13 @@ function ParameterView(props){
             <Tooltip title={<p style={TooltipStyle}>Whether or not a song is suitable for dancing. If you choose danceable, you will only get danceable music. If not, you will get a mix.</p>}>
                 <h2 className='white'>Danceable</h2>
             </Tooltip>
-            <Switch checked={props.checked} onChange={onChangeDanceableACB}/>
+            <Switch checked={props.model.danceable} onChange={onChangeDanceableACB}/>
         </div>
         <div className = "parameterSwitch">
             <Tooltip title={<p style={TooltipStyle}>Whether or not a song only contains acoustic instruments. If you choose acoustic, you will only get acoustic music. If not, you will get a mix.</p>}>
                 <h2 className='white'>Acoustic</h2>
             </Tooltip>
-            <Switch checked={props.checked} onChange={onChangeAcousticACB}/>
+            <Switch checked={props.model.acoustic} onChange={onChangeAcousticACB}/>
         </div>
         
     </div>
