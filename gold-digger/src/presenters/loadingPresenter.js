@@ -34,7 +34,7 @@ function Loading(props) {
     }
 
     // state for visual feedback when loading is done
-    const [loadingDone, setloadingDone] = useState(false);
+    const [loadingState, setLoadingState] = useState("Getting tracks from source...");
 
     // states for API calls (trackids, audiofeatures, trackinformation)
     const [sourceTracksPromise, setSourceTracksPromiseState] = useState({});
@@ -49,7 +49,7 @@ function Loading(props) {
 
     return (
         <div>
-            <LoadingView loadingState={loadingDone} viewPlaylist={viewPlaylistACB}/>
+            <LoadingView loadingState={loadingState} viewPlaylist={viewPlaylistACB}/>
             <AudioPlayer play={false} tracks={["spotify:track:0hl8k492sfcfLQudNctEiR"]}/>
         </div>
     );
@@ -70,20 +70,16 @@ function Loading(props) {
 
         // set trackids from source
         if (props.model.source) { 
-            console.log("about to resolve gettracksplaylist");
             // get tracks from provided source URL
             resolvePromise(getTracksPlaylist(props.model.source), sourceTracksPromise, setSourceTracksPromiseState);
             
         } else { 
-            console.log("about to resolve getsavedtracks");
             // get from saved songs
             resolvePromise(getSavedTracks(), sourceTracksPromise, setSourceTracksPromiseState);
         }    
     }
 
-    function onResolveSourceTracksPromiseACB() {
-        console.log("in onResolveTrackIDPromiseACB");
-        
+    function onResolveSourceTracksPromiseACB() {        
         function extractIdACB (element) {
             return element.track.id;
         }
@@ -92,16 +88,13 @@ function Loading(props) {
             let tracksFromSource = sourceTracksPromise.data;
             let trackIDs = [...tracksFromSource].map(extractIdACB);
 
-            console.log("sourceTracksPromise.data", tracksFromSource);
-            console.log("ids", trackIDs);
+            setLoadingState("Getting audio features...");
             // get track audio features from the ids
             resolvePromise(getAllTracksParams(trackIDs), audioFeaturesPromise, setAudioFeaturesPromiseState)
         } 
     }
 
     function onResolveAudioFeaturesPromiseACB() {
-        console.log("in onResolveAudioFeaturesPromiseACB");
-
         function extractIdACB (element) {
             return element.id;
         }
@@ -109,35 +102,30 @@ function Loading(props) {
         if (audioFeaturesPromise.data != null) {
             let tracksWithAudioFeatures = audioFeaturesPromise.data;
             
-            console.log("audioFeaturesPromise.data", tracksWithAudioFeatures);
+            setLoadingState("Filtering on audio features...");
             let filteredTracks = filterOnAudioFeatParams(tracksWithAudioFeatures);
-            
-            console.log("filtered on audio feature params", filteredTracks);
             let trackIDs = filteredTracks.map(extractIdACB);
-    
-            console.log("about to resolve trackinfo", trackIDs);
+            
+            // TODO handle case of trackIDs.length = 0
+            setLoadingState("Getting additional information...");
             // get track info from ids that are left
             resolvePromise(getAllTracks(trackIDs), trackInfoPromise, setTrackInfoPromiseState);
         }
     }
 
     function oneResolveTrackInfoStatePromiseACB() {
-        console.log("in oneResolveTrackInfoStatePromiseACB");
-
         if (trackInfoPromise.data != null) {
             let tracksWithInfo = trackInfoPromise.data;
-            console.log("trackInfoPromise.data", trackInfoPromise.data);
 
-            console.log("filter on genre and artists");
+            setLoadingState("Filtering on genres and artists...");
             let filteredTracks = filterOnGenreAndExclArtist(tracksWithInfo);
 
-            console.log("filter by included artist logic");
+            console.log("Creating the final blend...");
             let finalTrackList = setTracksBasedOnIncludedArtists(filteredTracks);
 
             setNewGenerated(finalTrackList); 
 
-            //loading done
-            setloadingDone(true);
+            setLoadingState("Done!");
         }
     }
 
@@ -187,7 +175,6 @@ function Loading(props) {
                 includeBasedOnAcousticness = (track.acousticness >= acousticMinValue);
             }
 
-            console.log(includeBasedOnTempo, includeBasedOnLoudness, includeBasedOnInstrumentalness, includeBasedOnDanceability, includeBasedOnAcousticness);
             return (includeBasedOnTempo &&
                     includeBasedOnLoudness &&
                     includeBasedOnInstrumentalness &&
@@ -236,9 +223,7 @@ function Loading(props) {
     }
 
     function setTracksBasedOnIncludedArtists(filteredTracks) {
-        
         let wantedTracks = createListOfWantedArtistsTracks(filteredTracks);
-        console.log("wanted tracks", wantedTracks);
         
         // if list with included artists has < 50 tracks, add from other list so that we have 50. Scramble and return.
         if (wantedTracks.length <= 50) {
@@ -349,7 +334,6 @@ function Loading(props) {
             newGenerated.firebaseKey = 0;
         }
 
-        console.log(finalTrackList);
         newGenerated.tracks = finalTrackList[0];
         newGenerated.playlistName = 'Playlist #' + newGenerated.firebaseKey;
 

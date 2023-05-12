@@ -39,7 +39,7 @@ function Playlist (props) {
     function notifyACB(payload={}) {
       if (!payload.exclusivelyForPersistence) {
         forceReRender({});
-        props.model.debugModelState("/playlist rerender");
+        //props.model.debugModelState("/playlist rerender");
       }
     }
 
@@ -152,7 +152,6 @@ function retrieveTrackACB(){
   }
 
   function removeInclusionStatusCB(item) {
-    console.log(item.track);
     return {track: {album:item.track.album, artists:item.track.artists, id:item.track.id, name:item.track.name, href:item.track.href}};
   }
 
@@ -181,7 +180,6 @@ function retrieveTrackACB(){
   }
 
   function removePlaylistACB(){
-    console.log(props.model.generated.firebaseKey);
     props.model.removePrevPlaylist(props.model.generated.firebaseKey)
   }
 }

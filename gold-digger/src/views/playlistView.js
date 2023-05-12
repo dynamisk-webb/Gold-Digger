@@ -5,7 +5,6 @@ import albumImg from "./../img/genericAlbumIcon.png";
 function PlaylistView(props){
 
     const navigate = useNavigate(); // So React doesn't complain about React components
-    console.log(props.generatedTracks);
     return (<div id="playlistContainer">
         <p id="playlistText">Here's your playlist!</p>
         <input id="playlistTitle" type="text" placeholder={props.generatedName} maxLength="50" onChange={setPlaylistNameACB}></input>
