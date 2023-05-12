@@ -3,13 +3,9 @@ import { useEffect, useState } from "react";
 import { generatedListPromise } from "../firebaseModel.js";
 import resolvePromise from "../resolvePromise.js";
 import waitForFirebase from "../views/waitForFirebase.js";
-
-import { createPlaylist, addAllTracks } from "../spotifySource.js";
-
-// temp import
-import fixedList from "../test/fixedList.js";
 import AudioPlayer from "../views/audioPlayView.js";
 
+import { createPlaylist, addAllTracks } from "../spotifySource.js";
 
 /**
  * Sends a playlist containing all tracks to props.
@@ -23,7 +19,7 @@ function Playlist (props) {
     // add observer for notifications for state changes
     useEffect(addObserverOnCreatedACB, [])
     const [, forceReRender ]= useState(); 
-    const [playTrackState, setPlayTrackState] = useState({play:false, tracks:[]});
+    const [playTrackState, setPlayTrackState] = useState({play:false, offset:0, tracks:[]});
 
     function addObserverOnCreatedACB() {
 
@@ -58,12 +54,16 @@ function Playlist (props) {
       }
     }, [playlistCreatePromiseState, setPlaylistCreatePromiseState]);
 
+    useEffect(() =>{
+      if(playlistPromiseState.data != null) {
+        setPlayTrackState({play:false,offset:0,tracks:tracksToIDList()});
+      }
+    }, [playlistPromiseState]);
 
     // Lifecycle
     function onMountedACB(){
         // Resolve promise. Get all data in generated playlist from firebase, add it to model.
         resolvePromise (generatedListPromise (props.model, props.model.generated.firebaseKey), playlistPromiseState, setPlaylistPromiseState);
-        setPlayTrackState({play:true,tracks:tracksToIDList()});
         return;
     }
 
@@ -81,7 +81,7 @@ function Playlist (props) {
             savePlaylistToSpotify={savePlaylistToSpotifyACB}
             removePlaylist={removePlaylistACB}
           ></PlaylistView>
-          <AudioPlayer play={playTrackState.play} tracks={playTrackState.tracks}/>
+          {!playTrackState.tracks.length || <AudioPlayer play={false} offset={playTrackState.offset} tracks={playTrackState.tracks}/>}
         </div>}
       </div>
     );
@@ -106,12 +106,12 @@ function Playlist (props) {
 
   /* Event: onClick set audio player song */
   function setAudioPlayerSongACB(trackID) {
-    setPlayTrackState({play:true, tracks:["spotify:track:" + trackID]});
+    const i = playTrackState.tracks.indexOf("spotify:track:"+trackID);
+    setPlayTrackState({play:false,offset:i,tracks:tracksToIDList()});
   }
 
   function savePlaylistToSpotifyACB() {
     resolvePromise(createPlaylist(props.model.userid, playlistName), playlistCreatePromiseState, setPlaylistCreatePromiseState);
-    
   }
 
   function removePlaylistACB(){

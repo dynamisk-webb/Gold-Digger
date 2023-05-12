@@ -1,7 +1,10 @@
 import { useState } from 'react';
 import SpotifyPlayer from 'react-spotify-web-playback'
 /**
- * Code based on Spotify & react-spotify-web-playback by https://github.com/gilbarbara/react-spotify-web-playback
+ * Code based on Spotify 
+ * & 
+ * Third party component react-spotify-web-playback
+ * by https://github.com/gilbarbara/react-spotify-web-playback
  */
 
 function AudioPlayer(props){
@@ -16,6 +19,7 @@ function AudioPlayer(props){
             uris={props.tracks}
             hideAttribution={true}
             name="Gold Digger"
+            offset={props.offset}
             play={props.play}
             persistDeviceSelection={true}
             magnifySliderOnHover={true}
