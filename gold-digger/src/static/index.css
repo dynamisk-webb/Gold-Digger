@@ -63,10 +63,6 @@ button{
 
 }
 
-.MuiSlider-markLabel{
-  
-}
-
 input:focus { 
   outline: none !important;
   border-color: #FF6B35;
@@ -90,6 +86,30 @@ input:focus {
   color:#FF6B35;
   margin-left: 5vw;
   width:80%;
+}
+
+.sliderMarks{
+  display: flex;
+  flex-direction: row;
+}
+
+.leftSliderVal{
+  display: block;
+  left:0;
+  top:0;
+  padding:0;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.rightSliderVal{
+  text-align: right;
+  margin-left: auto; 
+margin-right: 0;
+top:0;
+padding:0;
+margin-top: 0;
+margin-bottom: 0;
 }
 
 .parameterTitle{
@@ -137,6 +157,11 @@ input:focus {
   margin-right: auto;
   margin-top: 100px;
   width: 10%;
+}
+
+.cutText{
+  text-overflow: ellipsis;
+  overflow: hidden; 
 }
 
 /* ------------------- IDs ------------------- */
@@ -532,6 +557,7 @@ input[type=text] {
 
 .MuiSlider-root{
   color: pink;
+  padding-bottom: 0;
 }
 
 .MuiSlider-colorPrimary{
@@ -571,7 +597,7 @@ input[type=text] {
 
 #playlistContainer{
   display:grid;
-  margin-left: 200px;
+  margin-left: 100px;
   margin-right: 200px;
   grid-template-columns: 1fr;
   grid-template-rows: 100px 100px 100px 1fr 100px;
@@ -630,14 +656,26 @@ input[type=text] {
 
 #trackInfo{
   display: grid;
-  grid-template-columns: 120px 1fr 1fr 50px 120px;
+  grid-template-columns: 80px 120px 1fr 1fr 50px 120px;
   grid-template-rows: 40px 40px 40px;
 
 }
 
-#trackImg{
+#playButton{
   grid-row: 1 / span 3;
   grid-column: 1 / span 1;
+  background-image: url("./../img/playIcon.png"); /* 16px x 16px */
+  background-color:transparent;
+  background-repeat: no-repeat;  /* make the background image appear only once */
+  background-position: center; 
+  background-size: contain;
+
+  margin: 30% 30% 30% 30%;
+}
+
+#trackImg{
+  grid-row: 1 / span 3;
+  grid-column: 2 / span 1;
   object-fit: contain;
   align-self: center;
   justify-self: center;
@@ -645,32 +683,32 @@ input[type=text] {
 
 #trackName{
   grid-row: 2 / span 1;
-  grid-column: 2 / span 1;
+  grid-column: 3 / span 1;
   align-self: center;
 }
 
 #trackArtist{
   grid-row: 3 / span 1;
-  grid-column: 2 / span 1;
+  grid-column: 3 / span 1;
   vertical-align: top;
   margin:0 0 0 0;
 }
 
 #trackAlbum{
   grid-row: 2 / span 1;
-  grid-column: 3 / span 1;
+  grid-column: 4 / span 1;
   align-self: center;
 }
 
 #trackTime{
   grid-row: 2 / span 1;
-  grid-column: 4 / span 1;
+  grid-column: 5 / span 1;
   align-self: center;
 }
 
 #trackRemove{
   grid-row: 1 / span 3;
-  grid-column: 5 / span 1;
+  grid-column: 6 / span 1;
 
   background-image: url("./../img/garbageIcon.png"); 
   background-color:transparent;

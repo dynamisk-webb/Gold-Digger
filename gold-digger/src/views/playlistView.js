@@ -37,6 +37,9 @@ function PlaylistView(props){
 
     
     function getSongInfoACB(item){
+        function playSongACB(){
+            props.setAudioPlayerSong(item.track.id);
+        }
         function removeTrackACB(){
             props.removeTrack(item.track.id);
         }
@@ -46,9 +49,10 @@ function PlaylistView(props){
         }
 
         return (<div id="trackInfo" key={item.track.name}>
+            <button id="playButton" onClick={playSongACB}></button>
             <img id="trackImg" src={albumImg} alt="albumImg"></img>
             {/*Should display more info in the future*/}
-            <h2 id="trackName">{item.track.name}</h2>
+            <h2 className="cutText" id="trackName">{item.track.name}</h2>
             <p id="trackArtist">{item.track.artists.map(getArtistsACB)}</p>
             <p id="trackAlbum">{item.track.album.name}</p>
             <p id="trackTime">{/*item.track.time*/}3:31</p>

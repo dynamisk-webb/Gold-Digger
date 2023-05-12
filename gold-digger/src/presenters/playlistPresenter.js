@@ -23,6 +23,7 @@ function Playlist (props) {
     // add observer for notifications for state changes
     useEffect(addObserverOnCreatedACB, [])
     const [, forceReRender ]= useState(); 
+    const [playTrackState, setPlayTrackState] = useState({play:false, tracks:[]});
 
     function addObserverOnCreatedACB() {
 
@@ -53,6 +54,7 @@ function Playlist (props) {
       if(playlistCreatePromiseState.data != null){
         let ids = tracks.map(elem => elem.track.id);
         addAllTracks(playlistCreatePromiseState.data.id, ids);
+        alert("Playlist was added to your account!");
       }
     }, [playlistCreatePromiseState, setPlaylistCreatePromiseState]);
 
@@ -78,7 +80,7 @@ function Playlist (props) {
             savePlaylistToSpotify={savePlaylistToSpotifyACB}
             removePlaylist={removePlaylistACB}
           ></PlaylistView>
-          <AudioPlayer play={false} tracks={tracksToIDList()}/>
+          <AudioPlayer play={playTrackState.play} tracks={playTrackState.tracks}/>
         </div>}
       </div>
     );
@@ -102,11 +104,13 @@ function Playlist (props) {
   }
 
   /* Event: onClick set audio player song */
-  function setAudioPlayerSongACB() {}
+  function setAudioPlayerSongACB(trackID) {
+    setPlayTrackState({play:true, tracks:["spotify:track:" + trackID]});
+  }
 
   function savePlaylistToSpotifyACB() {
     resolvePromise(createPlaylist(props.model.userid, playlistName), playlistCreatePromiseState, setPlaylistCreatePromiseState);
-    alert("Playlist was added to your account!");
+    
   }
 
   function removePlaylistACB(){
