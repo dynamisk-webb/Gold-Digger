@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import LoggedInTestView from "./loggedInTestView.js";
-import { getProfile, getSavedTracks } from "../spotifySource.js";
+import { getAllArtistsPlaylist, getProfile, getSavedTracks, getAllTracks, getAllTracksParams, getAllArtistsSaved } from "../spotifySource.js";
 import resolvePromise from "../resolvePromise.js";
+import fixedList from "../test/fixedList.js";
 
 function LoggedInTest(props) {
     let [state, setState] = useState("Test2");
@@ -9,7 +10,9 @@ function LoggedInTest(props) {
 
     useEffect(() => {
         const getTrack = async () => {
-            console.log("Result: " + promiseState.data.id);
+            if(promiseState.data) {
+                console.log("Result: " + JSON.stringify(promiseState.data));
+            }
         };
       getTrack();
     }, [promiseState]);
@@ -36,8 +39,8 @@ function LoggedInTest(props) {
     }
 
     async function onAPICallACB() {
-        //resolvePromise(getSavedTracks(), promiseState, setPromiseState);
-        resolvePromise(getProfile(), promiseState, setPromiseState);
+        const idlist = ["5PUawWFG1oIS2NwEcyHaCr", "4cOdK2wGLETKBW3PvgPWqT"];
+        resolvePromise(getSavedTracks(), promiseState, setPromiseState);
     }
 }
 

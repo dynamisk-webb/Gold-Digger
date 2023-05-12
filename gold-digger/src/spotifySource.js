@@ -1,5 +1,4 @@
 import {refreshAccessToken} from "./authentication.js";
-import { spotifyApi } from "react-spotify-web-playback";
 
 /* 
 EXAMPLE FUNCTION FROM SPOTIFYS TUTORIAL
@@ -25,6 +24,18 @@ function getSavedTracks() { // Get all of user's saved tracks
     } else {
       return tracks;
     }
+  }
+  
+  function savedTrackToFormatCB(element) {  // Filter what parameters is kept for each track
+    return { 
+      track: {
+        album: {images:element.track.album.images, name:element.track.album.name},
+        artists: element.track.artists.map(artistToFormatCB),
+        id: element.track.id,
+        href: element.track.href,
+        name: element.track.name
+      }
+    };
   }
 }
 
@@ -68,12 +79,13 @@ function getTracks(idlist) {  // Gets maximum of 50 tracks from id list
 }
 
 function getAllTracks(idlist) { // Gets all tracks from a id list
-  return fetchAllFromIDList(getTracks, idlist);
+  return fetchAllFromIDList(getTracks, idlist).then((values) => {
+    return values.reduce((subArray, response) => subArray.concat(response), []);
+  });
 }
 
-async function getTrackParams(id) {  // Gets a tracks audio parameter
-  const response = await generalAPI('/audio-features/' + id);
-  return trackParamsToFormatCB(response);
+function getTrackParams(id) {  // Gets a tracks audio parameter
+  return generalAPI('/audio-features/' + id).then(trackParamsToFormatCB);
 }
 
 function getTracksParams(idlist) {  // Gets tracks audio parameters
@@ -82,7 +94,9 @@ function getTracksParams(idlist) {  // Gets tracks audio parameters
 }
 
 function getAllTracksParams(idlist) {
-  return fetchAllFromIDList(getTracksParams, idlist);
+  return fetchAllFromIDList(getTracksParams, idlist).then((values) => {
+    return values.reduce((subArray, response) => subArray.concat(response), []);
+  });
 }
 
 async function getGenres() {  // Returns list of all genres
@@ -90,18 +104,37 @@ async function getGenres() {  // Returns list of all genres
   return response.genres;
 }
 
-function getArtistsPlaylist(playlist) { // Returns list of all artists in a playlist
+function getArtistsPlaylist(playlist) { // Returns list of all artists IDs in a playlist
   const list = getTracksPlaylist(playlist).then(tracksToArtistList);;
   return list;
 }
 
-function getArtistsSaved() {
+function getArtistsSaved() {  // Returns list of all artists IDs in saved tracks
   const list = getSavedTracks().then(tracksToArtistList);
   return list;
 }
 
-function getArtist(id) {  // Get Artist by Spotify ID
-  return generalAPI('/artists/' + id);
+function getArtists(idlist) {  // Get Artist by Spotify ID
+  const field = "?ids=" + idlist.join();
+  return generalAPI('/artists' + field);
+}
+
+function getAllArtistsPlaylist(playlist) {
+  return getArtistsPlaylist(playlist).then((idlist) => {   // Retrieve ids from playlist
+    return fetchAllFromIDList(getArtists, idlist);  // Get ids from different api call
+  }).then((values) => { // Reduce the list to one
+    return values.reduce((subArray, response) => {
+      return subArray.concat(response.artists)}, []);
+  }).then((artists) => artists.map(artistToFormatCB));// Compress to important fields
+}
+
+function getAllArtistsSaved() {
+  return getArtistsSaved().then((idlist) => {   // Retrieve ids from playlist
+    return fetchAllFromIDList(getArtists, idlist);  // Get ids from different api call
+  }).then((values) => { // Reduce the list to one
+    return values.reduce((subArray, response) => {
+      return subArray.concat(response.artists)}, []);
+  }).then((artists) => artists.map(artistToFormatCB));// Compress to important fields
 }
 
 /* Search */
@@ -213,13 +246,13 @@ async function generalAPI(endpoint, method="GET", body=null) {
 }
 
 // Help-functions
-function tracksToArtistList(tracks) {
+function tracksToArtistList(tracks) { // Retrieve unique artist from list of tracks
   const artistList = [];
   tracks.forEach((track) => {  
     const artists = track.track.artists;
     artists.forEach((artist) => { // Don't allow repeats
       if(!artistList.find(element => element.id == artist.id))
-        artistList.push(artist);
+        artistList.push(artist.id);
     });
   });
 
@@ -236,25 +269,11 @@ function fetchAllFromIDList(call, idlist) { // Uses Promise.all to call all prom
       leftIds = leftIds.slice(50);
       promises.push(call(currentIds));
     }
-    return Promise.all(promises).then((values) => {
-      return values.reduce((response, subArray) => subArray.concat(response), []);
-    })
+    return Promise.all(promises);
   }
 }
 
-function savedTrackToFormatCB(element) {  // Filter what parameters is kept for each track
-  return { 
-    track: {
-      album: {images:element.track.album.images, name:element.track.album.name},
-      artists: element.track.artists.map(artistToFormatCB),
-      id: element.track.id,
-      href: element.track.href,
-      name: element.track.name
-    }
-  };
-}
-
-function artistToFormatCB(artist) {
+function artistToFormatCB(artist) { // Compress retrieved artist format to what we need
   return {
     genres: artist.genres,
     id: artist.id,
@@ -263,7 +282,7 @@ function artistToFormatCB(artist) {
   }
 }
 
-function trackParamsToFormatCB(track) {
+function trackParamsToFormatCB(track) { // Get audio features used in app
   return {
     id:track.id,
     acousticness: track.acousticness,
@@ -274,7 +293,7 @@ function trackParamsToFormatCB(track) {
   };
 }
 
-function convertIDtoURI(ID) { // Converts id to spotify URI
+function convertIDtoURI(ID) { // Converts ID to spotify URI
   return "spotify:track:" + ID;
 }
 
@@ -287,8 +306,8 @@ function convertURLtoID(url) {  // Removes part of url to convert to spotify id
   return url_new.split('?')[0];
 }
 
-function apiToEndpoint(url) { // Removes start
+function apiToEndpoint(url) { // Removes start when retrieving next url from Spotify API
   return url.replace("https://api.spotify.com/v1", '');
 }
 
-export {getProfile, getSavedTracks, getTracks, getAllTracks, getPlaylistID, getTracksPlaylist, getTrackParams, getTracksParams, getAllTracksParams, getGenres, getArtistsPlaylist, getArtistsSaved, getArtist, searchArtist, playTracks, createPlaylist, addTracks, addAllTracks, changePlaylistName, removeTrack};
+export {getProfile, getSavedTracks, getPlaylistID, getTracks, getAllTracks, getTracksPlaylist, getTrackParams, getTracksParams, getAllTracksParams, getGenres, getArtistsPlaylist, getArtistsSaved, getAllArtistsPlaylist, getAllArtistsSaved, searchArtist, playTracks, createPlaylist, addTracks, addAllTracks, changePlaylistName, removeTrack};
