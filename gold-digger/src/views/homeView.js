@@ -12,11 +12,18 @@ function HomeView(props){
         <h2 id="homeSubTitle">A playlist generator for Spotify</h2>
         <PrevlistView prevPlaylists={props.prevPlaylists} setCurrentPlaylist={props.setCurrentPlaylist}></PrevlistView>
         <button id="createPlaylist" onClick={generatePlaylistACB}>Create new playlist</button>
-        <button id="continuePlaylist" onClick={continueLastSessionACB}>Continue Previous Session</button>
+        {renderLastSessionButton()}
         <img src={piano} id="pianoImage"></img>
     </div>);
 
     //https://www.w3schools.com/howto/howto_js_toggle_hide_show.asp <-- TO HIDE BUTTONS
+
+    function renderLastSessionButton(){
+        if(props.model.source !== null)
+            return <button id="continuePlaylist" onClick={continueLastSessionACB}>Continue Previous Session</button>;
+        else
+            return <button id="continuePlaylistDisabled" disabled>Continue Previous Session</button>;
+    }
 
     function generatePlaylistACB(evt){
         navigate("/source");
