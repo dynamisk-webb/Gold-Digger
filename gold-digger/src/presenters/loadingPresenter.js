@@ -236,32 +236,37 @@ function Loading(props) {
      * - excluded artists
      */
     function filterOnGenreAndExclArtist(tracksWithInfo) {
-        // return false if artist is unwanted. 
-        function markUnwantedArtistsACB(artist) {
-            if (props.model.excludedArtists.includes(artist))
-                return false;
-            return true;
-        }
-
         // return true if genre is wanted
-        function markWantedGenreACB(genre) {
+        function markWantedGenreCB(genre) {
+            console.log("genre", genre);
             return props.model.genres.includes(genre);         
         }
 
-        /* filter for each current track */
-        function filterGenreAndArtistACB(currentTrack) {
-            // go through genres
-            let trackContainsWantedGenre = true;
-            if (props.model.genres.length != 0) { // user has selected specific genres
-                let wantedStatusOfGenres = [true] // TODO currentTrack.track.genres.map(markWantedGenreACB);
-                trackContainsWantedGenre = wantedStatusOfGenres.includes(true);
+        // return false if artist is excluded or does not make music out of one of the wanted genres
+        function markUnwantedArtistsACB(artist) {
+            if (props.model.excludedArtists.includes(artist)) {
+                return false;
+            } else if (props.model.genres.length !== 0) { 
+
+                if (artist.genres.length !== 0) { // there exists genres for artist
+                    let makesMusicInWantedGenre = artist.genres.map(markWantedGenreCB);
+                    return makesMusicInWantedGenre.includes(true);
+                }
+
+                console.log("No genres in artist");
+                return true; // artists without genre are included
+            } else {
+                return true; // if no genres are selected, all genres are ok
             }
            
-            // go through artist array
+        }
+        
+        /* filter for each current track */
+        function filterGenreAndArtistACB(currentTrack) {
             let wantedStatusofArtists = currentTrack.track.artists.map(markUnwantedArtistsACB);
             let trackContainsUnwantedArtist = wantedStatusofArtists.includes(false);
 
-            return (!trackContainsUnwantedArtist && trackContainsWantedGenre);
+            return !trackContainsUnwantedArtist;
         }
 
         return tracksWithInfo.filter(filterGenreAndArtistACB);

@@ -291,6 +291,7 @@ function fetchAllFromIDList(call, idlist) { // Uses Promise.all to call all prom
 }
 
 function artistToFormatCB(artist) { // Compress retrieved artist format to what we need
+  // instantiate with default values
   let genres = [];
   let images = null;
 
