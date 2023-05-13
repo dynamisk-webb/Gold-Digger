@@ -116,7 +116,7 @@ function removeTrackACB(id) {
   setChangesState(changes);
 
   // Let the user know they have unsaved changes
-  setUnsavedChangesState(true);
+  // setUnsavedChangesState(true);
 
   // Persist change without triggering rerender
   props.model.removeTrack(id, true)
