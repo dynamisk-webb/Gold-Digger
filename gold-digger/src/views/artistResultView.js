@@ -32,8 +32,10 @@ function ArtistResultView(props){
     function getArtistACB(result){
       
         function renderImg(){
-          if(result.images[2]){
-            return <img src={result.images[2].url} id="artistImg"></img>
+          if(result.images){
+            if(result.images[2]){
+              return <img src={result.images[2].url} id="artistImg"></img>
+            } else return <img src={artistImg} id="artistImg"></img>
           } else return <img src={artistImg} id="artistImg"></img>
         }
 

@@ -13,6 +13,7 @@ function SourceView(props){
       }, [props.validURL]);
 
     return (<div id="sourceGrid">
+            <button id="returnHomefromSource" onClick={goBackACB}></button>
             <h2 id="sourceNoTitle">Step 1 of 4</h2>
             <h1 id="sourceTitle">Select a source</h1>
             <h2 id="sourceSubTitle">to generate a playlist from</h2>
@@ -21,6 +22,11 @@ function SourceView(props){
             <button id="sourceSaved" onClick={setSourceSavedACB}>From Saved Tracks</button>
             <img src={piano} id="pianoImage"></img>
     </div>);
+
+    // navigate home 
+    function goBackACB(){
+        navigate("/");
+    }
     
     // Display input-field when playlist button is pressed
     function updateSearchbarACB(){

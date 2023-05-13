@@ -388,37 +388,50 @@ html {
   width: 100%;
   height: 100%;
   display: grid;
-  grid-template-columns: 1fr 600px 1fr;
-  grid-template-rows: 2fr 140px 100px 100px 2fr;
+  grid-template-columns: 100px 0.8fr 600px 1fr;
+  grid-template-rows: 200px 1fr 140px 100px 100px 2fr;
+}
+
+#returnHomefromSource{
+
+  grid-row: 1 / span 1;
+  grid-column: 1 / span 1;
+  background-image: url("./../img/returnIcon.png"); /* 16px x 16px */
+  background-color:transparent;
+  background-repeat: no-repeat;  /* make the background image appear only once */
+  background-position: center; 
+  background-size: contain;
+
+  margin: 30% 30% 30% 30%;
 }
 
 #sourceNoTitle{
-  grid-row: 2 / span 1;
-  grid-column: 2 / span 1;
+  grid-row: 3 / span 1;
+  grid-column: 3 / span 1;
   justify-self: center;
   align-self: start;
   margin: 0 0 0 0;
 }
 
 #sourceTitle{
-  grid-row: 2 / span 1;
-  grid-column: 2 / span 1;
+  grid-row: 3 / span 1;
+  grid-column: 3 / span 1;
   justify-self: center;
   align-self: center;
   margin: 0 0 0 0;
 }
 
 #sourceSubTitle{
-  grid-row: 2 / span 1;
-  grid-column: 2 / span 1;
+  grid-row: 3 / span 1;
+  grid-column: 3 / span 1;
   justify-self: center;
   align-self: end;
   margin: 0 0 0 0;
 }
 
 #sourceButtonPlaylist{
-  grid-row: 3 / span 1;
-  grid-column: 2 / span 1;
+  grid-row: 4 / span 1;
+  grid-column: 3 / span 1;
   justify-self: center;
   margin: 3% 0 3% 0;
   width: 60%;
@@ -426,8 +439,8 @@ html {
 }
 
 #sourceInputPlaylist{
-  grid-row: 3 / span 1;
-  grid-column: 2 / span 1;
+  grid-row: 4 / span 1;
+  grid-column: 3 / span 1;
   justify-self: center;
   margin: 3% 0 3% 0;
   width: 60%;
@@ -444,8 +457,8 @@ input[type=text] {
 
 
 #sourceSaved{
-  grid-row: 4 / span 1;
-  grid-column: 2 / span 1;
+  grid-row: 5 / span 1;
+  grid-column: 3 / span 1;
   justify-self: center;
   margin: 3% 0 3% 0;
   width: 60%;
@@ -715,6 +728,10 @@ input[type=text] {
   grid-column: 1 / span 1;
 }
 
+#noPlaylistText{
+  color:#828282;
+}
+
 
 
 #trackInfo{
@@ -976,6 +993,27 @@ input[type=text] {
 }
 
 /*LOADING VIEW*/
+
+#loadingContainer{
+display:grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+}
+
+#loadingTitle{
+justify-self: center;
+margin-top: 10%;
+}
+
+#loadingInfo{
+  color:#828282;
+  justify-self: center;
+}
+
+#loadingButton{
+  width:200px;
+  justify-self: center;
+}
 
 #audioPlayer{
   position:fixed;
