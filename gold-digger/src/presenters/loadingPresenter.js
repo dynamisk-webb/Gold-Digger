@@ -11,6 +11,9 @@ import fixedFeatures from "../test/fixedFeatures";
 
 
 function Loading(props) {
+    const debugFilterSteps = true;
+    const playlistMaxLength = 10;
+
     // debug
     // props.model.debugModelState("/loading init");
 
@@ -88,9 +91,20 @@ function Loading(props) {
             let tracksFromSource = sourceTracksPromise.data;
             let trackIDs = [...tracksFromSource].map(extractIdACB);
 
-            setLoadingState("Getting audio features...");
-            // get track audio features from the ids
-            resolvePromise(getAllTracksParams(trackIDs), audioFeaturesPromise, setAudioFeaturesPromiseState)
+            if(debugFilterSteps) {
+                console.log("tracksFromSource", tracksFromSource);
+            }
+
+            if (trackIDs.length !== 0) {
+                setLoadingState("Getting audio features...");
+                // get track audio features from the ids
+                resolvePromise(getAllTracksParams(trackIDs), audioFeaturesPromise, setAudioFeaturesPromiseState)
+            } else {
+                setLoadingState("Generation cancelled.");
+                alert("Source playlist empty! Please choose a source playlist that contains tracks.");
+            }
+
+           
         } 
     }
 
@@ -101,15 +115,28 @@ function Loading(props) {
         
         if (audioFeaturesPromise.data != null) {
             let tracksWithAudioFeatures = audioFeaturesPromise.data;
+
+            if(debugFilterSteps) {
+                console.log("tracksWithAudioFeatures", tracksWithAudioFeatures);
+            }
             
             setLoadingState("Filtering on audio features...");
             let filteredTracks = filterOnAudioFeatParams(tracksWithAudioFeatures);
             let trackIDs = filteredTracks.map(extractIdACB);
-            
-            // TODO handle case of trackIDs.length = 0
-            setLoadingState("Getting additional information...");
-            // get track info from ids that are left
-            resolvePromise(getAllTracks(trackIDs), trackInfoPromise, setTrackInfoPromiseState);
+
+            if(debugFilterSteps) {
+                console.log("tracksFilteredOnAudioFeatures", filteredTracks);
+            }
+
+            if (trackIDs.length !== 0) {
+                setLoadingState("Getting additional information...");
+                // get track info from ids that are left
+                resolvePromise(getAllTracks(trackIDs), trackInfoPromise, setTrackInfoPromiseState);
+            } else {
+                setLoadingState("Generation cancelled.");
+                alert("Your parameters are too strict!\n\nTry relaxing the parameters in the following categories:\n\n - Tempo\n - Noisiness\n - Amount of vocals\n - Restrictions on danceability\n - Restrictions on acousticness\n\nYou can also try selecting a different source playlist!");
+            }
+           
         }
     }
 
@@ -117,15 +144,33 @@ function Loading(props) {
         if (trackInfoPromise.data != null) {
             let tracksWithInfo = trackInfoPromise.data;
 
+            if(debugFilterSteps) {
+                console.log("tracksWithInfo", tracksWithInfo);
+            }
+
             setLoadingState("Filtering on genres and artists...");
             let filteredTracks = filterOnGenreAndExclArtist(tracksWithInfo);
 
-            console.log("Creating the final blend...");
-            let finalTrackList = setTracksBasedOnIncludedArtists(filteredTracks);
+            if(debugFilterSteps) {
+                console.log("tracksFilteredOnGenreAndExclArtist", filteredTracks);
+            }
 
-            setNewGenerated(finalTrackList); 
+            if (filteredTracks.length !== 0) {
+                console.log("Creating the final blend...");
+                let finalTrackList = setTracksBasedOnIncludedArtists(filteredTracks);
 
-            setLoadingState("Done!");
+                if(debugFilterSteps) {
+                    console.log("finalTracklist", finalTrackList);
+                }
+
+                setNewGenerated(finalTrackList); 
+
+                setLoadingState("Done!");
+            } else {
+                setLoadingState("Generation cancelled.");
+                alert("Your parameters are too strict!\n\Try making changes in the following categories:\n\n - Include more genres\n - Do not exclude as many artists\n\nYou can also try selecting a different source playlist!")
+            }
+            
         }
     }
 
@@ -224,24 +269,31 @@ function Loading(props) {
 
     function setTracksBasedOnIncludedArtists(filteredTracks) {
         let wantedTracks = createListOfWantedArtistsTracks(filteredTracks);
+        console.log("wanted1:", wantedTracks);
         
-        // if list with included artists has < 50 tracks, add from other list so that we have 50. Scramble and return.
-        if (wantedTracks.length <= 50) {
+        // if list with included artists has < playlistMaxLength tracks, add from other list so that we have playlistMaxLength. Scramble and return.
+        if (wantedTracks.length <= playlistMaxLength) {
             let additionalAcceptableTracks= createListOfAdditionalAcceptableTracks(filteredTracks, wantedTracks);
             // plocka ut diffen från additionalAcceptableTracks, lägg till i wantedtracks
-            const diff = 50 - wantedTracks.length;
+            const diff = playlistMaxLength - wantedTracks.length;
+
                 if (additionalAcceptableTracks.length > diff) {
                     additionalAcceptableTracks = scramblePlaylist(additionalAcceptableTracks);
-                    additionalAcceptableTracks = [...additionalAcceptableTracks].slice(diff-1);
+                    additionalAcceptableTracks = [...additionalAcceptableTracks].slice(0, diff);
+
+                    console.log("additional", additionalAcceptableTracks)
                 }
-                
+                console.log("wanted:", wantedTracks);
                 wantedTracks.push(additionalAcceptableTracks);
+                console.log("wanted push:", wantedTracks);
                 wantedTracks = scramblePlaylist(wantedTracks);
                 
         } else {
-            // cut the saved tracks at 50
-            wantedTracks = [...wantedTracks].slice(49);
+            // cut the saved tracks at playlistMaxLength
+            wantedTracks = wantedTracks.slice(0, playlistMaxLength);
         }
+
+        console.log("wanted:", wantedTracks);
 
         return wantedTracks;
     }
@@ -297,11 +349,15 @@ function Loading(props) {
         let onlyWantedArtistsTracks = [...filteredTracks].filter(filterOnWantedArtistACB);
         // Scramble the list
         let scrambledOnlyWanted = scramblePlaylist(onlyWantedArtistsTracks);
+        console.log("scramble only wanted", scrambledOnlyWanted);
+
         // Create counter for how many song we have looked at so far from each wanted artist
         let artistCounter = [...props.model.includedArtists].map(createArtistCounterACB);
         // Filter so that max the first 3 songs of each artist remain
         let limitedScrambledOnlyWanted = scrambledOnlyWanted.filter(limitTracksFromSameArtistACB);
- 
+        
+        console.log("scramble only wanted limit", limitedScrambledOnlyWanted);
+
         return limitedScrambledOnlyWanted;
     }
 
