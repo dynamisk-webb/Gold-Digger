@@ -11,7 +11,7 @@ import fixedFeatures from "../test/fixedFeatures";
 
 
 function Loading(props) {
-    const debugFilterSteps = true;
+    const debugFilterSteps = false;
     const playlistMaxLength = 10;
 
     // debug
@@ -76,10 +76,12 @@ function Loading(props) {
             // get tracks from provided source URL
             resolvePromise(getTracksPlaylist(props.model.source), sourceTracksPromise, setSourceTracksPromiseState);
             
-        } else { 
+        } else if (props.model.source !== null) { 
             // get from saved songs
             resolvePromise(getSavedTracks(), sourceTracksPromise, setSourceTracksPromiseState);
-        }    
+        } else { // someone went to loading page manually without an active session
+            setLoadingState("Except it's not, since you're not supposed to be here because you do not have an active session going on!");
+        }
     }
 
     function onResolveSourceTracksPromiseACB() {        
@@ -103,8 +105,6 @@ function Loading(props) {
                 setLoadingState("Generation cancelled.");
                 alert("Source playlist empty! Please choose a source playlist that contains tracks.");
             }
-
-           
         } 
     }
 
@@ -269,31 +269,26 @@ function Loading(props) {
 
     function setTracksBasedOnIncludedArtists(filteredTracks) {
         let wantedTracks = createListOfWantedArtistsTracks(filteredTracks);
-        console.log("wanted1:", wantedTracks);
-        
+
         // if list with included artists has < playlistMaxLength tracks, add from other list so that we have playlistMaxLength. Scramble and return.
         if (wantedTracks.length <= playlistMaxLength) {
             let additionalAcceptableTracks= createListOfAdditionalAcceptableTracks(filteredTracks, wantedTracks);
+
             // plocka ut diffen från additionalAcceptableTracks, lägg till i wantedtracks
             const diff = playlistMaxLength - wantedTracks.length;
 
                 if (additionalAcceptableTracks.length > diff) {
+                    // scramble and cut down additional tracks to correct lenght
                     additionalAcceptableTracks = scramblePlaylist(additionalAcceptableTracks);
                     additionalAcceptableTracks = [...additionalAcceptableTracks].slice(0, diff);
-
-                    console.log("additional", additionalAcceptableTracks)
                 }
-                console.log("wanted:", wantedTracks);
-                wantedTracks.push(additionalAcceptableTracks);
-                console.log("wanted push:", wantedTracks);
-                wantedTracks = scramblePlaylist(wantedTracks);
-                
+
+                wantedTracks = wantedTracks.concat(additionalAcceptableTracks); 
+
         } else {
             // cut the saved tracks at playlistMaxLength
             wantedTracks = wantedTracks.slice(0, playlistMaxLength);
         }
-
-        console.log("wanted:", wantedTracks);
 
         return wantedTracks;
     }
@@ -349,16 +344,12 @@ function Loading(props) {
         let onlyWantedArtistsTracks = [...filteredTracks].filter(filterOnWantedArtistACB);
         // Scramble the list
         let scrambledOnlyWanted = scramblePlaylist(onlyWantedArtistsTracks);
-        console.log("scramble only wanted", scrambledOnlyWanted);
-
         // Create counter for how many song we have looked at so far from each wanted artist
         let artistCounter = [...props.model.includedArtists].map(createArtistCounterACB);
         // Filter so that max the first 3 songs of each artist remain
         let limitedScrambledOnlyWanted = scrambledOnlyWanted.filter(limitTracksFromSameArtistACB);
-        
-        console.log("scramble only wanted limit", limitedScrambledOnlyWanted);
 
-        return limitedScrambledOnlyWanted;
+        return [...limitedScrambledOnlyWanted];
     }
 
     /**
@@ -369,7 +360,6 @@ function Loading(props) {
             // if not in selected, it should be in our list
             return (!alreadySelected.includes(track))
         }
-
         return [...filteredTracks].filter(removeAlreadySelectedACB);
     }
 
@@ -390,7 +380,7 @@ function Loading(props) {
             newGenerated.firebaseKey = 0;
         }
 
-        newGenerated.tracks = finalTrackList[0];
+        newGenerated.tracks = finalTrackList;
         newGenerated.playlistName = 'Playlist #' + newGenerated.firebaseKey;
 
         props.model.addToPrevPlaylists({playlistName:newGenerated.playlistName, firebaseKey:newGenerated.firebaseKey}); 
