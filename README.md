@@ -13,9 +13,9 @@
     An iprogd Project Web site that generates a Spotify playlist based on selected parameters and your own library.
     <br />
     <br />
-    <a href="https://gold-digger-be2ef.web.app/">Deployed Site</a>
+    <a href="https://gold-digger-be2ef.web.app/" target="_blank">Deployed Site</a>
     ·
-    <a href="https://www.figma.com/file/3TpeoyPVti5l0aqRASbQL3/Gold-Digger-mock-up?node-id=0%3A1&t=UOCqxbzFzoUMvWx5-1">View Interactive Prototype</a>
+    <a href="https://www.figma.com/file/3TpeoyPVti5l0aqRASbQL3/Gold-Digger-mock-up?node-id=0%3A1&t=UOCqxbzFzoUMvWx5-1" target="_blank">View Interactive Prototype</a>
   </p>
 </div>
 
