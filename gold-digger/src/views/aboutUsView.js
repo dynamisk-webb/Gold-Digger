@@ -15,22 +15,26 @@ function AboutUsView(props){
         {
             image: jessica,
             name: "Jessica Gorwat",
-            about: "Song: "
+            songName: "Song: Wii Sports Theme (From \"Nintendo Wii\")",
+            link: "https://open.spotify.com/track/0hl8k492sfcfLQudNctEiR?si=4373ca3a353f4e75"
         },
         {
             image: julia,
             name: "Julia Wang",
-            about: "Song: "
+            songName: "Melancholic Song: Isolation - Ichika Nito",
+            link:"https://open.spotify.com/track/3kzMcBgOeIzwNQW2VTJQcF?si=700e497c414643a8",
         },
         {
             image: maria,
             name: "Maria Moliteus",
-            about: "Song: "
+            songName: "Song: Wii Sports Theme (From \"Nintendo Wii\")",
+            link: "https://open.spotify.com/track/0hl8k492sfcfLQudNctEiR?si=4373ca3a353f4e75"
         },
         {
             image: rej,
             name: "Rej Karlander",
-            about: "Song: Destroyed by hippie Powers - Car Seat Headrest"
+            songName: "Song: Destroyed by hippie Powers - Car Seat Headrest",
+            link: "https://open.spotify.com/track/4mxoJfHYvwuWCwqnZvzggL?si=b09b4f9c82dc40a7"
         }
     ];
 
@@ -46,7 +50,7 @@ function AboutUsView(props){
         return (<div key={author.name} id="authorInfo">
             <img src={author.image} id="authorImg"></img>
             <h2 id="authorName">{author.name}</h2>
-            <p id="authorAbout">{author.about}</p>
+            <a id="authorAbout" href={author.link} target="_blank">{author.songName}</a> 
         </div>);
     }
 

@@ -205,8 +205,8 @@ function Loading(props) {
                 (track.loudness >= props.model.loudness.min &&
                  track.loudness <= props.model.loudness.max);
             let includeBasedOnInstrumentalness =
-                (track.instrumentalness >= props.model.instrumentalness.min/100 &&
-                 track.instrumentalness <= props.model.instrumentalness.max/100); // 0-1 in API, % in model
+                (track.instrumentalness >= (1-props.model.instrumentalness.max/100) &&
+                 track.instrumentalness <= (1-props.model.instrumentalness.min/100)); // 0-1 in API, % in model
 
             let includeBasedOnAcousticness = true;
             let includeBasedOnDanceability = true;
