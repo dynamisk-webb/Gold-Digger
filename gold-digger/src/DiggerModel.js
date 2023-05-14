@@ -16,7 +16,7 @@ class DiggerModel{
                 excludedArtist = [],
                 prevPlaylists = [],
                 tempo = {min: 0, max: 300},
-                loudness = {min: -60, max: 0},
+                loudness = {min: -30, max: 0},
                 instrumentalness = {min: 0, max: 100},
                 danceable = false,
                 acoustic = false,
@@ -84,10 +84,12 @@ class DiggerModel{
         }
     }
 
-    setGenerated(generated, updateFromPersistence=false) { // Sets generated playlist
+    setGenerated(generated, updateFromPersistence=false, exclusivelyForPersistence=false) { // Sets generated playlist
         this.generated = generated;
         if (updateFromPersistence) {
             this.notifyObservers({key:"modelParams", param:"generated", specs:"wholeObject", updateFromPersistence});
+        } else if (exclusivelyForPersistence) {
+            this.notifyObservers({key:"modelParams", param:"generated", specs:"wholeObject", exclusivelyForPersistence});
         } else {
             this.notifyObservers({key:"modelParams", param:"generated", specs:"wholeObject"});
         }
@@ -145,8 +147,11 @@ class DiggerModel{
         this.notifyObserveres({key: "modelParams", param: "generated", specs:"addTracks", firebaseKey:this.generated.firebaseKey}); // TODO
     }
 
-    removeTrack(trackID) {  // Removes a specific track from the already generated list
+    removeTrack(trackID, exclusivelyForPersistence=false) {  // Removes a specific track from the already generated list
         this.generated.tracks = this.generated.tracks.filter(tr => tr.track.id != trackID);
+        if (exclusivelyForPersistence) {
+            this.notifyObservers({key:"modelParams", param:"generated", specs:"removeTrack", firebaseKey:this.generated.firebaseKey, exclusivelyForPersistence});
+        }
         this.notifyObservers({key:"modelParams", param:"generated", specs:"removeTrack", firebaseKey:this.generated.firebaseKey});
     }
 
@@ -165,7 +170,6 @@ class DiggerModel{
     removeGenre(genre) {    // Exclude from genres
         if(this.genres.includes(genre)) {
             this.genres = this.genres.filter(elem => elem !== genre);
-            console.log("remove genre");
             this.notifyObservers({key:"modelParams", param:"removeGenre"});
         }
     }
@@ -204,11 +208,10 @@ class DiggerModel{
         this.excludedArtists = [];
         this.tempo.min = 0;
         this.tempo.max = 300; // = {min: 0, max: 300}; // {min:, max}, set to default or limits
-        this.loudness = {min: -60, max: 0};
+        this.loudness = {min: -30, max: 0};
         this.instrumentalness = {min: 0, max: 100};
         this.danceable = false;
         this.acoustic = false;
-        // TODO notify observers with relevant params
     }
 
     resetLocalCurrentGenerated() { // should not call notifyObservers, only for local resets

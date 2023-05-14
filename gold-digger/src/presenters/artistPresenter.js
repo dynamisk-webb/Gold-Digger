@@ -7,7 +7,7 @@ import { getAllArtistsPlaylist, getAllArtistsSaved} from "../spotifySource.js";
 import { useEffect, useState } from "react";
 
 function Artists(props) {
-
+  // Add observers
   useEffect(addObserverOnCreatedACB, [])
     const [, forceReRender ]= useState(); 
 
@@ -23,7 +23,6 @@ function Artists(props) {
     // rerender on state change
     function notifyACB() {
         forceReRender({});
-        //props.model.debugModelState("/genre rerender");
     }
 
   // State for list of artists
@@ -32,18 +31,20 @@ function Artists(props) {
   const [artistListState, setArtistListState] = useState([]);
   const [searchState, setSearchState] = useState("");
 
+  // States of infinite scrolling
+  const itemsPerPage = 20;
+  const [record, setRecord] = useState(itemsPerPage);
+  const [hasMore, setHasMore] = useState(true);
+    
+
   useEffect(() => {
-    // TODO: get all artists from *saved tracks* or a *chosen playlist*
-    // Right now: gets them all from Spotify(?) from a playlist. Unclear if this API call works. 
     async function getArtistsACB() {
-      let playlist = props.model.source; // TODO: is this the right way to get the playlist in here? 
+      let playlist = props.model.source;
       // Check if a saved playlist exists before getting the artists from it
-      if (playlist) {
-        resolvePromise(getAllArtistsPlaylist(playlist), promiseState, setState);
-        console.log(promiseState.promise);
-      }else {
+      if (playlist === "saved") {  
         resolvePromise(getAllArtistsSaved(), promiseState, setState);
-        console.log(promiseState.promise);
+      }else {
+        resolvePromise(getAllArtistsPlaylist(playlist), promiseState, setState);
       }
     }
     getArtistsACB();
@@ -52,7 +53,6 @@ function Artists(props) {
   }, []);
 
   useEffect(() => {
-
     /* retrieve from model and mark artists as Exclude or Include values*/
     function getIncludeOrExcludeACB(artist) {
       
@@ -67,7 +67,6 @@ function Artists(props) {
 
 
     if (promiseState.data != null) {     
-      console.log(promiseState.promise);
       // Transfer results from promiseState into artistList
       // Make use the values are unique
       let artistList = promiseState.data.map(obj => ({ ...obj, value: 'neutral' }));
@@ -77,7 +76,11 @@ function Artists(props) {
       // transfer results from artistList into filteredState and artistListState
       setFilteredState(artistList);
       setArtistListState(artistList);
+      setHasMore(true);
+      
+      notifyACB();
     }
+
   }, [promiseState, setState])
 
 
@@ -86,9 +89,14 @@ function Artists(props) {
       // filter based on the search term
       filterArtist(searchData);
     }else{
-      console.log("quick");
       setFilteredState(artistListState);
     }
+
+    // Ensure the new result resets the scroll
+    setRecord(20);
+    let myDiv = document.getElementById('artistResults');
+    myDiv.scrollTop = 0;
+
     notifyACB();
     
     // save the search term
@@ -103,9 +111,23 @@ function Artists(props) {
   // Show loading, then search results
   return (
     <div>
-      <FilterView filterType="artist" title= "Select Artists" noTitle="Step 3 of 4" nextTitle="Next"></FilterView>
+      <FilterView 
+        filterType="artist" 
+        title= "Select Artists" 
+        noTitle="Step 3 of 4" 
+        nextTitle="Next"
+        loadingComplete={promiseState.data != null}></FilterView>
       <SearchView id="search" search={searchArtistACB}></SearchView>
-      {promiseNoData(promiseState) || <ArtistResultView artistResults={filteredState} setExcludeInclude={setExcludeIncludeACB}></ArtistResultView>}
+      {promiseNoData(promiseState) || 
+      <ArtistResultView 
+        artistResults={filteredState} 
+        setExcludeInclude={setExcludeIncludeACB} 
+        record={record} 
+        setRecord={setRecord} 
+        itemsPerPage={itemsPerPage}
+        hasMore = {hasMore}
+        setHasMore ={setHasMore}>
+      </ArtistResultView>}
     </div>
   );
 

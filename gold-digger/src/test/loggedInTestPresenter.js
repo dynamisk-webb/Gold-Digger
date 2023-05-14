@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import LoggedInTestView from "./loggedInTestView.js";
-import { getAllArtistsPlaylist, getProfile, getSavedTracks, getAllTracks, getAllTracksParams, getAllArtistsSaved } from "../spotifySource.js";
+import { getGenresPlaylist, getTracksPlaylist } from "../spotifySource.js";
 import resolvePromise from "../resolvePromise.js";
 import fixedList from "../test/fixedList.js";
 
@@ -40,7 +40,7 @@ function LoggedInTest(props) {
 
     async function onAPICallACB() {
         const idlist = ["5PUawWFG1oIS2NwEcyHaCr", "4cOdK2wGLETKBW3PvgPWqT"];
-        resolvePromise(getSavedTracks(), promiseState, setPromiseState);
+        resolvePromise(getGenresPlaylist("https://open.spotify.com/playlist/4kCO8l97N2jn3SDEInbwzX?si=99fabdbf185a411e"), promiseState, setPromiseState);
     }
 }
 

@@ -22,12 +22,11 @@ function Home(props) {
     // rerender on state change
     function notifyACB() {
         forceReRender({});
-        //props.model.debugModelState("/home rerender");
     }
 
 
     return (
-      <HomeView testName={props.model.generated.playlistName} setCurrentPlaylist={setCurrentPlaylistACB} prevPlaylists={props.model.prevPlaylists}></HomeView>  
+      <HomeView model={props.model} testName={props.model.generated.playlistName} setCurrentPlaylist={setCurrentPlaylistACB} prevPlaylists={props.model.prevPlaylists}></HomeView>  
     );
 
     // Set the generated playlist as the current playlist in the model

@@ -6,7 +6,7 @@ function waitForFirebase(firebasePromiseState) {
     if(firebasePromiseState.promise) {
         if (!firebasePromiseState.data) {
             if (!firebasePromiseState.error) {
-                return <img src="https://i.giphy.com/media/Rd755PrtAEhZLLTt2N/giphy.webp" alt="Loading" class="fullLoading"></img>
+                return <img src="https://i.giphy.com/media/Rd755PrtAEhZLLTt2N/giphy.webp" alt="Loading" className="fullLoading"></img>
             }
             return <div >{firebasePromiseState.error.toString()}</div>
         }
@@ -15,7 +15,7 @@ function waitForFirebase(firebasePromiseState) {
         return false;
     }
     // firebasepromise hasn't been requested yet
-    return <img src="https://i.giphy.com/media/Rd755PrtAEhZLLTt2N/giphy.webp" alt="Loading" class="fullLoading"></img>
+    return <img src="https://i.giphy.com/media/Rd755PrtAEhZLLTt2N/giphy.webp" alt="Loading" className="fullLoading"></img>
 }
 
 export default waitForFirebase;

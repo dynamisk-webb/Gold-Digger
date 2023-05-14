@@ -1,11 +1,8 @@
 import SourceView from "../views/sourceView";
-import { getPlaylistID } from "../spotifySource";
+import { getPlaylistInfo, getSavedInfo } from "../spotifySource";
 import { useState, useEffect } from "react";
-import resolvePromise from "../resolvePromise";
 
 function Source(props) {
-  // debug
-  // props.model.debugModelState("/source init");
 
   // add observer for notifications for state changes
   useEffect(addObserverOnCreatedACB, [])
@@ -23,11 +20,9 @@ function Source(props) {
   // rerender on state change
   function notifyACB() {
       forceReRender({});
-      //props.model.debugModelState("/source rerender");
   }
 
   const [validURL, setValidURL] = useState(false);
-  const [promiseState, setState] = useState({});
 
   return (
     <SourceView
@@ -45,7 +40,7 @@ function Source(props) {
     
     if (url.startsWith("http://open.spotify.com/track/") || url.startsWith("https://open.spotify.com/playlist/")) {
       // Use API call 'getPlaylistID' to check if URL leads to an exisiting playlist
-      getPlaylistID(url).then(setValidSourceACB).catch(invalidSourceACB);
+      getPlaylistInfo(url).then(setValidSourceACB).catch(invalidSourceACB);
     } else {
       alert("Oops!\nThat doesn't look like a valid Spotify link.\n\nTo get a link, simply right-click any Spotify playlist,\nselect \"Share\" and then \"Copy link to playlist\"");
     }
@@ -54,11 +49,16 @@ function Source(props) {
       Helper function. Sets the playlist as the source once we know it's a valid source.
       then passes this state to sourceView so that it can redirect.
     */
-    function setValidSourceACB() {
-      // make call to reset process parameters
-      props.model.resetParams();
-      props.model.setSource(url);
-      setValidURL(true);
+    function setValidSourceACB(playlist) {
+      // check if playlist is empty
+      if(playlist.tracks.total === 0) {
+        alert("That looks like an empty playlist!\n\nSubmit a playlist with songs for us to filter.");
+      } else {
+        // make call to reset process parameters
+        props.model.resetParams();
+        props.model.setSource(url);
+        setValidURL(true);
+      }
     }
 
     /*
@@ -78,8 +78,21 @@ function Source(props) {
   */
   function setSourceSavedACB() {
     // make call to reset process parameters
-    props.model.resetParams();
-    props.model.setSource("");
+    getSavedInfo().then(checkEmptySavedACB);
+  }
+
+  /*
+    Helper function. Checks if saved tracks is empty
+
+   */
+  function checkEmptySavedACB(saved) {
+    if(saved.total === 0) {
+      alert("Oops!\nLooks like you don't have any Liked Songs on Spotify.\n\nFill your Liked Songs on Spotify before continuing!");
+    } else {
+      props.model.resetParams();
+      props.model.setSource("saved");
+      setValidURL(true);
+    }
   }
 }
 export default Source;

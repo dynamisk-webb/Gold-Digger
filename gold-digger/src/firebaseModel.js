@@ -98,8 +98,13 @@ function persistenceToModelParams(persistedData, model) {
 function persistenceToGeneratedList(persistedData, model) {
     if(persistedData !== null) {
         if (persistedData.generated) {
-            //console.log("tracks: ", persistedData.generated.tracks); 
-             model.setGenerated(persistedData.generated, true); 
+             model.setGenerated(persistedData.generated, true, false);
+             
+             // handle edgecase if user has removed all songs
+             if (!persistedData.generated.tracks) {
+                model.generated.tracks = [];
+             }
+
         } else {
             model.generated = null;
         }

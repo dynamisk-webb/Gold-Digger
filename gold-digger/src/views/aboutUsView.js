@@ -1,3 +1,8 @@
+/** 
+ * aboutUsView renders a view containing information about the Gold Digger application and its authors.
+ */
+
+/* Import Images*/
 import julia from "./../img/julia.png";
 import jessica from "./../img/jessica.png";
 import rej from "./../img/rej.png";
@@ -5,33 +10,49 @@ import maria from "./../img/maria.png";
 
 function AboutUsView(props){
 
+    // Variables
     const authors = [
         {
             image: jessica,
             name: "Jessica Gorwat",
-            about: "As royal as a queen, as buzzed as a bee"
+            songName: "Song: Wii Sports Theme (From \"Nintendo Wii\")",
+            link: "https://open.spotify.com/track/0hl8k492sfcfLQudNctEiR?si=4373ca3a353f4e75"
         },
         {
             image: julia,
             name: "Julia Wang",
-            about: "As fast as a hare, as brave as a bear"
+            songName: "Melancholic Song: Isolation - Ichika Nito",
+            link:"https://open.spotify.com/track/3kzMcBgOeIzwNQW2VTJQcF?si=700e497c414643a8",
         },
         {
             image: maria,
             name: "Maria Moliteus",
-            about: "As free as a bird, as neat as a word"
+            songName: "Song: Wii Sports Theme (From \"Nintendo Wii\")",
+            link: "https://open.spotify.com/track/0hl8k492sfcfLQudNctEiR?si=4373ca3a353f4e75"
         },
         {
             image: rej,
             name: "Rej Karlander",
-            about: "As warm as the sun, as silly as fun"
+            songName: "Song: Destroyed by hippie Powers - Car Seat Headrest",
+            link: "https://open.spotify.com/track/4mxoJfHYvwuWCwqnZvzggL?si=b09b4f9c82dc40a7"
         }
     ];
+
+    // Functions
 
     /* Set the width of the sidebar to 0 and the left margin of the page content to 0 */
     function closeAboutCB() {
         props.closeAbout();
     } 
+
+    /* Display infor about each author*/ 
+    function displayInfoCB(author){
+        return (<div key={author.name} id="authorInfo">
+            <img src={author.image} id="authorImg"></img>
+            <h2 id="authorName">{author.name}</h2>
+            <a id="authorAbout" href={author.link} target="_blank">{author.songName}</a> 
+        </div>);
+    }
 
     return (<div id="aboutUsContainer">
         <button id="closeField" onClick={closeAboutCB}></button>
@@ -44,18 +65,10 @@ function AboutUsView(props){
                You can even choose to filter your saved songs on the off chance that<br></br>
                you, like us, have far too many of them.
             </p>
-            <h1 id="aboutTitle">About the authors</h1>
+            <h2 id="aboutAuthorTitle">The Authors</h2>
             {authors.map(displayInfoCB)}
         </div>
     </div>);
-
-    function displayInfoCB(author){
-        return (<div key={author.name} id="authorInfo">
-            <img src={author.image} id="authorImg"></img>
-            <h2 id="authorName">{author.name}</h2>
-            <p id="authorAbout">{author.about}</p>
-        </div>);
-    }
 }
 
 export default AboutUsView;

@@ -33,8 +33,6 @@ function Root(props) {
 
   // Detect login and restrict access based on login status
   useEffect(() => {
-    console.log("[LOGIN] status:", isLoggedIn);
-
     if (isLoggedIn == null) {
         localStorage.setItem("isLoggedIn", "false");
     } else if (isLoggedIn === "true") {

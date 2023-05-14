@@ -1,24 +1,27 @@
-import {useNavigate} from "react-router-dom"
+/**
+ * PrevlistView renders a view displaying a list of previously generated playlists.
+ */
 
-function PrevlistView(props){
-    const navigate = useNavigate(); // So React doesn't complain about React components
+import { useNavigate } from "react-router-dom"
 
-    return (<div id="prevListsContainer">
-        <h3 id="prevListsTitle"> Previously generated playlists</h3>
-        <div className="scrollable"  id="prevLists">
-        {renderPrevPlaylist()}
-        </div>
-    </div>);
+function PrevlistView(props) {
 
-    function renderPrevPlaylist(){
-        if(props.prevPlaylists.length != 0){
-            return props.prevPlaylists.map(songInfoACB);
+    // Variables
+    const navigate = useNavigate();
+
+    // Functions
+
+    /* Render the previous playlist if there are any playlists */
+    function renderPrevPlaylist() {
+        if (props.prevPlaylists.length != 0) {
+            return props.prevPlaylists.map(playlistInfoACB);
         }
         else return <p id="prevListText">Create some playlists to see them here!</p>
     }
 
-    function songInfoACB(playlist){
-        function setCurrentPlaylistACB(){
+    /* Retrieve info about the playlist */
+    function playlistInfoACB(playlist) {
+        function setCurrentPlaylistACB() {
             props.setCurrentPlaylist(playlist.playlistName, playlist.firebaseKey);
             navigate("/playlist");
         }
@@ -29,6 +32,12 @@ function PrevlistView(props){
             </button>);
     }
 
+    return (<div id="prevListsContainer">
+        <h3 id="prevListsTitle"> Previously generated playlists</h3>
+        <div className="scrollable" id="prevLists">
+            {renderPrevPlaylist()}
+        </div>
+    </div>);
 }
 
 export default PrevlistView;

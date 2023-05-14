@@ -14,18 +14,23 @@ async function getProfile() {
 /* GET-functions */
 function getSavedTracks() { // Get all of user's saved tracks
   const field = "?limit=50";
-  let tracks = [];
-  return generalAPI('/me/tracks' + field).then(filterACB);
-  
-  function filterACB(response) { 
-    tracks = tracks.concat(response.items.map(savedTrackToFormatCB));
-    if(response.next !== null) {  // If there is more to retrieve
-      return generalAPI(apiToEndpoint(response.next)).then(filterACB);
-    } else {
-      return tracks;
+  return generalAPI('/me/tracks' + field).then(getNextACB);
+
+  function getNextACB(response) {
+    const promises = [];
+
+    if(response.total > 0) {
+      for(let i = 0; i < (Math.ceil(response.total/50)-1); i++) {
+        const offset = (i+1)*50;
+        const field = "?limit=50" + "&offset=" + offset;
+        promises.push(generalAPI('/me/tracks' + field));
+      }
+      return Promise.all(promises).then((values) => {
+        return values.reduce((subArray, response) => subArray.concat(response.items.map(savedTrackToFormatCB)), response.items.map(savedTrackToFormatCB));
+      });
     }
   }
-  
+
   function savedTrackToFormatCB(element) {  // Filter what parameters is kept for each track
     return { 
       track: {
@@ -39,27 +44,35 @@ function getSavedTracks() { // Get all of user's saved tracks
   }
 }
 
-
-async function getPlaylistID(playlist) {  // Get id from playlist
+function getPlaylistInfo(playlist) {  // Get id from playlist
   const id = convertURLtoID(playlist);
-  return await generalAPI('/playlists/' + id); 
+  return generalAPI('/playlists/' + id); 
 }
 
+function getSavedInfo() {
+  const field = "?limit=1";
+  return generalAPI('/me/tracks' + field);
+}
 
 function getTracksPlaylist(playlist) {  // Get tracks from playlist
   const id = convertURLtoID(playlist);
-  const fields = "?limit=50&fields=next,items(track(album(id, images),artists(genres,id,name,images),name,id))"; // Adjust what is retrieved here
-  let tracks = [];
+  const fields = "?limit=50&fields=total,items(track(album(id, images),artists(genres,id,name,images),name,id))"; // Adjust what is retrieved here
   return generalAPI('/playlists/' + id + '/tracks' + fields).then(getNextACB);
 
   function getNextACB(response) {
-    tracks = tracks.concat(response.items);
-    if(response.next !== null) {  // If there is more to retrieve
-      return generalAPI(apiToEndpoint(response.next)).then(getNextACB);
-    } else {
-      return tracks;
+    const promises = [];
+
+    if(response.total > 0) {
+      for(let i = 0; i < (Math.ceil(response.total/50)-1); i++) {
+        const offset = (i+1)*50;
+        const field = "?limit=50&fields=items(track(album(id, images),artists(genres,id,name,images),name,id))" + "&offset=" + offset;
+        promises.push(generalAPI('/playlists/' + id + '/tracks' + field));
+      }
+      return Promise.all(promises).then((values) => {
+        return values.reduce((subArray, response) => subArray.concat(response.items), response.items);
+      });
     }
-  } 
+  }
 }
 
 function getTracks(idlist) {  // Gets maximum of 50 tracks from id list
@@ -67,7 +80,7 @@ function getTracks(idlist) {  // Gets maximum of 50 tracks from id list
   return generalAPI('/tracks' + ids).then((response) => response.tracks.map((track) => { 
     return {
       track: {
-        album: {images:track.album.images, name:track.album.naame},
+        album: {images:track.album.images, name:track.album.name},
         artists: track.artists.map(artistToFormatCB),
         id: track.id,
         href: track.href,
@@ -84,7 +97,7 @@ function getAllTracks(idlist) { // Gets all tracks from a id list
   });
 }
 
-function getTrackParams(id) {  // Gets a tracks audio parameter
+function getTrackParams(id) { // Gets a tracks audio parameter
   return generalAPI('/audio-features/' + id).then(trackParamsToFormatCB);
 }
 
@@ -105,7 +118,7 @@ async function getGenres() {  // Returns list of all genres
 }
 
 function getArtistsPlaylist(playlist) { // Returns list of all artists IDs in a playlist
-  const list = getTracksPlaylist(playlist).then(tracksToArtistList);;
+  const list = getTracksPlaylist(playlist).then(tracksToArtistList);
   return list;
 }
 
@@ -125,7 +138,10 @@ function getAllArtistsPlaylist(playlist) {
   }).then((values) => { // Reduce the list to one
     return values.reduce((subArray, response) => {
       return subArray.concat(response.artists)}, []);
-  }).then((artists) => artists.map(artistToFormatCB));// Compress to important fields
+  }).then((artists) => artists.map(artistToFormatCB) // Compress to important fields
+  ).then((list) => {  // Sort
+    return list.sort((a,b) => a.name > b.name ? 1:-1);
+  });
 }
 
 function getAllArtistsSaved() {
@@ -134,7 +150,38 @@ function getAllArtistsSaved() {
   }).then((values) => { // Reduce the list to one
     return values.reduce((subArray, response) => {
       return subArray.concat(response.artists)}, []);
-  }).then((artists) => artists.map(artistToFormatCB));// Compress to important fields
+  }).then((artists) => artists.map(artistToFormatCB) // Compress to important fields
+  ).then((list) => {  // Sort
+    return list.sort((a,b) => a.name > b.name ? 1:-1);
+  });
+}
+
+function getGenresPlaylist(playlist) {
+  const genres = [];
+  return getAllArtistsPlaylist(playlist).then((list) => {
+    list.forEach(artist => {
+      artist.genres.forEach(genre => {
+        if(genres.includes(genre))
+          return;
+        genres.push(genre);
+      });
+    });
+    return genres.sort();
+  });
+}
+
+function getGenresSaved() {
+  const genres = [];
+  return getAllArtistsSaved().then((list) => {
+    list.forEach(artist => {
+      artist.genres.forEach(genre => {
+        if(genres.includes(genre))
+          return;
+        genres.push(genre);
+      });
+    });
+    return genres.sort();
+  });
 }
 
 /* Search */
@@ -186,7 +233,7 @@ function addAllTracks(playlist, idlist) {
   let currentIds = [];
   let leftIds = idlist;
   if(idlist.length > 0) {
-    for(let i = 0; i < idlist.length/50; i++) {
+    for(let i = 0; i < Math.ceil(idlist.length/50); i++) {
       currentIds = leftIds.slice(0,50);
       leftIds = leftIds.slice(50);
       promises.push(addTracks(playlist, currentIds));
@@ -231,32 +278,32 @@ async function generalAPI(endpoint, method="GET", body=null) {
         body:body
       });
       
-        if (!response.ok) {
-          throw new Error('HTTP status ' + response.status);
-        } 
-
+      if (response.ok) {
         if(method === "GET" || method === "POST")
           return await response.json();
-
+      } else {
+        throw new Error('HTTP status ' + response.status);
+      }
     } catch (err) {
-      console.log("Error " + err);
       throw new Error(err);
+      return;
     }
   }
 }
 
 // Help-functions
 function tracksToArtistList(tracks) { // Retrieve unique artist from list of tracks
-  const artistList = [];
+  const artistList = new Set([]);
   tracks.forEach((track) => {  
     const artists = track.track.artists;
     artists.forEach((artist) => { // Don't allow repeats
-      if(!artistList.find(element => element == artist.id))
-        artistList.push(artist.id);
+      if(artistList.has(artist.id)) {
+        return;
+      }
+      artistList.add(artist.id);
     });
   });
-
-  return artistList;
+  return Array.from(artistList);
 }
 
 function fetchAllFromIDList(call, idlist) { // Uses Promise.all to call all promises concurrently
@@ -274,11 +321,23 @@ function fetchAllFromIDList(call, idlist) { // Uses Promise.all to call all prom
 }
 
 function artistToFormatCB(artist) { // Compress retrieved artist format to what we need
+  // instantiate with default values
+  let genres = [];
+  let images = null;
+
+  if (artist.genres) {
+    genres = artist.genres;
+  }
+
+  if (artist.images) {
+    images = artist.images;
+  }
+
   return {
-    genres: artist.genres,
-    id: artist.id,
-    name: artist.name,
-    images: artist.images
+    genres:genres,
+    id:artist.id,
+    name:artist.name,
+    images:images
   }
 }
 
@@ -310,4 +369,4 @@ function apiToEndpoint(url) { // Removes start when retrieving next url from Spo
   return url.replace("https://api.spotify.com/v1", '');
 }
 
-export {getProfile, getSavedTracks, getPlaylistID, getTracks, getAllTracks, getTracksPlaylist, getTrackParams, getTracksParams, getAllTracksParams, getGenres, getArtistsPlaylist, getArtistsSaved, getAllArtistsPlaylist, getAllArtistsSaved, searchArtist, playTracks, createPlaylist, addTracks, addAllTracks, changePlaylistName, removeTrack};
+export {getProfile, getSavedTracks, getSavedInfo, getPlaylistInfo, getTracks, getAllTracks, getTracksPlaylist, getTrackParams, getTracksParams, getAllTracksParams, getGenres, getArtistsPlaylist, getArtistsSaved, getAllArtistsPlaylist, getAllArtistsSaved, getGenresPlaylist, getGenresSaved, searchArtist, playTracks, createPlaylist, addTracks, addAllTracks, changePlaylistName, removeTrack};

@@ -2,21 +2,14 @@ import LoadingView from "../views/loadingView";
 import AudioPlayer from "../views/audioPlayView";
 
 import { useState, useEffect } from "react";
-import { getSavedTracks, getTracksParams, getTracksPlaylist, getAllTracks } from "../spotifySource.js";
-
-// temp import
-import fixedPlaylist from "../test/fixedList";
-import fixedFeatures from "../test/fixedFeatures";
-
-
-import { flushSync } from 'react-dom';
-import DiggerModel from "../DiggerModel";
-
-
+import { getSavedTracks, getAllTracksParams, getTracksPlaylist, getAllTracks, getAllArtistsPlaylist, getAllArtistsSaved } from "../spotifySource.js";
+import resolvePromise from "../resolvePromise.js";
+import { useNavigate } from "react-router-dom";
 
 function Loading(props) {
-    // debug
-    // props.model.debugModelState("/loading init");
+    const debugFilterSteps = false;
+    const playlistMaxLength = 30; // Change to increase playlist size
+    const navigate = useNavigate();
 
     // add observer for notifications for state changes
     useEffect(addObserverOnCreatedACB, [])
@@ -34,86 +27,169 @@ function Loading(props) {
     // rerender on state change
     function notifyACB() {
         forceReRender({});
-        //props.model.debugModelState("/loading rerender");
     }
 
-
     // state for visual feedback when loading is done
-    const [loadingDone, setloadingDone] = useState(false);
+    const [loadingState, setLoadingState] = useState("Getting tracks from source...");
 
-    // Objects to save tracks from Spotify in
-    let tracks = {}; // final tracklist
-    let trackIDs = []; // keep track of ids when filtering
-    let trackInformation = []; // info includes artist, genre etc
-    let trackAudioFeatures = []; // info includes tempo, loudness etc
-    let newGenerated = {};
+    // states for API calls (trackids, audiofeatures, trackinformation)
+    const [sourceTracksPromise, setSourceTracksPromiseState] = useState({});
+    const [audioFeaturesPromise, setAudioFeaturesPromiseState] = useState({});
+    const [trackInfoPromise, setTrackInfoPromiseState] = useState({});
+    const [artistsInfoPromise, setArtistPromiseState] = useState({});
 
-    
+    // useEffects for API calls
     useEffect(onMountedACB, []);
+    useEffect(onResolveSourceTracksPromiseACB, [sourceTracksPromise]);
+    useEffect(onResolveAudioFeaturesPromiseACB, [audioFeaturesPromise]);
+    useEffect(onResolveArtistInfoPromiseACB, [trackInfoPromise]);
+    useEffect(onResolveTrackInfoStatePromiseACB, [artistsInfoPromise]);
+
+    // useEffect to Redirect
+    useEffect(() => {
+        if(loadingState === "Generation cancelled.")
+            navigate("/parameter");
+    }, [loadingState]);
 
     return (
         <div>
-            <LoadingView loadingState={loadingDone} viewPlaylist={viewPlaylistACB}/>
-            <AudioPlayer play={true} tracks={["spotify:track:0hl8k492sfcfLQudNctEiR"]}/>
+            <LoadingView loadingState={loadingState} viewPlaylist={viewPlaylistACB}/>
+            <AudioPlayer play={false} tracks={["spotify:track:0hl8k492sfcfLQudNctEiR"]}/>
         </div>
     );
 
-    function onMountedACB() {
-        // create and save generated list from source
-        /* 
-        * get list of ids from source
-        * get audio features for those ids
-        * filter ids based on audiofeatures
-        * 
-        * get trackinformation based on filtered ids
-        * filter genre and excluded artists
-        * create final playlist with a mix of wanted and neutral artists
-        */
-
-        getTrackIDsFromSource();
-        getTrackAudioFeatures();
-        filterOnAudioFeatParams();
-
-        getTracksFromFilteredIDs();
-        filterOnGenreAndExclArtist();
-        setTracksBasedOnIncludedArtists();
-
-        setNewGenerated();
-
-        //loading done
-        setloadingDone(true);
-    }
-
-
     /**
-     * API-related
+     * useEffect callbacks
      */
 
-    // Returns 
-    function getTrackIDsFromSource() {
-        if (props.model.source) { // get tracks from provided source
-            // TODO implement
-            // getTracksPlaylist
-        } else { // get from saved songs
-            // TODO implement
-            // getSavedTracks
-        }    
+    function onMountedACB() {
+        /* FLOW OF GENERATION:
+         * get list of ids from source (API)
+         * get audio features for those ids (API)
+         * filter ids based on audiofeatures
+         * get trackinformation based on filtered ids (API)
+         * filter genre and excluded artists
+         * create final playlist with a mix of wanted and neutral artists
+         */
+
+        // set trackids from source
+        if (props.model.source === "saved") { 
+            // get from saved songs
+            resolvePromise(getSavedTracks(), sourceTracksPromise, setSourceTracksPromiseState);
+        } else if (props.model.source) { 
+            // get tracks from provided source URL
+            resolvePromise(getTracksPlaylist(props.model.source), sourceTracksPromise, setSourceTracksPromiseState);
+        } else { // someone went to loading page manually without an active session
+            setLoadingState("Except it's not, since you're not supposed to be here because you do not have an active session going on!");
+        }
     }
 
-    function getTrackAudioFeatures() {
-        // TODO
-        // should use trackIDs to set trackAudioFeatures
-        // getTracksParams(idList), takes an array of track ids in string format
+    function onResolveSourceTracksPromiseACB() {        
+        function extractIdACB (element) {
+            return element.track.id;
+        }
 
-        // temp:
-        trackAudioFeatures = fixedFeatures;
+        if (sourceTracksPromise.data != null) {
+            let tracksFromSource = sourceTracksPromise.data;
+            let trackIDs = [...tracksFromSource].map(extractIdACB);
+
+            if(debugFilterSteps) {
+                console.log("tracksFromSource", tracksFromSource);
+            }
+
+            if (trackIDs.length !== 0) {
+                setLoadingState("Getting audio features...");
+                // get track audio features from the ids
+                resolvePromise(getAllTracksParams(trackIDs), audioFeaturesPromise, setAudioFeaturesPromiseState);
+            } else {
+                setLoadingState("Generation cancelled.");
+                alert("Source playlist empty! Please choose a source playlist that contains tracks.");
+            }
+        } 
     }
 
-    function getTracksFromFilteredIDs() {
-        // TODO
-        // should use trackIDs to set trackInformation
-        // getAllTracks(idList)
-        trackInformation = fixedPlaylist.tracks;
+    function onResolveAudioFeaturesPromiseACB() {
+        function extractIdACB (element) {
+            return element.id;
+        }
+
+        if (audioFeaturesPromise.data != null) {
+            let tracksWithAudioFeatures = audioFeaturesPromise.data;
+
+            if(debugFilterSteps) {
+                console.log("tracksWithAudioFeatures", tracksWithAudioFeatures);
+            }
+            setLoadingState("Filtering on audio features...");
+            let filteredTracks = filterOnAudioFeatParams(tracksWithAudioFeatures);
+            let trackIDs = filteredTracks.map(extractIdACB);
+
+            if(debugFilterSteps) {
+                console.log("tracksFilteredOnAudioFeatures", filteredTracks);
+            }
+
+            if (trackIDs.length !== 0) {
+                setLoadingState("Getting additional information...");
+                // get track info from ids that are left
+                resolvePromise(getAllTracks(trackIDs), trackInfoPromise, setTrackInfoPromiseState);
+            } else {
+                setLoadingState("Generation cancelled.");
+                alert("Your parameters are too strict!\n\nTry relaxing the parameters in the following categories:\n\n - Tempo\n - Noisiness\n - Amount of vocals\n - Restrictions on danceability\n - Restrictions on acousticness\n\nYou can also try selecting a different source playlist!");
+            }
+           
+        }
+    }
+
+    function onResolveArtistInfoPromiseACB() {
+        if(trackInfoPromise.data != null) {            
+            let tracksWithInfo = trackInfoPromise.data;
+
+            if(debugFilterSteps) {
+                console.log("tracksWithInfo", tracksWithInfo);
+            }
+
+            setLoadingState("Getting artist information...");
+
+            if(props.model.source === "saved")
+                resolvePromise(getAllArtistsSaved(), artistsInfoPromise, setArtistPromiseState);
+            else if(props.model.source) 
+                resolvePromise(getAllArtistsPlaylist(props.model.source), artistsInfoPromise, setArtistPromiseState);
+        }
+    }
+
+    function onResolveTrackInfoStatePromiseACB() {
+        if (artistsInfoPromise.data != null) {
+            const artistsInfo = artistsInfoPromise.data;
+            const tracksWithInfo = trackInfoPromise.data;
+
+            if(debugFilterSteps) {
+                console.log("artistsInfo", artistsInfo);
+            }
+
+            setLoadingState("Filtering on genres and artists...");
+            let filteredTracks = filterOnGenreAndExclArtist(tracksWithInfo, artistsInfo);
+
+            if(debugFilterSteps) {
+                console.log("tracksFilteredOnGenreAndExclArtist", filteredTracks);
+            }
+
+            if (filteredTracks.length !== 0) {
+                if(debugFilterSteps)
+                    console.log("Creating the final blend...");
+                let finalTrackList = setTracksBasedOnIncludedArtists(filteredTracks);
+
+                if(debugFilterSteps) {
+                    console.log("finalTracklist", finalTrackList);
+                }
+
+                setNewGenerated(finalTrackList); 
+
+                setLoadingState("Done!");
+            } else {
+                setLoadingState("Generation cancelled.");
+                alert("Your parameters are too strict!\n\Try making changes in the following categories:\n\n - Include more genres\n - Do not exclude as many artists\n\nYou can also try selecting a different source playlist!")
+            }
+            
+        }
     }
 
 
@@ -129,44 +205,47 @@ function Loading(props) {
      * - danceability (switch, decide threshhold)    0.75<
      * - acousticness threshhold)     0.75<
      * 
-     * Updates trackIDs to only include trackIDs left in trackAudioFeatures
+     * returns list of tracks filter from these params
      */
-    function filterOnAudioFeatParams() {
+    function filterOnAudioFeatParams(tracksWithAudioFeatures) {
         function chosenParamsACB(track) {
             // Our decided thresholds
-            const danceMinValue = 0.75;
-            const acousticMinValue = 0.75;
+            let includeBasedOnTempo =
+                (track.tempo >= props.model.tempo.min &&
+                 track.tempo <= props.model.tempo.max);
+            let includeBasedOnLoudness =
+                (track.loudness >= props.model.loudness.min &&
+                 track.loudness <= props.model.loudness.max);
+            let includeBasedOnInstrumentalness =
+                (track.instrumentalness >= (1-props.model.instrumentalness.max/100) &&
+                 track.instrumentalness <= (1-props.model.instrumentalness.min/100)); // 0-1 in API, % in model
 
             let includeBasedOnAcousticness = true;
             let includeBasedOnDanceability = true;
 
+            const danceMinValue = 0.7;
+            const acousticMinValue = 0.5;
+
             // If user wants a danceable list, only include danceable songs. Else, include full range. 
+            // IMPORTANT danceability in FixedFeatures, danceable in model
             if (props.model.danceable) {
                 includeBasedOnDanceability = (track.danceability >= danceMinValue);
             }
 
             // If user wants an acoustic list, only include such songs. Else, include full range. 
+            // IMPORTANT acousticness in FixedFeatures, acoustic in model
             if (props.model.acoustic) {
                 includeBasedOnAcousticness = (track.acousticness >= acousticMinValue);
             }
-            
-            // FixedFeatures on the left, compare with values from Diggermodel on the right.
-            // important: danceability, acousticness in FixedFeatures
-            //            danceable, acoustic in DiggerModel
-            return (track.tempo >= props.model.tempo.min &&
-                    track.tempo <= props.model.tempo.min &&
-                    track.loudness >= props.model.loudness.min &&
-                    track.loudness <= props.model.louness.max &&
-                    track.instrumentalness >= props.model.instrumentalness.min/100 && // 0-1 in API, % in model
-                    track.instrumentalness <= props.model.instrumentalness.max/100 &&
-                    includeBasedOnDanceability && includeBasedOnAcousticness);
+
+            return (includeBasedOnTempo &&
+                    includeBasedOnLoudness &&
+                    includeBasedOnInstrumentalness &&
+                    includeBasedOnDanceability &&
+                    includeBasedOnAcousticness);
         }
 
-        function extractTrackIDsACB(track) {
-            return track.id;
-        }
-
-        trackIDs = trackAudioFeatures.filter(chosenParamsACB).map(extractTrackIDsACB);
+        return tracksWithAudioFeatures.filter(chosenParamsACB);
     }
 
     /** 
@@ -174,51 +253,150 @@ function Loading(props) {
      * - genres
      * - excluded artists
      */
-    function filterOnGenreAndExclArtist() {
-        // return false if artist is unwanted. 
-        function markUnwantedArtistsACB(artist) {
-            if (props.model.excludedArtists.includes(artist))
-                return false;
-            return true;
-        }
+    function filterOnGenreAndExclArtist(tracksWithInfo, artistsInfo) {
 
         // return true if genre is wanted
-        function markWantedGenreACB(genre) {
+        function markWantedGenreCB(genre) {
             return props.model.genres.includes(genre);         
         }
 
-        /* filter for each current track */
-        function filterGenreAndArtistACB(currentTrack) {
-            // go through genres
-            let trackContainsWantedGenre = true;
-            if (props.model.genres.length != 0) { // user has selected specific genres
-                let wantedStatusOfGenres = [true] // TODO currentTrack.track.genres.map(markWantedGenreACB);
-                trackContainsWantedGenre = wantedStatusOfGenres.includes(true);
+        // return false if artist is excluded or does not make music out of one of the wanted genres
+        function markUnwantedArtistsACB(artist) {
+            if (props.model.excludedArtists.includes(artist.id)) {
+                return false;
+            } else if (props.model.genres.length !== 0) {
+                const info = artistsInfo.find(element => element.id === artist.id);
+        
+                if (info.genres.length !== 0) { // there exists genres for artist
+                    return info.genres.find(markWantedGenreCB);
+                }
+
+                //console.log("No genres for artist, " + artist.name);
+                return true; // artists without genre are included
+            } else {
+                return true; // if no genres are selected, all genres are ok
             }
            
-            // go through artist array
-            let wantedStatusofArtists = currentTrack.track.artists.map(markUnwantedArtistsACB);
-            let trackContainsUnwantedArtist = wantedStatusofArtists.includes(false);
-
-            return (!trackContainsUnwantedArtist && trackContainsWantedGenre);
         }
         
-        trackInformation = trackInformation.filter(filterGenreAndArtistACB);
+        /* filter for each current track */
+        function filterGenreAndArtistACB(currentTrack) {
+            let wantedStatusofArtists = currentTrack.track.artists.some(markUnwantedArtistsACB);
+            // Returns true if wanted
+
+            return wantedStatusofArtists;
+        }
+
+        return tracksWithInfo.filter(filterGenreAndArtistACB);
     }
 
-    function setTracksBasedOnIncludedArtists() {
-        // TODO implement
-        /*
-        create the following lists based on (the now filtered) trackInformation
-        * a list with only tracks from wanted artists, max 3 tracks from each wanted artist
-        * a list with only tracks from neutral artists, scrambled (excluded artist should have been removed in filterTracksNotMatchingParams)
+    function setTracksBasedOnIncludedArtists(filteredTracks) {
+        let wantedTracks = createListOfWantedArtistsTracks(filteredTracks);
+
+        if (debugFilterSteps) {
+            console.log("tracksIncludedArtist", [...wantedTracks]);
+        }
         
-        if list with included artists has > 50 tracks, scramble and set tracks to the 50 first
-        if list with included artists has < 50 tracks, add from other list so that we have 50. Scramble and return.
-        */
+
+        // if list with included artists has < playlistMaxLength tracks, add from other list so that we have playlistMaxLength. Scramble and return.
+        if (wantedTracks.length <= playlistMaxLength) {
+            let additionalAcceptableTracks= createListOfAdditionalAcceptableTracks(filteredTracks, wantedTracks);
+
+            // plocka ut diffen från additionalAcceptableTracks, lägg till i wantedtracks
+            const diff = playlistMaxLength - wantedTracks.length;
+
+                if (additionalAcceptableTracks.length > diff) {
+                    // scramble and cut down additional tracks to correct lenght
+                    additionalAcceptableTracks = scramblePlaylist(additionalAcceptableTracks);
+                    additionalAcceptableTracks = [...additionalAcceptableTracks].slice(0, diff);
+                }
+
+                wantedTracks = wantedTracks.concat(additionalAcceptableTracks); 
+
+        } else {
+            // cut the saved tracks at playlistMaxLength
+            wantedTracks = wantedTracks.slice(0, playlistMaxLength);
+        }
+
+        return wantedTracks;
     }
 
-    function setNewGenerated() {
+    /**
+     * Create a scrambled list of tracks from wanted artists with a maximum of 3 songs from each wanted artist
+     */
+    function createListOfWantedArtistsTracks(filteredTracks) {
+        function markWantedArtistsACB(artist) {
+            return props.model.includedArtists.includes(artist.id);
+        }
+
+        /**
+         * return true if artist is wanted and has been included less than 3 times
+         * return false if artist has been included to it's limit, or if it is not a wanted artist
+         */
+        function incrementArtistCounterACB(artist) {
+            if (props.model.includedArtists.includes(artist)) {
+                // find and update counter of artist
+                var foundIndex = artistCounter.findIndex(x => x.artisdID == artist.id);
+                var currentCount = artistCounter[foundIndex].counter;
+
+                if (currentCount < 3) {
+                    artistCounter[foundIndex] = {artistID:artist.id, counter:currentCount+1};
+                    return true;
+                } else {
+                    return false;
+                }
+            } else { // artist not explicitly wanted
+                return false; 
+            } 
+        }
+
+        function filterOnWantedArtistACB(currentTrack) {
+            let wantedStatusofArtists = currentTrack.track.artists.map(markWantedArtistsACB);
+            return wantedStatusofArtists.includes(true);
+        }
+
+        function createArtistCounterACB(artist) {
+            return {artistID:artist.id, counter:0};
+        }
+
+        function limitTracksFromSameArtistACB(currentTrack) {
+            // pick out all wanted artists collaborating on the song
+            let keepBasedOnCounter = currentTrack.track.artists.map(incrementArtistCounterACB);
+            // keep only if there exists a wanted artist on list that needs to be included
+            return (keepBasedOnCounter.includes(true)) 
+        }
+
+        // Extract only wanted artists
+        let onlyWantedArtistsTracks = [...filteredTracks].filter(filterOnWantedArtistACB);
+        // Scramble the list
+        let scrambledOnlyWanted = scramblePlaylist(onlyWantedArtistsTracks);
+        // Create counter for how many song we have looked at so far from each wanted artist
+        let artistCounter = [...props.model.includedArtists].map(createArtistCounterACB);
+        // Filter so that max the first 3 songs of each artist remain
+        let limitedScrambledOnlyWanted = scrambledOnlyWanted.filter(limitTracksFromSameArtistACB);
+
+        // TODO debug limit-functions with artistcounter and use limitedScrambledOnlyWanted
+        //return [...limitedScrambledOnlyWanted]; 
+        return [...scrambledOnlyWanted];
+    }
+
+    /**
+     * Create a list of tracks with all acceptable tracks except for given already selected tracks
+     */
+    function createListOfAdditionalAcceptableTracks(filteredTracks, alreadySelected) {
+        function removeAlreadySelectedACB(track) {
+            // if not in selected, it should be in our list
+            return (!alreadySelected.includes(track))
+        }
+        return [...filteredTracks].filter(removeAlreadySelectedACB);
+    }
+
+    function scramblePlaylist(playlist) {
+        // return a scrambled version of playlist
+        return [...playlist].sort((a, b) => 0.5 - Math.random());
+    }
+
+    function setNewGenerated(finalTrackList) {
         const newGenerated = {};
         
         // Set firebasekey based on the current highest key
@@ -230,7 +408,7 @@ function Loading(props) {
             newGenerated.firebaseKey = 0;
         }
 
-        newGenerated.tracks = fixedPlaylist.tracks; // TODO set to actual tracks
+        newGenerated.tracks = finalTrackList;
         newGenerated.playlistName = 'Playlist #' + newGenerated.firebaseKey;
 
         props.model.addToPrevPlaylists({playlistName:newGenerated.playlistName, firebaseKey:newGenerated.firebaseKey}); 

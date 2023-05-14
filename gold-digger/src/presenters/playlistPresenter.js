@@ -3,13 +3,9 @@ import { useEffect, useState } from "react";
 import { generatedListPromise } from "../firebaseModel.js";
 import resolvePromise from "../resolvePromise.js";
 import waitForFirebase from "../views/waitForFirebase.js";
-
-import { createPlaylist, addAllTracks } from "../spotifySource.js";
-
-// temp import
-import fixedList from "../test/fixedList.js";
 import AudioPlayer from "../views/audioPlayView.js";
 
+import { createPlaylist, addAllTracks } from "../spotifySource.js";
 
 /**
  * Sends a playlist containing all tracks to props.
@@ -17,12 +13,13 @@ import AudioPlayer from "../views/audioPlayView.js";
  */
 
 function Playlist (props) {
-    // debug
-    // props.model.debugModelState("/playlist init");
 
     // add observer for notifications for state changes
     useEffect(addObserverOnCreatedACB, [])
     const [, forceReRender ]= useState(); 
+    const [playTrackState, setPlayTrackState] = useState({play:false, offset:0, tracks:[]});
+    const [tracksState, setTracksState] = useState([]);
+    const [changesState, setChangesState] = useState([]);
 
     function addObserverOnCreatedACB() {
 
@@ -36,13 +33,13 @@ function Playlist (props) {
     }
 
     // rerender on state change
-    function notifyACB() {
+    function notifyACB(payload={}) {
+      if (!payload.exclusivelyForPersistence) {
         forceReRender({});
-        //props.model.debugModelState("/playlist rerender");
+      }
     }
 
     let playlistName = props.model.generated.playlistName;
-    let tracks = props.model.generated.tracks;
 
     const [playlistPromiseState, setPlaylistPromiseState] = useState({});
     const [playlistCreatePromiseState, setPlaylistCreatePromiseState] = useState({});
@@ -51,17 +48,27 @@ function Playlist (props) {
 
     useEffect(() =>{
       if(playlistCreatePromiseState.data != null){
-        let ids = tracks.map(elem => elem.track.id);
+        let ids = tracksState.map(elem => elem.track.id);
         addAllTracks(playlistCreatePromiseState.data.id, ids);
+        alert("Playlist was added to your account!");
       }
     }, [playlistCreatePromiseState, setPlaylistCreatePromiseState]);
 
+    useEffect(() =>{
+      if(playlistPromiseState.data != null) {
+        setTracksState(props.model.generated.tracks.map(obj => ({...obj, included:true})));
+      }
+    }, [playlistPromiseState]);
+
+    useEffect(() => {
+      if(tracksState)
+        setPlayTrackState({play:false,offset:0,tracks:tracksToIDList()});
+    }, [tracksState]);
 
     // Lifecycle
     function onMountedACB(){
         // Resolve promise. Get all data in generated playlist from firebase, add it to model.
-        resolvePromise (generatedListPromise (props.model, props.model.generated.firebaseKey), playlistPromiseState, setPlaylistPromiseState);
-        return;
+        resolvePromise (generatedListPromise(props.model, props.model.generated.firebaseKey), playlistPromiseState, setPlaylistPromiseState);
     }
 
    
@@ -70,30 +77,79 @@ function Playlist (props) {
         {waitForFirebase(playlistPromiseState) ||
         <div>
           <PlaylistView
-            generatedTracks={tracks}
+            generatedTracks={tracksState}
             generatedName={playlistName}
             removeTrack={removeTrackACB}
+            retrieveTrack={retrieveTrackACB}
+            changesList={changesState}
             setAudioPlayerSong={setAudioPlayerSongACB}
             setPlaylistName={setPlaylistNameACB}
             savePlaylistToSpotify={savePlaylistToSpotifyACB}
             removePlaylist={removePlaylistACB}
           ></PlaylistView>
-          <AudioPlayer play={false} tracks={tracksToIDList()}/>
+          {!playTrackState.tracks.length || <AudioPlayer play={false} offset={playTrackState.offset} tracks={playTrackState.tracks}/>}
         </div>}
       </div>
     );
     
   function tracksToIDList() {
-      const list = tracks.map((element => {
-          return "spotify:track:" + element.track.id;
-      }));
-      return list;
+    const list = tracksState.map((element => {
+        return "spotify:track:" + element.track.id;
+    }));
+    return list;
   }
   
-    /* Event: onClick REMOVE /playlists/{playlist_id}/tracks */
-  function removeTrackACB(id) {
-    props.model.removeTrack(id);
+  
+  /* Event: onClick REMOVE /playlists/{playlist_id}/tracks */
+function removeTrackACB(id) {
+  let tracks = tracksState;
+  let foundIndex = tracks.findIndex(x => x.track.id == id);
+  tracks[foundIndex].included = false;
+  setTracksState(tracks);
+
+  // Update the changes list to keep track of removed tracks
+  let changes = changesState;
+  changes.push(tracks[foundIndex].track.id)
+  setChangesState(changes);
+
+  // Persist change without triggering rerender
+  props.model.removeTrack(id, true)
+
+  // Rerender based on local change
+  notifyACB();
+}
+
+/* Event: onClick REVERT deletion*/
+function retrieveTrackACB(){
+  
+  let id = changesState[changesState.length - 1];
+  
+  let tracks = tracksState;
+  let foundIndex = tracks.findIndex(x => x.track.id == id);
+  tracks[foundIndex].included = true;
+  
+  let changes = changesState;
+  changes.pop();
+  
+  setChangesState(changes);
+
+  // Rerender based on local change
+  notifyACB();
+
+  // Persist retrieved songs without triggering rerender
+  let retrievedTracks = [...tracks].filter(removeRemovedCB);
+  retrievedTracks = [...retrievedTracks].map(removeInclusionStatusCB);
+  props.model.setGenerated({...props.model.generated, tracks:retrievedTracks}, false, true);
+
+  function removeRemovedCB(item) {
+    return item.included;
   }
+
+  function removeInclusionStatusCB(item) {
+    return {track: {album:item.track.album, artists:item.track.artists, id:item.track.id, name:item.track.name, href:item.track.href}};
+  }
+
+}
 
   /* Event: onInput set name of generated list */
   function setPlaylistNameACB(input) {
@@ -102,15 +158,16 @@ function Playlist (props) {
   }
 
   /* Event: onClick set audio player song */
-  function setAudioPlayerSongACB() {}
+  function setAudioPlayerSongACB(trackID) {
+    const i = playTrackState.tracks.indexOf("spotify:track:"+trackID);
+    setPlayTrackState({play:false,offset:i,tracks:tracksToIDList()});
+  }
 
   function savePlaylistToSpotifyACB() {
     resolvePromise(createPlaylist(props.model.userid, playlistName), playlistCreatePromiseState, setPlaylistCreatePromiseState);
-    alert("Playlist was added to your account!");
   }
 
   function removePlaylistACB(){
-    console.log(props.model.generated.firebaseKey);
     props.model.removePrevPlaylist(props.model.generated.firebaseKey)
   }
 }

@@ -63,10 +63,6 @@ button{
 
 }
 
-.MuiSlider-markLabel{
-  
-}
-
 input:focus { 
   outline: none !important;
   border-color: #FF6B35;
@@ -89,7 +85,31 @@ input:focus {
   
   color:#FF6B35;
   margin-left: 5vw;
-  width:80%;
+  width:90%;
+}
+
+.sliderMarks{
+  display: flex;
+  flex-direction: row;
+}
+
+.leftSliderVal{
+  display: block;
+  left:0;
+  top:0;
+  padding:0;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.rightSliderVal{
+  text-align: right;
+  margin-left: auto; 
+margin-right: 0;
+top:0;
+padding:0;
+margin-top: 0;
+margin-bottom: 0;
 }
 
 .parameterTitle{
@@ -139,6 +159,11 @@ input:focus {
   width: 10%;
 }
 
+.cutText{
+  text-overflow: ellipsis;
+  overflow: hidden; 
+}
+
 /* ------------------- IDs ------------------- */
 
 /* ABOUT US*/
@@ -167,7 +192,6 @@ input:focus {
   width: 0;
   height:100%;
   overflow:hidden;
-
   background: rgb(43,43,43);
   background: linear-gradient(90deg, rgb(32, 32, 32) 0%, rgba(32, 32, 32) 65%, rgba(0,0,0,0) 100%);
   transition: width 0.2s;
@@ -175,14 +199,20 @@ input:focus {
 
 #aboutTitle{
   width:auto;
+  margin-top:10px;
+  margin-bottom: 0;
+}
+
+#aboutAuthorTitle{
+  color:white;
 }
 
 #authorInfo{
   margin: 10px 10px 25px 10px;
   width:auto;
   display:grid;
-  height: 130px;
-  grid-template-columns: 1fr 2fr;
+  height: 100px;
+  grid-template-columns: 120px 3fr;
   grid-template-rows: 1fr 2fr;
   overflow: hidden;
 }
@@ -191,11 +221,16 @@ input:focus {
   grid-column: 2/span 1;
   grid-row: 1/span 1;
   margin-bottom: 0;
+  color: rgb(219, 219, 219);
 }
 
 #authorAbout{
+  width:auto;
   grid-column: 2/span 1;
   grid-row: 2/span 1;
+  color:rgb(146, 146, 146);
+  text-decoration:underline; 
+  text-decoration-color: rgb(100, 100, 100);
 }
 
 #authorImg {
@@ -203,8 +238,8 @@ input:focus {
   grid-row: 1/span 2;
 
   object-fit: cover;
-  width: 120px;
-  height: 120px;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
 }
 
@@ -286,6 +321,17 @@ input:focus {
   font-size: 25px;
 }
 
+#continuePlaylistDisabled{
+  grid-row: 5 / span 1;
+  grid-column: 3 / span 1;
+  position: relative;
+  right:0;
+  margin: 4% 0 4% 18%;
+  font-size: 25px;
+  background-color:#2b2b2b;
+  color:#828282;
+}
+
 
 
 /* PREVLIST */
@@ -340,6 +386,7 @@ html {
   color:#828282;
   align-self: center;
   justify-self: center;
+  padding-left:15px;
 }
 
 /* S O U R C E */
@@ -352,37 +399,50 @@ html {
   width: 100%;
   height: 100%;
   display: grid;
-  grid-template-columns: 1fr 600px 1fr;
-  grid-template-rows: 2fr 140px 100px 100px 2fr;
+  grid-template-columns: 100px 0.8fr 600px 1fr;
+  grid-template-rows: 200px 1fr 140px 100px 100px 2fr;
+}
+
+#returnHomefromSource{
+
+  grid-row: 1 / span 1;
+  grid-column: 1 / span 1;
+  background-image: url("./../img/returnIcon.png"); /* 16px x 16px */
+  background-color:transparent;
+  background-repeat: no-repeat;  /* make the background image appear only once */
+  background-position: center; 
+  background-size: contain;
+
+  margin: 30% 30% 30% 30%;
 }
 
 #sourceNoTitle{
-  grid-row: 2 / span 1;
-  grid-column: 2 / span 1;
+  grid-row: 3 / span 1;
+  grid-column: 3 / span 1;
   justify-self: center;
   align-self: start;
   margin: 0 0 0 0;
 }
 
 #sourceTitle{
-  grid-row: 2 / span 1;
-  grid-column: 2 / span 1;
+  grid-row: 3 / span 1;
+  grid-column: 3 / span 1;
   justify-self: center;
   align-self: center;
   margin: 0 0 0 0;
 }
 
 #sourceSubTitle{
-  grid-row: 2 / span 1;
-  grid-column: 2 / span 1;
+  grid-row: 3 / span 1;
+  grid-column: 3 / span 1;
   justify-self: center;
   align-self: end;
   margin: 0 0 0 0;
 }
 
 #sourceButtonPlaylist{
-  grid-row: 3 / span 1;
-  grid-column: 2 / span 1;
+  grid-row: 4 / span 1;
+  grid-column: 3 / span 1;
   justify-self: center;
   margin: 3% 0 3% 0;
   width: 60%;
@@ -390,8 +450,8 @@ html {
 }
 
 #sourceInputPlaylist{
-  grid-row: 3 / span 1;
-  grid-column: 2 / span 1;
+  grid-row: 4 / span 1;
+  grid-column: 3 / span 1;
   justify-self: center;
   margin: 3% 0 3% 0;
   width: 60%;
@@ -408,8 +468,8 @@ input[type=text] {
 
 
 #sourceSaved{
-  grid-row: 4 / span 1;
-  grid-column: 2 / span 1;
+  grid-row: 5 / span 1;
+  grid-column: 3 / span 1;
   justify-self: center;
   margin: 3% 0 3% 0;
   width: 60%;
@@ -452,7 +512,7 @@ input[type=text] {
   left:0;
   top:150px;
   left:100px;
-  right: 100px;
+  right: 200px;
   bottom: 100px;
 
   display: grid;
@@ -499,6 +559,14 @@ input[type=text] {
   margin: 10% 5% 10% 5%;
 }
 
+#disabledFilterForwardButton{
+  grid-row: 4 / span 1;
+  grid-column: 3 / span 1;
+  margin: 10% 5% 10% 5%;
+  background-color:#2b2b2b;
+  color:#828282;
+}
+
 #filterNoTitle{
   grid-row: 1 / span 1;
   grid-column: 2 / span 1;
@@ -522,8 +590,6 @@ input[type=text] {
 #parameterGrid{
   grid-row: 2 /span 1;
   grid-column: 1/span 3;
-  grid-template-columns: 50px 1fr 2fr 2fr;
-  grid-template-rows: 1fr 2fr 0.5fr;
 }
 
 #tempoSlider{
@@ -532,6 +598,7 @@ input[type=text] {
 
 .MuiSlider-root{
   color: pink;
+  padding-bottom: 0;
 }
 
 .MuiSlider-colorPrimary{
@@ -571,8 +638,9 @@ input[type=text] {
 
 #playlistContainer{
   display:grid;
-  margin-left: 200px;
+  margin-left: 100px;
   margin-right: 200px;
+  height: 100vh;
   grid-template-columns: 1fr;
   grid-template-rows: 100px 100px 100px 1fr 100px;
 }
@@ -621,23 +689,93 @@ input[type=text] {
   margin-bottom: 30px;
 }
 
+#savePlaylistContainer{
+  width:150px;
+  grid-row: 3 / span 1;
+  grid-column: 1 / span 1;
+  margin-left: 350px;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  margin-right: 40px;
+  display: flex;
+}
+
+#savePlaylistInfo{
+  top:0;
+  margin-top:0;
+  margin-left: 12px;
+  color:#828282;
+}
+
+
+#savePlaylistButton{
+
+  background-image: url("./../img/saveIcon.png"); /* 16px x 16px */
+  background-color:transparent;
+  background-repeat: no-repeat;  /* make the background image appear only once */
+  background-position: center; 
+  background-size: contain;
+
+  width: 50px;
+  height:50px;
+
+}
+
+#undoChangeButton{
+  grid-row: 3 / span 1;
+  grid-column: 1 / span 1;
+  margin-left: auto;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  margin-right: 40px;
+
+
+  background-image: url("./../img/undoIcon.png"); /* 16px x 16px */
+  background-color:transparent;
+  background-repeat: no-repeat;  /* make the background image appear only once */
+  background-position: center; 
+  background-size: contain;
+
+  width: 50px;
+  height:50px;
+
+}
+
 #trackContainer{
   grid-row: 4 / span 1;
   grid-column: 1 / span 1;
+}
+
+#noPlaylistText{
+  color:#828282;
 }
 
 
 
 #trackInfo{
   display: grid;
-  grid-template-columns: 120px 1fr 1fr 50px 120px;
+  grid-template-columns: 80px 120px 1fr 1fr 50px 120px;
   grid-template-rows: 40px 40px 40px;
 
 }
 
-#trackImg{
+#playButton{
   grid-row: 1 / span 3;
   grid-column: 1 / span 1;
+  background-image: url("./../img/playIcon.png"); /* 16px x 16px */
+  background-color:transparent;
+  background-repeat: no-repeat;  /* make the background image appear only once */
+  background-position: center; 
+  background-size: contain;
+
+  margin: 30% 15% 30% 30%;
+}
+
+#trackImg{
+  grid-row: 1 / span 3;
+  grid-column: 2 / span 1;
+  height: 90px;
+  width: 90px;
   object-fit: contain;
   align-self: center;
   justify-self: center;
@@ -645,32 +783,32 @@ input[type=text] {
 
 #trackName{
   grid-row: 2 / span 1;
-  grid-column: 2 / span 1;
+  grid-column: 3 / span 1;
   align-self: center;
 }
 
 #trackArtist{
   grid-row: 3 / span 1;
-  grid-column: 2 / span 1;
+  grid-column: 3 / span 1;
   vertical-align: top;
   margin:0 0 0 0;
 }
 
 #trackAlbum{
   grid-row: 2 / span 1;
-  grid-column: 3 / span 1;
+  grid-column: 4 / span 1;
   align-self: center;
 }
 
 #trackTime{
   grid-row: 2 / span 1;
-  grid-column: 4 / span 1;
+  grid-column: 5 / span 1;
   align-self: center;
 }
 
 #trackRemove{
   grid-row: 1 / span 3;
-  grid-column: 5 / span 1;
+  grid-column: 6 / span 1;
 
   background-image: url("./../img/garbageIcon.png"); 
   background-color:transparent;
@@ -843,7 +981,16 @@ input[type=text] {
   grid-column: 1/span 1;
   grid-row: 1/span 1;
   width: 95px;
+  height: 95px;
+  border-radius: 50%;
+  object-fit: cover;
 
+}
+
+#artistName{
+  font-size: large;
+  align-self: center;
+  margin-left: 20px;
 }
 
 #includeExcludeButtons{
@@ -864,6 +1011,27 @@ input[type=text] {
 }
 
 /*LOADING VIEW*/
+
+#loadingContainer{
+display:grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+}
+
+#loadingTitle{
+justify-self: center;
+margin-top: 10%;
+}
+
+#loadingInfo{
+  color:#828282;
+  justify-self: center;
+}
+
+#loadingButton{
+  width:200px;
+  justify-self: center;
+}
 
 #audioPlayer{
   position:fixed;
