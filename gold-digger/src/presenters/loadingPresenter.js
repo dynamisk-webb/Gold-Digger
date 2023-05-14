@@ -42,8 +42,8 @@ function Loading(props) {
     useEffect(onMountedACB, []);
     useEffect(onResolveSourceTracksPromiseACB, [sourceTracksPromise]);
     useEffect(onResolveAudioFeaturesPromiseACB, [audioFeaturesPromise]);
-    useEffect(onResolveArtistInfoPromiseACB, [trackInfoPromise]);
-    useEffect(onResolveTrackInfoStatePromiseACB, [artistsInfoPromise]);
+    useEffect(onResolveTrackInfoPromiseACB, [trackInfoPromise]);
+    useEffect(onResolveArtistInfoPromiseACB, [artistsInfoPromise]);
 
     // useEffect to Redirect
     useEffect(() => {
@@ -105,7 +105,10 @@ function Loading(props) {
                 setLoadingState("Generation cancelled.");
                 alert("Source playlist empty! Please choose a source playlist that contains tracks.");
             }
-        } 
+        } else if (sourceTracksPromise.error != null) {
+            setLoadingState("Generation cancelled.");
+            alert("There was a problem connecting to Spotify. Check your internet connection and try again!");
+        }
     }
 
     function onResolveAudioFeaturesPromiseACB() {
@@ -135,11 +138,13 @@ function Loading(props) {
                 setLoadingState("Generation cancelled.");
                 alert("Your parameters are too strict!\n\nTry relaxing the parameters in the following categories:\n\n - Tempo\n - Noisiness\n - Amount of vocals\n - Restrictions on danceability\n - Restrictions on acousticness\n\nYou can also try selecting a different source playlist!");
             }
-           
+        } else if (audioFeaturesPromise.error != null) {
+            setLoadingState("Generation cancelled.");
+            alert("There was a problem connecting to Spotify. Check your internet connection and try again!");
         }
     }
 
-    function onResolveArtistInfoPromiseACB() {
+    function onResolveTrackInfoPromiseACB() {
         if(trackInfoPromise.data != null) {            
             let tracksWithInfo = trackInfoPromise.data;
 
@@ -153,10 +158,13 @@ function Loading(props) {
                 resolvePromise(getAllArtistsSaved(), artistsInfoPromise, setArtistPromiseState);
             else if(props.model.source) 
                 resolvePromise(getAllArtistsPlaylist(props.model.source), artistsInfoPromise, setArtistPromiseState);
+        } else if (trackInfoPromise.error != null) {
+            setLoadingState("Generation cancelled.");
+            alert("There was a problem connecting to Spotify. Check your internet connection and try again!");
         }
     }
 
-    function onResolveTrackInfoStatePromiseACB() {
+    function onResolveArtistInfoPromiseACB() {
         if (artistsInfoPromise.data != null) {
             const artistsInfo = artistsInfoPromise.data;
             const tracksWithInfo = trackInfoPromise.data;
@@ -188,7 +196,9 @@ function Loading(props) {
                 setLoadingState("Generation cancelled.");
                 alert("Your parameters are too strict!\n\Try making changes in the following categories:\n\n - Include more genres\n - Do not exclude as many artists\n\nYou can also try selecting a different source playlist!")
             }
-            
+        } else if (artistsInfoPromise.error != null) {
+            setLoadingState("Generation cancelled.");
+            alert("There was a problem connecting to Spotify. Check your internet connection and try again!");
         }
     }
 
