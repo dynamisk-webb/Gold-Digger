@@ -77,7 +77,7 @@ function ArtistResultView(props){
     }
 
     return (
-      <div id="artistResult" key={result.name}>
+      <div id="artistResult" key={result.id}>
         {renderImg()}
         <p id="artistName">{result.name}</p>
         <div id="includeExcludeButtons">
