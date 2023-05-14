@@ -9,10 +9,15 @@ import resolvePromise from "../resolvePromise.js";
 import fixedPlaylist from "../test/fixedList";
 import fixedFeatures from "../test/fixedFeatures";
 
+import {useNavigate} from "react-router-dom"
+
 
 function Loading(props) {
+
+    // Variables
     const debugFilterSteps = true;
     const playlistMaxLength = 1000;
+    const navigate = useNavigate(); 
 
     // add observer for notifications for state changes
     useEffect(addObserverOnCreatedACB, [])
@@ -102,6 +107,7 @@ function Loading(props) {
             } else {
                 setLoadingState("Generation cancelled.");
                 alert("Source playlist empty! Please choose a source playlist that contains tracks.");
+                navigate("/source");
             }
         } 
     }
@@ -133,6 +139,7 @@ function Loading(props) {
             } else {
                 setLoadingState("Generation cancelled.");
                 alert("Your parameters are too strict!\n\nTry relaxing the parameters in the following categories:\n\n - Tempo\n - Noisiness\n - Amount of vocals\n - Restrictions on danceability\n - Restrictions on acousticness\n\nYou can also try selecting a different source playlist!");
+                navigate("/parameter");
             }
            
         }
@@ -167,6 +174,7 @@ function Loading(props) {
             } else {
                 setLoadingState("Generation cancelled.");
                 alert("Your parameters are too strict!\n\Try making changes in the following categories:\n\n - Include more genres\n - Do not exclude as many artists\n\nYou can also try selecting a different source playlist!")
+                navigate("/parameter");
             }
             
         }

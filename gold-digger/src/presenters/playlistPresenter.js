@@ -22,7 +22,6 @@ function Playlist (props) {
     const [playTrackState, setPlayTrackState] = useState({play:false, offset:0, tracks:[]});
     const [tracksState, setTracksState] = useState([]);
     const [changesState, setChangesState] = useState([]);
-    const [unsavedChangesState, setUnsavedChangesState] = useState(false);
 
     function addObserverOnCreatedACB() {
 
@@ -91,8 +90,6 @@ function Playlist (props) {
             setPlaylistName={setPlaylistNameACB}
             savePlaylistToSpotify={savePlaylistToSpotifyACB}
             removePlaylist={removePlaylistACB}
-            updatePlaylist={updatePlaylistACB}
-            unsavedChanges={unsavedChangesState}
           ></PlaylistView>
           {!playTrackState.tracks.length || <AudioPlayer play={false} offset={playTrackState.offset} tracks={playTrackState.tracks}/>}
         </div>}
@@ -119,9 +116,6 @@ function removeTrackACB(id) {
   let changes = changesState;
   changes.push(tracks[foundIndex].track.id)
   setChangesState(changes);
-
-  // Let the user know they have unsaved changes
-  // setUnsavedChangesState(true);
 
   // Persist change without triggering rerender
   props.model.removeTrack(id, true)
@@ -166,18 +160,12 @@ function retrieveTrackACB(){
   function setPlaylistNameACB(input) {
     props.model.setGeneratedName(input);
     props.model.setPrevName(input);
-    setUnsavedChangesState(true);
   }
 
   /* Event: onClick set audio player song */
   function setAudioPlayerSongACB(trackID) {
     const i = playTrackState.tracks.indexOf("spotify:track:"+trackID);
     setPlayTrackState({play:false,offset:i,tracks:tracksToIDList()});
-  }
-
-  /* Event: onClick UPDATE playlist*/
-  function updatePlaylistACB(){
-
   }
 
   function savePlaylistToSpotifyACB() {

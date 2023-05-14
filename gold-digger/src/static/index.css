@@ -85,7 +85,7 @@ input:focus {
   
   color:#FF6B35;
   margin-left: 5vw;
-  width:80%;
+  width:90%;
 }
 
 .sliderMarks{
@@ -507,7 +507,7 @@ input[type=text] {
   left:0;
   top:150px;
   left:100px;
-  right: 100px;
+  right: 200px;
   bottom: 100px;
 
   display: grid;
@@ -585,8 +585,6 @@ input[type=text] {
 #parameterGrid{
   grid-row: 2 /span 1;
   grid-column: 1/span 3;
-  grid-template-columns: 50px 1fr 2fr 2fr;
-  grid-template-rows: 1fr 2fr 0.5fr;
 }
 
 #tempoSlider{
@@ -687,7 +685,7 @@ input[type=text] {
 }
 
 #savePlaylistContainer{
-  
+  width:150px;
   grid-row: 3 / span 1;
   grid-column: 1 / span 1;
   margin-left: 350px;
@@ -699,6 +697,7 @@ input[type=text] {
 
 #savePlaylistInfo{
   top:0;
+  margin-top:0;
   margin-left: 12px;
   color:#828282;
 }
