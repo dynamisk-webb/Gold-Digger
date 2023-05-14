@@ -32,6 +32,12 @@ function Artists(props) {
   const [artistListState, setArtistListState] = useState([]);
   const [searchState, setSearchState] = useState("");
 
+  // States of infinite scrolling
+  const itemsPerPage = 20;
+  const [record, setRecord] = useState(itemsPerPage);
+  const [hasMore, setHasMore] = useState(true);
+    
+
   useEffect(() => {
     // TODO: get all artists from *saved tracks* or a *chosen playlist*
     // Right now: gets them all from Spotify(?) from a playlist. Unclear if this API call works. 
@@ -50,7 +56,6 @@ function Artists(props) {
   }, []);
 
   useEffect(() => {
-
     /* retrieve from model and mark artists as Exclude or Include values*/
     function getIncludeOrExcludeACB(artist) {
       
@@ -74,7 +79,10 @@ function Artists(props) {
       // transfer results from artistList into filteredState and artistListState
       setFilteredState(artistList);
       setArtistListState(artistList);
+      
+      notifyACB();
     }
+
   }, [promiseState, setState])
 
 
@@ -83,9 +91,15 @@ function Artists(props) {
       // filter based on the search term
       filterArtist(searchData);
     }else{
-      console.log("quick");
       setFilteredState(artistListState);
     }
+
+    // Ensure the new result resets the scroll
+    setRecord(20);
+    setHasMore(true);
+    let myDiv = document.getElementById('artistResults');
+    myDiv.scrollTop = 0;
+
     notifyACB();
     
     // save the search term
@@ -102,7 +116,16 @@ function Artists(props) {
     <div>
       <FilterView filterType="artist" title= "Select Artists" noTitle="Step 3 of 4" nextTitle="Next"></FilterView>
       <SearchView id="search" search={searchArtistACB}></SearchView>
-      {promiseNoData(promiseState) || <ArtistResultView artistResults={filteredState} setExcludeInclude={setExcludeIncludeACB}></ArtistResultView>}
+      {promiseNoData(promiseState) || 
+      <ArtistResultView 
+        artistResults={filteredState} 
+        setExcludeInclude={setExcludeIncludeACB} 
+        record={record} 
+        setRecord={setRecord} 
+        itemsPerPage={itemsPerPage}
+        hasMore = {hasMore}
+        setHasMore ={setHasMore}>
+      </ArtistResultView>}
     </div>
   );
 
