@@ -11,7 +11,6 @@ import FormLabel from '@mui/material/FormLabel';
 import Tooltip from '@mui/material/Tooltip';
 
 import InfiniteScroll from 'react-infinite-scroller';
-import {useState} from "react";
 
 import artistImg from "./../img/genericArtistIcon.png";
 import { orange, grey } from '@mui/material/colors';
@@ -57,7 +56,6 @@ function ArtistResultView(props){
       artists.push(getArtistCB(props.artistResults[i]));
       }
     }
-    console.log(artists);
     return artists;
   }
 

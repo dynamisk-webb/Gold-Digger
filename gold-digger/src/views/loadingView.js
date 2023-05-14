@@ -1,3 +1,7 @@
+/**
+ * LoadingView renders a view showing the status of the creation of the playlist.
+*/
+
 import {useNavigate} from "react-router-dom"
 
 function LoadingView(props){
@@ -5,7 +9,7 @@ function LoadingView(props){
     const navigate = useNavigate(); 
 
     // Functions
-    
+
     /* Render the current status of the creation of the playlist */
     function renderStatus(){
         if(props.loadingState == "Done!"){

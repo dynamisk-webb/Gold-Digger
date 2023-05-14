@@ -42,6 +42,7 @@ function Genres(props) {
             } else {
                 resolvePromise(getGenresPlaylist(playlist), promiseState, setState);
             }
+            notifyACB();
         }
         getGenreACB();
     }, []);
