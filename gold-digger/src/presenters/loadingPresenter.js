@@ -136,7 +136,7 @@ function Loading(props) {
                 resolvePromise(getAllTracks(trackIDs), trackInfoPromise, setTrackInfoPromiseState);
             } else {
                 setLoadingState("Generation cancelled.");
-                alert("Your parameters are too strict!\n\nTry relaxing the parameters in the following categories:\n\n - Tempo\n - Noisiness\n - Amount of vocals\n - Restrictions on danceability\n - Restrictions on acousticness\n\nYou can also try selecting a different source playlist!");
+                alert("Your parameters are too strict!\n\nTry relaxing the parameters in the following categories:\n\n - Tempo\n - Noisiness\n - Amount of vocals\n - Restrictions on danceability\n - Restrictions on acousticness\n\nYou can also try the same parameters with a different source playlist.");
             }
         } else if (audioFeaturesPromise.error != null) {
             setLoadingState("Generation cancelled.");
@@ -194,7 +194,7 @@ function Loading(props) {
                 setLoadingState("Done!");
             } else {
                 setLoadingState("Generation cancelled.");
-                alert("Your parameters are too strict!\n\Try making changes in the following categories:\n\n - Include more genres\n - Do not exclude as many artists\n\nYou can also try selecting a different source playlist!")
+                alert("Your parameters are too strict!\n\Try making changes in the following categories:\n\n - Include more genres\n - Do not exclude as many artists\n\nYou can also try relaxing the parameters in the following categories:\n\n - Tempo\n - Noisiness\n - Amount of vocals\n - Restrictions on danceability\n - Restrictions on acousticness\n\nYou can also try the same parameters with a different source playlist.")
             }
         } else if (artistsInfoPromise.error != null) {
             setLoadingState("Generation cancelled.");

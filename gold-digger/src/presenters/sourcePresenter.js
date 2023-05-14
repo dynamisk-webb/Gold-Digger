@@ -55,7 +55,6 @@ function Source(props) {
         alert("That looks like an empty playlist!\n\nSubmit a playlist with songs for us to filter.");
       } else {
         // make call to reset process parameters
-        props.model.resetParams();
         props.model.setSource(url);
         setValidURL(true);
       }
@@ -89,7 +88,6 @@ function Source(props) {
     if(saved.total === 0) {
       alert("Oops!\nLooks like you don't have any Liked Songs on Spotify.\n\nFill your Liked Songs on Spotify before continuing!");
     } else {
-      props.model.resetParams();
       props.model.setSource("saved");
       setValidURL(true);
     }
