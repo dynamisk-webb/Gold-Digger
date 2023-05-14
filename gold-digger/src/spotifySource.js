@@ -162,7 +162,7 @@ function getGenresPlaylist(playlist) {
         genres.push(genre);
       });
     });
-    return genres;
+    return genres.sort();
   });
 }
 
@@ -176,7 +176,7 @@ function getGenresSaved() {
         genres.push(genre);
       });
     });
-    return genres;
+    return genres.sort();
   });
 }
 
@@ -281,8 +281,8 @@ async function generalAPI(endpoint, method="GET", body=null) {
         throw new Error('HTTP status ' + response.status);
       }
     } catch (err) {
-      console.log(err);
       throw new Error(err);
+      return;
     }
   }
 }
