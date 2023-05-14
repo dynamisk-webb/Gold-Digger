@@ -74,7 +74,7 @@ function Source(props) {
   function setSourceSavedACB() {
     // make call to reset process parameters
     props.model.resetParams();
-    props.model.setSource("");
+    props.model.setSource("saved");
   }
 }
 export default Source;

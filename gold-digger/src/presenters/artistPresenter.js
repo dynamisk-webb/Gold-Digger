@@ -7,7 +7,7 @@ import { getAllArtistsPlaylist, getAllArtistsSaved} from "../spotifySource.js";
 import { useEffect, useState } from "react";
 
 function Artists(props) {
-
+  // Add observers
   useEffect(addObserverOnCreatedACB, [])
     const [, forceReRender ]= useState(); 
 
@@ -23,7 +23,6 @@ function Artists(props) {
     // rerender on state change
     function notifyACB() {
         forceReRender({});
-        //props.model.debugModelState("/genre rerender");
     }
 
   // State for list of artists
@@ -39,12 +38,10 @@ function Artists(props) {
     
 
   useEffect(() => {
-    // TODO: get all artists from *saved tracks* or a *chosen playlist*
-    // Right now: gets them all from Spotify(?) from a playlist. Unclear if this API call works. 
     async function getArtistsACB() {
-      let playlist = props.model.source; // TODO: is this the right way to get the playlist in here? 
+      let playlist = props.model.source;
       // Check if a saved playlist exists before getting the artists from it
-      if (!playlist) {  
+      if (playlist === "saved") {  
         resolvePromise(getAllArtistsSaved(), promiseState, setState);
       }else {
         resolvePromise(getAllArtistsPlaylist(playlist), promiseState, setState);

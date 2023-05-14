@@ -13,8 +13,6 @@ import { createPlaylist, addAllTracks } from "../spotifySource.js";
  */
 
 function Playlist (props) {
-    // debug
-    // props.model.debugModelState("/playlist init");
 
     // add observer for notifications for state changes
     useEffect(addObserverOnCreatedACB, [])
@@ -38,7 +36,6 @@ function Playlist (props) {
     function notifyACB(payload={}) {
       if (!payload.exclusivelyForPersistence) {
         forceReRender({});
-        //props.model.debugModelState("/playlist rerender");
       }
     }
 
@@ -58,7 +55,6 @@ function Playlist (props) {
     }, [playlistCreatePromiseState, setPlaylistCreatePromiseState]);
 
     useEffect(() =>{
-      console.log(playlistPromiseState);
       if(playlistPromiseState.data != null) {
         setTracksState(props.model.generated.tracks.map(obj => ({...obj, included:true})));
       }
@@ -97,7 +93,6 @@ function Playlist (props) {
     );
     
   function tracksToIDList() {
-    console.log(tracksState);
     const list = tracksState.map((element => {
         return "spotify:track:" + element.track.id;
     }));

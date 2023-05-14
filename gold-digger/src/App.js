@@ -19,10 +19,6 @@ import Redirect from "./presenters/redirectPresenter.js";
 // FIREBASE
 import "./firebaseModel.js";
 
-// TEMPORARY IMPORTS
-import fixedPlaylist from "./test/fixedList.js";
-import LoggedInTest from "./test/loggedInTestPresenter";
-
 /**
  *  Main App rendering all components
  */
@@ -45,7 +41,6 @@ function App(props) {
         <Route path="playlist" element={<Playlist model={props.model} />} />
         <Route path="source" element={<Source model={props.model} />} />
         <Route path="loading" element={<Loading model={props.model} />} />
-        <Route path="test" element={<LoggedInTest model={props.model} />} />
       </Route>
       <Route
         path="*"

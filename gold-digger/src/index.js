@@ -1,6 +1,5 @@
 import { BrowserRouter } from 'react-router-dom';
 import React from 'react';
-import { useEffect, useState } from "react";
 import ReactDOM from 'react-dom/client';
 import './static/index.css';
 import Root from './Root';

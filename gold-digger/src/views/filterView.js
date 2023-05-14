@@ -34,7 +34,6 @@ function FilterView(props){
 
     /* Render 'go forward' button only if loading is complete */
     function renderForwardButton(){
-        console.log(props.loadingComplete);
         if(props.loadingComplete) return <button id="filterForwardButton" onClick={continueACB}>{props.nextTitle}</button>;
         else return <button id="disabledFilterForwardButton" >{props.nextTitle}</button>
     }

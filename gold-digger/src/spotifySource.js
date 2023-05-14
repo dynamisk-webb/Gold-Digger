@@ -44,9 +44,9 @@ function getSavedTracks() { // Get all of user's saved tracks
   }
 }
 
-async function getPlaylistID(playlist) {  // Get id from playlist
+function getPlaylistInfo(playlist) {  // Get id from playlist
   const id = convertURLtoID(playlist);
-  return await generalAPI('/playlists/' + id); 
+  return generalAPI('/playlists/' + id); 
 }
 
 
@@ -365,4 +365,4 @@ function apiToEndpoint(url) { // Removes start when retrieving next url from Spo
   return url.replace("https://api.spotify.com/v1", '');
 }
 
-export {getProfile, getSavedTracks, getPlaylistID, getTracks, getAllTracks, getTracksPlaylist, getTrackParams, getTracksParams, getAllTracksParams, getGenres, getArtistsPlaylist, getArtistsSaved, getAllArtistsPlaylist, getAllArtistsSaved, getGenresPlaylist, getGenresSaved, searchArtist, playTracks, createPlaylist, addTracks, addAllTracks, changePlaylistName, removeTrack};
+export {getProfile, getSavedTracks, getPlaylistInfo, getTracks, getAllTracks, getTracksPlaylist, getTrackParams, getTracksParams, getAllTracksParams, getGenres, getArtistsPlaylist, getArtistsSaved, getAllArtistsPlaylist, getAllArtistsSaved, getGenresPlaylist, getGenresSaved, searchArtist, playTracks, createPlaylist, addTracks, addAllTracks, changePlaylistName, removeTrack};

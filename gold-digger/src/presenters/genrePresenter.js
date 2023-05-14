@@ -37,7 +37,7 @@ function Genres(props) {
         async function getGenreACB() {
             // Get all genres from Spotify
             const playlist = props.model.source;
-            if(!playlist) {
+            if(playlist === "saved") {
                 resolvePromise(getGenresSaved(), promiseState, setState);
             } else {
                 resolvePromise(getGenresPlaylist(playlist), promiseState, setState);

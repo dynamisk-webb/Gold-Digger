@@ -22,7 +22,6 @@ function Home(props) {
     // rerender on state change
     function notifyACB() {
         forceReRender({});
-        //props.model.debugModelState("/home rerender");
     }
 
 
