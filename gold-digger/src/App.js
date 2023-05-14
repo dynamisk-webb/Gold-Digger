@@ -40,7 +40,11 @@ function App(props) {
         <Route path="parameter" element={<Parameter model={props.model} />} />
         <Route path="playlist" element={<Playlist model={props.model} />} />
         <Route path="source" element={<Source model={props.model} />} />
-        <Route path="loading" element={<Loading model={props.model} />} />
+        {/*<Route path="loading" element={<Loading model={props.model} />} />*/}
+        <Route path="loading" element={
+          props.model.source !== null ? (<Loading model={props.model} />) : (<Navigate to="/" />)
+        }/>
+
       </Route>
       <Route
         path="*"
