@@ -14,9 +14,6 @@ function Loading(props) {
     const debugFilterSteps = true;
     const playlistMaxLength = 10;
 
-    // debug
-    // props.model.debugModelState("/loading init");
-
     // add observer for notifications for state changes
     useEffect(addObserverOnCreatedACB, [])
     const [, forceReRender ]= useState(); 
@@ -33,7 +30,6 @@ function Loading(props) {
     // rerender on state change
     function notifyACB() {
         forceReRender({});
-        //props.model.debugModelState("/loading rerender");
     }
 
     // state for visual feedback when loading is done

@@ -1,11 +1,8 @@
 import SourceView from "../views/sourceView";
 import { getPlaylistID } from "../spotifySource";
 import { useState, useEffect } from "react";
-import resolvePromise from "../resolvePromise";
 
 function Source(props) {
-  // debug
-  // props.model.debugModelState("/source init");
 
   // add observer for notifications for state changes
   useEffect(addObserverOnCreatedACB, [])
@@ -23,11 +20,9 @@ function Source(props) {
   // rerender on state change
   function notifyACB() {
       forceReRender({});
-      //props.model.debugModelState("/source rerender");
   }
 
   const [validURL, setValidURL] = useState(false);
-  const [promiseState, setState] = useState({});
 
   return (
     <SourceView
