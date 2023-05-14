@@ -5,6 +5,7 @@ import { getGenresSaved, getGenresPlaylist } from "../spotifySource.js";
 import { useEffect, useState } from "react";
 import promiseNoData from "../views/promiseNoData.js";
 import resolvePromise from "../resolvePromise.js";
+import { update } from "firebase/database";
 
 function Genres(props) {
 
@@ -31,6 +32,7 @@ function Genres(props) {
     const [filteredState, setFilteredState] = useState([])
     const [genreListState, setGenreListState] = useState([]);
     const [searchState, setSearchState] = useState("");
+    const [nextState, setNextState] = useState("Include all");
 
     // get genres
     useEffect(()=>{    
@@ -60,6 +62,7 @@ function Genres(props) {
             // transfer results from genreList into filteredState and genreListState
             setFilteredState(genreList);
             setGenreListState(genreList);
+            updateNext();
             
         }
     }, [promiseState, setState]);
@@ -85,7 +88,7 @@ function Genres(props) {
                 filterType="genre" 
                 title="Select Genres" 
                 noTitle="Step 2 of 4" 
-                nextTitle="Next" 
+                nextTitle={nextState}
                 loadingComplete={promiseState.data != null}></FilterView>
         </div>
     );
@@ -97,7 +100,6 @@ function Genres(props) {
             props.model.addGenre(genre);
             genreList.find(element => {return element.genre == genre}).checked = true;
             
-            
         } else if(mode === -1) {
             props.model.removeGenre(genre);
             genreList.find(element => {return element.genre == genre}).checked = false;
@@ -106,6 +108,16 @@ function Genres(props) {
 
         // Re-render the filtered list with updated states
         filterGenre(searchState);
+
+        // Update "next" button
+        updateNext();
+        
+    }
+
+    /* Update the text on the button navigating the user to the Artist view. Include all if no genres have been selected*/
+    function updateNext(){
+        if(nextState == "Include all" && props.model.genres.length != 0) setNextState("next");
+        else if (nextState == "next" && props.model.genres.length == 0) setNextState("Include all");
     }
 }
 
