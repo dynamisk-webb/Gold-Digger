@@ -1,6 +1,18 @@
+/**
+ * LoginView renders a view displaying the login page for the Gold Digger application.
+*/
+
 import piano from "./../img/piano.png";
 
 function LoginView(props){
+
+    // Functions
+
+    /* Connect to Spotify */
+    function connectSpotifyACB(evt){
+        props.connectSpotify();
+    } 
+
     return (
     <div id="homeGrid">
         <h1 id="homeTitle">Gold Digger</h1>
@@ -9,12 +21,6 @@ function LoginView(props){
         <button id="connectSpotify" onClick={connectSpotifyACB}>Connect your Spotify</button>
         <img src={piano} id="pianoImage"></img>
     </div>);
-
-    //https://www.w3schools.com/howto/howto_js_toggle_hide_show.asp <-- TO HIDE BUTTONS
-
-    function connectSpotifyACB(evt){
-        props.connectSpotify();
-    } 
 
 };
 

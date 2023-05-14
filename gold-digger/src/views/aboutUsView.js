@@ -1,3 +1,8 @@
+/** 
+ * aboutUsView renders a view containing information about the Gold Digger application and its authors.
+ */
+
+/* Import Images*/
 import julia from "./../img/julia.png";
 import jessica from "./../img/jessica.png";
 import rej from "./../img/rej.png";
@@ -5,33 +10,45 @@ import maria from "./../img/maria.png";
 
 function AboutUsView(props){
 
+    // Variables
     const authors = [
         {
             image: jessica,
             name: "Jessica Gorwat",
-            about: "As royal as a queen, as buzzed as a bee"
+            about: "Song: "
         },
         {
             image: julia,
             name: "Julia Wang",
-            about: "As fast as a hare, as brave as a bear"
+            about: "Song: "
         },
         {
             image: maria,
             name: "Maria Moliteus",
-            about: "As free as a bird, as neat as a word"
+            about: "Song: "
         },
         {
             image: rej,
             name: "Rej Karlander",
-            about: "As warm as the sun, as silly as fun"
+            about: "Song: Destroyed by hippie Powers - Car Seat Headrest"
         }
     ];
+
+    // Functions
 
     /* Set the width of the sidebar to 0 and the left margin of the page content to 0 */
     function closeAboutCB() {
         props.closeAbout();
     } 
+
+    /* Display infor about each author*/ 
+    function displayInfoCB(author){
+        return (<div key={author.name} id="authorInfo">
+            <img src={author.image} id="authorImg"></img>
+            <h2 id="authorName">{author.name}</h2>
+            <p id="authorAbout">{author.about}</p>
+        </div>);
+    }
 
     return (<div id="aboutUsContainer">
         <button id="closeField" onClick={closeAboutCB}></button>
@@ -44,18 +61,10 @@ function AboutUsView(props){
                You can even choose to filter your saved songs on the off chance that<br></br>
                you, like us, have far too many of them.
             </p>
-            <h1 id="aboutTitle">About the authors</h1>
+            <h2 id="aboutAuthorTitle">The Authors</h2>
             {authors.map(displayInfoCB)}
         </div>
     </div>);
-
-    function displayInfoCB(author){
-        return (<div key={author.name} id="authorInfo">
-            <img src={author.image} id="authorImg"></img>
-            <h2 id="authorName">{author.name}</h2>
-            <p id="authorAbout">{author.about}</p>
-        </div>);
-    }
 }
 
 export default AboutUsView;

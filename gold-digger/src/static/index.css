@@ -192,7 +192,6 @@ margin-bottom: 0;
   width: 0;
   height:100%;
   overflow:hidden;
-
   background: rgb(43,43,43);
   background: linear-gradient(90deg, rgb(32, 32, 32) 0%, rgba(32, 32, 32) 65%, rgba(0,0,0,0) 100%);
   transition: width 0.2s;
@@ -200,14 +199,20 @@ margin-bottom: 0;
 
 #aboutTitle{
   width:auto;
+  margin-top:10px;
+  margin-bottom: 0;
+}
+
+#aboutAuthorTitle{
+  color:white;
 }
 
 #authorInfo{
   margin: 10px 10px 25px 10px;
   width:auto;
   display:grid;
-  height: 130px;
-  grid-template-columns: 1fr 2fr;
+  height: 100px;
+  grid-template-columns: 120px 3fr;
   grid-template-rows: 1fr 2fr;
   overflow: hidden;
 }
@@ -219,6 +224,7 @@ margin-bottom: 0;
 }
 
 #authorAbout{
+  width:auto;
   grid-column: 2/span 1;
   grid-row: 2/span 1;
 }
@@ -228,8 +234,8 @@ margin-bottom: 0;
   grid-row: 1/span 2;
 
   object-fit: cover;
-  width: 120px;
-  height: 120px;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
 }
 

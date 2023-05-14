@@ -1,19 +1,18 @@
+/**
+ * FilterView renders a view for navigating when filtering the Gold Digger application by genre, artist, or parameter.
+ */
+
 import {useNavigate} from "react-router-dom"
 
 
 function FilterView(props){
 
-    const navigate = useNavigate(); // So React doesn't complain about React components
+    // Variables
+    const navigate = useNavigate(); 
 
-    return(
-        <div id="filterGrid">
-            <button id="filterReturnButton" onClick={returnACB}></button>
-            <h2 id="filterNoTitle">{props.noTitle}</h2>
-            <h1 id="filterTitle">{props.title}</h1>
-            <button id="filterForwardButton" onClick={continueACB}>{props.nextTitle}</button>
-        </div>
-    );
+    // Functions
 
+    /* Returns to the previous step */
     function returnACB(){
         if(props.filterType == "genre")
             navigate("/source");
@@ -23,6 +22,7 @@ function FilterView(props){
             navigate("/artist");
     }
 
+    /* Continues to the next step */
     function continueACB(){
         if(props.filterType == "genre")
             navigate("/artist");
@@ -31,6 +31,15 @@ function FilterView(props){
         else if(props.filterType == "parameter")
             navigate("/loading");
     }
+
+    return(
+        <div id="filterGrid">
+            <button id="filterReturnButton" onClick={returnACB}></button>
+            <h2 id="filterNoTitle">{props.noTitle}</h2>
+            <h1 id="filterTitle">{props.title}</h1>
+            <button id="filterForwardButton" onClick={continueACB}>{props.nextTitle}</button>
+        </div>
+    );
 }
 
 export default FilterView;

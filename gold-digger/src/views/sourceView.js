@@ -1,12 +1,49 @@
+/**
+ * SourceView renders a view displaying options for the source of
+ * the playlist to be generated
+ */
+
 import piano from "./../img/piano.png";
 import {useNavigate} from "react-router-dom"
 import { useEffect, useState } from "react";
 
 function SourceView(props){
-    const navigate = useNavigate(); // So React doesn't complain about React components
+
+    // Variables
+    const navigate = useNavigate(); 
     const [input, setInput] = useState(false);
 
-    // Once the URL is validated
+    // Functions
+
+    /* navigate home */
+    function goBackACB(){
+        navigate("/");
+    }
+    
+    /* Display input-field when playlist button is pressed */
+    function updateSearchbarACB(){
+        setInput(true);
+    }
+
+    /* Sets the source to being from the users saved songs*/
+    function setSourceSavedACB(evt){
+        navigate("/genre");
+        props.setSourceSaved(); // Set source empty when taking from saved tracks
+    }
+    
+    /* Sets the source to being from a specific playlist */
+    function setSourcePlaylistACB(evt){
+        let url = "";
+
+        if(evt.key === "Enter"){
+            url = document.getElementById("sourceInputPlaylist").value;
+            props.setSource(url);
+        }
+    }
+
+    // Effects
+
+    /* Once the URL is valid, navigate to Genre */
     useEffect(() => {
         if(props.validURL)
             navigate("/genre");
@@ -22,30 +59,6 @@ function SourceView(props){
             <button id="sourceSaved" onClick={setSourceSavedACB}>From Saved Tracks</button>
             <img src={piano} id="pianoImage"></img>
     </div>);
-
-    // navigate home 
-    function goBackACB(){
-        navigate("/");
-    }
-    
-    // Display input-field when playlist button is pressed
-    function updateSearchbarACB(){
-        setInput(true);
-    }
-
-    function setSourceSavedACB(evt){
-        navigate("/genre");
-        props.setSourceSaved(); // Set source empty when taking from saved tracks
-    }
-    
-    function setSourcePlaylistACB(evt){
-        let url = "";
-
-        if(evt.key === "Enter"){
-            url = document.getElementById("sourceInputPlaylist").value;
-            props.setSource(url);
-        }
-    }
 }
 
 export default SourceView;

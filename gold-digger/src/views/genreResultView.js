@@ -1,3 +1,7 @@
+/**
+ * GenreResultView renders a view displaying a list of genres with checkboxes to select/deselect them.
+ */
+
 import { Checkbox } from "@mui/material";
 import { orange, grey } from '@mui/material/colors';
 import Favorite from '@mui/icons-material/Favorite';
@@ -5,10 +9,9 @@ import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
 
 function GenreResultView(props){
 
-    return (<div className="scrollable" id="genreResults">
-        {props.genreResults.map(getGenreACB)}
-    </div>);
+    // Functions
 
+    /* Renders each genre in the genre list*/
     function getGenreACB(result){
         function selectDeselectGenreACB(event){
             if (event.target.checked){
@@ -39,7 +42,9 @@ function GenreResultView(props){
         ) 
     }
 
-    
+    return (<div className="scrollable" id="genreResults">
+        {props.genreResults.map(getGenreACB)}
+    </div>); 
 }
 
 export default GenreResultView;
