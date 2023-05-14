@@ -81,7 +81,12 @@ function Genres(props) {
         <div id="genreMainGrid">
             <SearchView id="search" search={searchGenreACB}></SearchView>
             {promiseNoData(promiseState) || <GenreResultView id="genreResults" genreResults={filteredState} setSelectDeselect={setSelectDeselectACB}></GenreResultView>}
-            <FilterView filterType="genre" title="Select Genres" noTitle="Step 2 of 4" nextTitle="Next" ></FilterView>
+            <FilterView 
+                filterType="genre" 
+                title="Select Genres" 
+                noTitle="Step 2 of 4" 
+                nextTitle="Next" 
+                loadingComplete={promiseState.data != null}></FilterView>
         </div>
     );
 

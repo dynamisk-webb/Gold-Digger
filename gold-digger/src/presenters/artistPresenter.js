@@ -114,7 +114,12 @@ function Artists(props) {
   // Show loading, then search results
   return (
     <div>
-      <FilterView filterType="artist" title= "Select Artists" noTitle="Step 3 of 4" nextTitle="Next"></FilterView>
+      <FilterView 
+        filterType="artist" 
+        title= "Select Artists" 
+        noTitle="Step 3 of 4" 
+        nextTitle="Next"
+        loadingComplete={promiseState.data != null}></FilterView>
       <SearchView id="search" search={searchArtistACB}></SearchView>
       {promiseNoData(promiseState) || 
       <ArtistResultView 

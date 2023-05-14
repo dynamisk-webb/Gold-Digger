@@ -554,6 +554,14 @@ input[type=text] {
   margin: 10% 5% 10% 5%;
 }
 
+#disabledFilterForwardButton{
+  grid-row: 4 / span 1;
+  grid-column: 3 / span 1;
+  margin: 10% 5% 10% 5%;
+  background-color:#2b2b2b;
+  color:#828282;
+}
+
 #filterNoTitle{
   grid-row: 1 / span 1;
   grid-column: 2 / span 1;

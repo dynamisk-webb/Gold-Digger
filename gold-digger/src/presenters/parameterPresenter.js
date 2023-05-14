@@ -28,7 +28,12 @@ function Parameters (props) {
 
     return (
         <div id="parameterMainGrid">
-            <FilterView filterType="parameter" title="Select Parameters" noTitle="Step 4 of 4" nextTitle="Generate"></FilterView>
+            <FilterView 
+                filterType="parameter" 
+                title="Select Parameters" 
+                noTitle="Step 4 of 4" 
+                nextTitle="Generate"
+                loadingComplete={true}></FilterView>
             <ParameterView id="parameterGridPlacement" model={props.model} changeTempo={changeTempoACB} changeLoudness={changeLoudnessACB} changeInstrumentalness={changeInstrumentalnessACB} changeDanceable={changeDanceableACB} changeAcoustic={changeAcousticACB}></ParameterView>
         </div>
     );
