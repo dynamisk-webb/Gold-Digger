@@ -117,11 +117,11 @@ function ParameterView(props) {
                         max={300.0}
                         valueLabelDisplay="auto"
                         color="primary"
-                        marks={[{ value: 0, label: "0 bpm" }]}
+                        marks={[{ value: 0, label: "0 BPM" }]}
                     />
                     <div className="sliderMarks">
-                        <p className='leftSliderVal'>0 bpm</p>
-                        <p className='rightSliderVal'>300 bpm</p>
+                        <p className='leftSliderVal'>0 BPM</p>
+                        <p className='rightSliderVal'>300 BPM</p>
                     </div>
                 </div>
                 <div className="parameterSlider" id="loudSlider">
