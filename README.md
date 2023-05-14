@@ -10,7 +10,7 @@
   <h3 align="center">Gold Digger</h3>
 
   <p align="center">
-    An iprogd Project Web site that generates a Spotify playlist based on selected parameters and your own library.
+    An iprogd Project website that generates a Spotify playlist based on selected parameters and your own library.
     <br />
     <br />
     <a href="https://gold-digger-be2ef.web.app/" target="_blank">Deployed Site</a>
@@ -259,5 +259,5 @@ Rej Karlander – isakkar@kth.se
 [npm-url]: https://www.npmjs.com/
 [js-shield]: https://camo.githubusercontent.com/3aaee8bf7885dcf0cea8a5647c4514b7d800b1a730d38bce7dadf6bff883378d/68747470733a2f2f696d672e736869656c64732e696f2f7374617469632f76313f7374796c653d666f722d7468652d6261646765266d6573736167653d4a61766153637269707426636f6c6f723d323232323232266c6f676f3d4a617661536372697074266c6f676f436f6c6f723d463744463145266c6162656c3d
 [js-url]: https://developer.mozilla.org/en-US/docs/Web/JavaScript
-[router-shield]: https://camo.githubusercontent.com/aa89b33796b378181b09d0ec37f76c1ca228d28e9bd7c6a685a8d62640ae2a72/68747470733a2f2f696d672e736869656c64732e696f2f7374617469632f76313f7374796c653d666f722d7468652d6261646765266d6573736167653d526574726f50696526636f6c6f723d434330303030266c6f676f3d526574726f506965266c6f676f436f6c6f723d464646464646266c6162656c3d
+[router-shield]: https://camo.githubusercontent.com/a5f1968a99631284ca552953929cff7b6abb375853bb0944fae0dc520c45c73b/68747470733a2f2f696d672e736869656c64732e696f2f7374617469632f76313f7374796c653d666f722d7468652d6261646765266d6573736167653d52656163742b526f7574657226636f6c6f723d434134323435266c6f676f3d52656163742b526f75746572266c6f676f436f6c6f723d464646464646266c6162656c3d
 [router-url]: https://reactrouter.com/en/main

@@ -26,6 +26,7 @@ function HomeView(props){
 
     /* Navigate to source to create a new playlist*/
     function generatePlaylistACB(evt){
+        props.startNewSession();
         navigate("/source");
     }
 

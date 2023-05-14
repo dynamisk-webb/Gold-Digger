@@ -26,13 +26,17 @@ function Home(props) {
 
 
     return (
-      <HomeView model={props.model} testName={props.model.generated.playlistName} setCurrentPlaylist={setCurrentPlaylistACB} prevPlaylists={props.model.prevPlaylists}></HomeView>  
+      <HomeView model={props.model} setCurrentPlaylist={setCurrentPlaylistACB} prevPlaylists={props.model.prevPlaylists} startNewSession={startNewSessionACB}></HomeView>  
     );
 
     // Set the generated playlist as the current playlist in the model
     function setCurrentPlaylistACB (playlistName, firebaseKey) {
       props.model.setGeneratedFirebaseKey(firebaseKey, true);
       props.model.setGeneratedName(playlistName, true);
+    }
+
+    function startNewSessionACB() {
+      props.model.resetParams();
     }
 }
 

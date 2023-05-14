@@ -80,7 +80,7 @@ function PlaylistView(props) {
             } else return <img src={albumImg} id="trackImg"></img>
         }
 
-        return (<div id="trackInfo" key={item.track.name}>
+        return (<div id="trackInfo" key={item.track.id}>
             <button id="playButton" onClick={playSongACB}></button>
             {renderImg()}
             <h2 className="cutText" id="trackName">{item.track.name}</h2>
