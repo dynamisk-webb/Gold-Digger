@@ -79,6 +79,7 @@ function Artists(props) {
       // transfer results from artistList into filteredState and artistListState
       setFilteredState(artistList);
       setArtistListState(artistList);
+      setHasMore(true);
       
       notifyACB();
     }
@@ -96,7 +97,6 @@ function Artists(props) {
 
     // Ensure the new result resets the scroll
     setRecord(20);
-    setHasMore(true);
     let myDiv = document.getElementById('artistResults');
     myDiv.scrollTop = 0;
 
