@@ -1,5 +1,5 @@
 import SourceView from "../views/sourceView";
-import { getPlaylistInfo } from "../spotifySource";
+import { getPlaylistInfo, getSavedInfo } from "../spotifySource";
 import { useState, useEffect } from "react";
 
 function Source(props) {
@@ -49,11 +49,16 @@ function Source(props) {
       Helper function. Sets the playlist as the source once we know it's a valid source.
       then passes this state to sourceView so that it can redirect.
     */
-    function setValidSourceACB() {
-      // make call to reset process parameters
-      props.model.resetParams();
-      props.model.setSource(url);
-      setValidURL(true);
+    function setValidSourceACB(playlist) {
+      // check if playlist is empty
+      if(playlist.tracks.total === 0) {
+        alert("That looks like an empty playlist!\n\nSubmit a playlist with songs for us to filter.");
+      } else {
+        // make call to reset process parameters
+        props.model.resetParams();
+        props.model.setSource(url);
+        setValidURL(true);
+      }
     }
 
     /*
@@ -73,8 +78,21 @@ function Source(props) {
   */
   function setSourceSavedACB() {
     // make call to reset process parameters
-    props.model.resetParams();
-    props.model.setSource("saved");
+    getSavedInfo().then(checkEmptySavedACB);
+  }
+
+  /*
+    Helper function. Checks if saved tracks is empty
+
+   */
+  function checkEmptySavedACB(saved) {
+    if(saved.total === 0) {
+      alert("Oops!\nLooks like you don't have any Liked Songs on Spotify.\n\nFill your Liked Songs on Spotify before continuing!");
+    } else {
+      props.model.resetParams();
+      props.model.setSource("saved");
+      setValidURL(true);
+    }
   }
 }
 export default Source;

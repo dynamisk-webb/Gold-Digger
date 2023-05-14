@@ -27,7 +27,6 @@ function SourceView(props){
 
     /* Sets the source to being from the users saved songs*/
     function setSourceSavedACB(evt){
-        navigate("/genre");
         props.setSourceSaved(); // Set source empty when taking from saved tracks
     }
     

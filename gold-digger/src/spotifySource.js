@@ -49,6 +49,10 @@ function getPlaylistInfo(playlist) {  // Get id from playlist
   return generalAPI('/playlists/' + id); 
 }
 
+function getSavedInfo() {
+  const field = "?limit=1";
+  return generalAPI('/me/tracks' + field);
+}
 
 function getTracksPlaylist(playlist) {  // Get tracks from playlist
   const id = convertURLtoID(playlist);
@@ -365,4 +369,4 @@ function apiToEndpoint(url) { // Removes start when retrieving next url from Spo
   return url.replace("https://api.spotify.com/v1", '');
 }
 
-export {getProfile, getSavedTracks, getPlaylistInfo, getTracks, getAllTracks, getTracksPlaylist, getTrackParams, getTracksParams, getAllTracksParams, getGenres, getArtistsPlaylist, getArtistsSaved, getAllArtistsPlaylist, getAllArtistsSaved, getGenresPlaylist, getGenresSaved, searchArtist, playTracks, createPlaylist, addTracks, addAllTracks, changePlaylistName, removeTrack};
+export {getProfile, getSavedTracks, getSavedInfo, getPlaylistInfo, getTracks, getAllTracks, getTracksPlaylist, getTrackParams, getTracksParams, getAllTracksParams, getGenres, getArtistsPlaylist, getArtistsSaved, getAllArtistsPlaylist, getAllArtistsSaved, getGenresPlaylist, getGenresSaved, searchArtist, playTracks, createPlaylist, addTracks, addAllTracks, changePlaylistName, removeTrack};
