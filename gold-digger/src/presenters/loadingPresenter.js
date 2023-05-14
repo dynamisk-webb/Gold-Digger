@@ -268,10 +268,8 @@ function Loading(props) {
                 const info = artistsInfo.find(element => element.id === artist.id);
         
                 if (info.genres.length !== 0) { // there exists genres for artist
-                    console.log("genre");
                     return info.genres.find(markWantedGenreCB);
                 } else {
-                    console.log("ah");
                 }
 
                 return false; // artists without genre are excluded
