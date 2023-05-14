@@ -1,5 +1,5 @@
 import SourceView from "../views/sourceView";
-import { getPlaylistID } from "../spotifySource";
+import { getPlaylistInfo } from "../spotifySource";
 import { useState, useEffect } from "react";
 
 function Source(props) {
@@ -40,7 +40,7 @@ function Source(props) {
     
     if (url.startsWith("http://open.spotify.com/track/") || url.startsWith("https://open.spotify.com/playlist/")) {
       // Use API call 'getPlaylistID' to check if URL leads to an exisiting playlist
-      getPlaylistID(url).then(setValidSourceACB).catch(invalidSourceACB);
+      getPlaylistInfo(url).then(setValidSourceACB).catch(invalidSourceACB);
     } else {
       alert("Oops!\nThat doesn't look like a valid Spotify link.\n\nTo get a link, simply right-click any Spotify playlist,\nselect \"Share\" and then \"Copy link to playlist\"");
     }
