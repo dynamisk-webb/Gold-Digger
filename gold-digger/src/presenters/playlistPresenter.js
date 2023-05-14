@@ -59,17 +59,21 @@ function Playlist (props) {
     }, [playlistCreatePromiseState, setPlaylistCreatePromiseState]);
 
     useEffect(() =>{
+      console.log(playlistPromiseState);
       if(playlistPromiseState.data != null) {
-        setPlayTrackState({play:false,offset:0,tracks:tracksToIDList()});
         setTracksState(props.model.generated.tracks.map(obj => ({...obj, included:true})));
       }
     }, [playlistPromiseState]);
 
+    useEffect(() => {
+      if(tracksState)
+        setPlayTrackState({play:false,offset:0,tracks:tracksToIDList()});
+    }, [tracksState]);
+
     // Lifecycle
     function onMountedACB(){
         // Resolve promise. Get all data in generated playlist from firebase, add it to model.
-        resolvePromise (generatedListPromise (props.model, props.model.generated.firebaseKey), playlistPromiseState, setPlaylistPromiseState);
-        return;
+        resolvePromise (generatedListPromise(props.model, props.model.generated.firebaseKey), playlistPromiseState, setPlaylistPromiseState);
     }
 
    
@@ -96,10 +100,11 @@ function Playlist (props) {
     );
     
   function tracksToIDList() {
-      const list = tracksState.map((element => {
-          return "spotify:track:" + element.track.id;
-      }));
-      return list;
+    console.log(tracksState);
+    const list = tracksState.map((element => {
+        return "spotify:track:" + element.track.id;
+    }));
+    return list;
   }
   
   

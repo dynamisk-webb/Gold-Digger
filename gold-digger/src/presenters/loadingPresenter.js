@@ -2,7 +2,7 @@ import LoadingView from "../views/loadingView";
 import AudioPlayer from "../views/audioPlayView";
 
 import { useState, useEffect } from "react";
-import { getSavedTracks, getAllTracksParams, getTracksPlaylist, getAllTracks } from "../spotifySource.js";
+import { getSavedTracks, getAllTracksParams, getTracksPlaylist, getAllTracks, getAllArtistsPlaylist, getAllArtistsSaved } from "../spotifySource.js";
 import resolvePromise from "../resolvePromise.js";
 
 // temp import
@@ -12,7 +12,7 @@ import fixedFeatures from "../test/fixedFeatures";
 
 function Loading(props) {
     const debugFilterSteps = true;
-    const playlistMaxLength = 10;
+    const playlistMaxLength = 1000;
 
     // add observer for notifications for state changes
     useEffect(addObserverOnCreatedACB, [])
@@ -39,12 +39,13 @@ function Loading(props) {
     const [sourceTracksPromise, setSourceTracksPromiseState] = useState({});
     const [audioFeaturesPromise, setAudioFeaturesPromiseState] = useState({});
     const [trackInfoPromise, setTrackInfoPromiseState] = useState({});
+    const [artistInfoPromise, setArtistPromiseState] = useState({});
 
     // useEffects for API calls
     useEffect(onMountedACB, []);
     useEffect(onResolveSourceTracksPromiseACB, [sourceTracksPromise]);
     useEffect(onResolveAudioFeaturesPromiseACB, [audioFeaturesPromise]);
-    useEffect(oneResolveTrackInfoStatePromiseACB, [trackInfoPromise]);
+    useEffect(onResolveTrackInfoStatePromiseACB, [trackInfoPromise, artistInfoPromise]);
 
     return (
         <div>
@@ -71,10 +72,11 @@ function Loading(props) {
         if (props.model.source) { 
             // get tracks from provided source URL
             resolvePromise(getTracksPlaylist(props.model.source), sourceTracksPromise, setSourceTracksPromiseState);
-            
+            resolvePromise(getAllArtistsPlaylist(props.model.source), artistInfoPromise, setArtistPromiseState);
         } else if (props.model.source !== null) { 
             // get from saved songs
             resolvePromise(getSavedTracks(), sourceTracksPromise, setSourceTracksPromiseState);
+            resolvePromise(getAllArtistsSaved(), artistInfoPromise, setArtistPromiseState);
         } else { // someone went to loading page manually without an active session
             setLoadingState("Except it's not, since you're not supposed to be here because you do not have an active session going on!");
         }
@@ -136,8 +138,8 @@ function Loading(props) {
         }
     }
 
-    function oneResolveTrackInfoStatePromiseACB() {
-        if (trackInfoPromise.data != null) {
+    function onResolveTrackInfoStatePromiseACB() {
+        if (trackInfoPromise.data != null && artistInfoPromise.data != null) {
             let tracksWithInfo = trackInfoPromise.data;
 
             if(debugFilterSteps) {
@@ -232,9 +234,10 @@ function Loading(props) {
      * - excluded artists
      */
     function filterOnGenreAndExclArtist(tracksWithInfo) {
+        let artistsInfo = artistInfoPromise.data;
+
         // return true if genre is wanted
         function markWantedGenreCB(genre) {
-            console.log("genre", genre);
             return props.model.genres.includes(genre);         
         }
 
@@ -242,11 +245,11 @@ function Loading(props) {
         function markUnwantedArtistsACB(artist) {
             if (props.model.excludedArtists.includes(artist.id)) {
                 return false;
-            } else if (props.model.genres.length !== 0) { 
-
-                if (artist.genres.length !== 0) { // there exists genres for artist
-                    let makesMusicInWantedGenre = artist.genres.map(markWantedGenreCB);
-                    return makesMusicInWantedGenre.includes(true);
+            } else if (props.model.genres.length !== 0) {
+                const info = artistsInfo.find(element => element.id === artist.id);
+        
+                if (info.genres.length !== 0) { // there exists genres for artist
+                    return info.genres.find(markWantedGenreCB);
                 }
 
                 console.log("No genres in artist");
@@ -259,10 +262,10 @@ function Loading(props) {
         
         /* filter for each current track */
         function filterGenreAndArtistACB(currentTrack) {
-            let wantedStatusofArtists = currentTrack.track.artists.map(markUnwantedArtistsACB);
-            let trackContainsUnwantedArtist = wantedStatusofArtists.includes(false);
+            let wantedStatusofArtists = currentTrack.track.artists.some(markUnwantedArtistsACB);
+            // Returns true if wanted
 
-            return !trackContainsUnwantedArtist;
+            return wantedStatusofArtists;
         }
 
         return tracksWithInfo.filter(filterGenreAndArtistACB);
@@ -331,7 +334,7 @@ function Loading(props) {
         function filterOnWantedArtistACB(currentTrack) {
             
             let wantedStatusofArtists = currentTrack.track.artists.map(markWantedArtistsACB);
-            console.log("inlcudes: ",wantedStatusofArtists.includes(true));
+            console.log("includes: ",wantedStatusofArtists.includes(true));
             return wantedStatusofArtists.includes(true);
         }
 
