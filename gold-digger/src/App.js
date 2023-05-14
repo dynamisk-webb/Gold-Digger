@@ -35,15 +35,20 @@ function App(props) {
         {/*<Route element={<Layout model={dModel} isLoggedIn={false} />}></Route>*/}
       <Route path="/" element={<Layout model={props.model} isLoggedIn={true} />}>
         <Route index element={<Home model={props.model} />} />
-        <Route path="artist" element={<Artist model={props.model} />} />
-        <Route path="genre" element={<Genres model={props.model} />} />
-        <Route path="parameter" element={<Parameter model={props.model} />} />
-        <Route path="playlist" element={<Playlist model={props.model} />} />
         <Route path="source" element={<Source model={props.model} />} />
-        {/*<Route path="loading" element={<Loading model={props.model} />} />*/}
+        <Route path="genre" element={
+          props.model.source !== null ? (<Genres model={props.model} />) : (<Navigate to="/" />)
+        }/>
+        <Route path="artist" element={
+          props.model.source !== null ? (<Artist model={props.model} />) : (<Navigate to="/" />)
+        }/>
+        <Route path="parameter" element={
+          props.model.source !== null ? (<Parameter model={props.model} />) : (<Navigate to="/" />)
+        }/>
         <Route path="loading" element={
           props.model.source !== null ? (<Loading model={props.model} />) : (<Navigate to="/" />)
         }/>
+        <Route path="playlist" element={<Playlist model={props.model} />} />
 
       </Route>
       <Route
