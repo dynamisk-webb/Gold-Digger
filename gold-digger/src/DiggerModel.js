@@ -121,13 +121,13 @@ class DiggerModel{
 
     }
 
-    setDanceable(bool) {    // Sets danceability (how suitable it is for dancing) from 0.0 to 1.0
-        this.danceable = bool;
+    switchDanceable() {    // Sets danceability (how suitable it is for dancing) from 0.0 to 1.0
+        this.danceable = !this.danceable;
         this.notifyObservers({key:"modelParams", param:"danceable"});
     }
 
-    setAcoustic(bool) {
-        this.acoustic = bool;
+    switchAcoustic() {
+        this.acoustic = !this.acoustic;
         this.notifyObservers({key:"modelParams", param:"acoustic"});
     }
 

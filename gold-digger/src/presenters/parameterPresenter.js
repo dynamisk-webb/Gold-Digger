@@ -48,10 +48,10 @@ function Parameters (props) {
         props.model.setInstrumentalness(arr[0], arr[1]);
     }
     function changeDanceableACB(value) {
-        props.model.setDanceable(value);
+        props.model.switchDanceable();
     }
     function changeAcousticACB(value) {
-        props.model.setAcoustic(value);
+        props.model.switchAcoustic();
     }
 }
 
