@@ -11,7 +11,7 @@ import fixedFeatures from "../test/fixedFeatures";
 
 
 function Loading(props) {
-    const debugFilterSteps = false;
+    const debugFilterSteps = true;
     const playlistMaxLength = 10;
 
     // debug
@@ -244,7 +244,7 @@ function Loading(props) {
 
         // return false if artist is excluded or does not make music out of one of the wanted genres
         function markUnwantedArtistsACB(artist) {
-            if (props.model.excludedArtists.includes(artist)) {
+            if (props.model.excludedArtists.includes(artist.id)) {
                 return false;
             } else if (props.model.genres.length !== 0) { 
 
@@ -275,6 +275,11 @@ function Loading(props) {
     function setTracksBasedOnIncludedArtists(filteredTracks) {
         let wantedTracks = createListOfWantedArtistsTracks(filteredTracks);
 
+        if (debugFilterSteps) {
+            console.log("tracksIncludedArtist", [...wantedTracks]);
+        }
+        
+
         // if list with included artists has < playlistMaxLength tracks, add from other list so that we have playlistMaxLength. Scramble and return.
         if (wantedTracks.length <= playlistMaxLength) {
             let additionalAcceptableTracks= createListOfAdditionalAcceptableTracks(filteredTracks, wantedTracks);
@@ -303,9 +308,7 @@ function Loading(props) {
      */
     function createListOfWantedArtistsTracks(filteredTracks) {
         function markWantedArtistsACB(artist) {
-            if (props.model.includedArtists.includes(artist))
-                return true;
-            return false;
+            return props.model.includedArtists.includes(artist.id);
         }
 
         /**
@@ -330,7 +333,9 @@ function Loading(props) {
         }
 
         function filterOnWantedArtistACB(currentTrack) {
+            
             let wantedStatusofArtists = currentTrack.track.artists.map(markWantedArtistsACB);
+            console.log("inlcudes: ",wantedStatusofArtists.includes(true));
             return wantedStatusofArtists.includes(true);
         }
 
@@ -342,7 +347,7 @@ function Loading(props) {
             // pick out all wanted artists collaborating on the song
             let keepBasedOnCounter = currentTrack.track.artists.map(incrementArtistCounterACB);
             // keep only if there exists a wanted artist on list that needs to be included
-            return (keepBasedOnCounter.contains(true)) 
+            return (keepBasedOnCounter.includes(true)) 
         }
 
         // Extract only wanted artists
@@ -354,7 +359,9 @@ function Loading(props) {
         // Filter so that max the first 3 songs of each artist remain
         let limitedScrambledOnlyWanted = scrambledOnlyWanted.filter(limitTracksFromSameArtistACB);
 
-        return [...limitedScrambledOnlyWanted];
+        // TODO debug limit-functions with artistcounter and use limitedScrambledOnlyWanted
+        //return [...limitedScrambledOnlyWanted]; 
+        return [...scrambledOnlyWanted];
     }
 
     /**
