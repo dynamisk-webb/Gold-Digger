@@ -116,8 +116,8 @@ function Genres(props) {
 
     /* Update the text on the button navigating the user to the Artist view. Include all if no genres have been selected*/
     function updateNext(){
-        if(nextState == "Include all" && props.model.genres.length != 0) setNextState("next");
-        else if (nextState == "next" && props.model.genres.length == 0) setNextState("Include all");
+        if(nextState == "Include all" && props.model.genres.length != 0) setNextState("Next");
+        else if (nextState == "Next" && props.model.genres.length == 0) setNextState("Include all");
     }
 }
 

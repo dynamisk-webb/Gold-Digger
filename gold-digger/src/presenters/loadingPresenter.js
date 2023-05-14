@@ -4,10 +4,13 @@ import AudioPlayer from "../views/audioPlayView";
 import { useState, useEffect } from "react";
 import { getSavedTracks, getAllTracksParams, getTracksPlaylist, getAllTracks, getAllArtistsPlaylist, getAllArtistsSaved } from "../spotifySource.js";
 import resolvePromise from "../resolvePromise.js";
+import { useNavigate } from "react-router-dom";
 
 function Loading(props) {
     const debugFilterSteps = false;
     const playlistMaxLength = 30; // Change to increase playlist size
+    const navigate = useNavigate();
+
     // add observer for notifications for state changes
     useEffect(addObserverOnCreatedACB, [])
     const [, forceReRender ]= useState(); 
@@ -41,6 +44,12 @@ function Loading(props) {
     useEffect(onResolveAudioFeaturesPromiseACB, [audioFeaturesPromise]);
     useEffect(onResolveArtistInfoPromiseACB, [trackInfoPromise]);
     useEffect(onResolveTrackInfoStatePromiseACB, [artistsInfoPromise]);
+
+    // useEffect to Redirect
+    useEffect(() => {
+        if(loadingState === "Generation cancelled.")
+            navigate("/parameter");
+    }, [loadingState]);
 
     return (
         <div>
@@ -110,7 +119,6 @@ function Loading(props) {
             if(debugFilterSteps) {
                 console.log("tracksWithAudioFeatures", tracksWithAudioFeatures);
             }
-            
             setLoadingState("Filtering on audio features...");
             let filteredTracks = filterOnAudioFeatParams(tracksWithAudioFeatures);
             let trackIDs = filteredTracks.map(extractIdACB);
@@ -215,8 +223,8 @@ function Loading(props) {
             let includeBasedOnAcousticness = true;
             let includeBasedOnDanceability = true;
 
-            const danceMinValue = 0.75;
-            const acousticMinValue = 0.75;
+            const danceMinValue = 0.7;
+            const acousticMinValue = 0.5;
 
             // If user wants a danceable list, only include danceable songs. Else, include full range. 
             // IMPORTANT danceability in FixedFeatures, danceable in model

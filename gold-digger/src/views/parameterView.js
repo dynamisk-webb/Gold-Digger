@@ -136,11 +136,11 @@ function ParameterView(props) {
                         value={loudValue}
                         onChange={onChangeLoudnessACB}
                         step={1}
-                        min={-60.0}
+                        min={-30.0}
                         max={0.0}
                         valueLabelDisplay="auto" />
                     <div className="sliderMarks">
-                        <p className='leftSliderVal'>-60 dB</p>
+                        <p className='leftSliderVal'>-30 dB</p>
                         <p className='rightSliderVal'>0 dB</p>
                     </div>
                 </div>
