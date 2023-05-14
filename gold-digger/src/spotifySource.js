@@ -22,7 +22,7 @@ function getSavedTracks() { // Get all of user's saved tracks
     if(response.total > 0) {
       for(let i = 0; i < (Math.ceil(response.total/50)-1); i++) {
         const offset = (i+1)*50;
-        const field = "?limit=50&fields=items(track(album(id, images),artists(genres,id,name,images),name,id))" + "&offset=" + offset;
+        const field = "?limit=50" + "&offset=" + offset;
         promises.push(generalAPI('/me/tracks' + field));
       }
       return Promise.all(promises).then((values) => {
@@ -30,7 +30,7 @@ function getSavedTracks() { // Get all of user's saved tracks
       });
     }
   }
-  
+
   function savedTrackToFormatCB(element) {  // Filter what parameters is kept for each track
     return { 
       track: {
@@ -43,7 +43,6 @@ function getSavedTracks() { // Get all of user's saved tracks
     };
   }
 }
-
 
 async function getPlaylistID(playlist) {  // Get id from playlist
   const id = convertURLtoID(playlist);
@@ -150,7 +149,35 @@ function getAllArtistsSaved() {
   }).then((artists) => artists.map(artistToFormatCB) // Compress to important fields
   ).then((list) => {  // Sort
     return list.sort((a,b) => a.name > b.name ? 1:-1);
-  });;
+  });
+}
+
+function getGenresPlaylist(playlist) {
+  const genres = [];
+  return getAllArtistsPlaylist(playlist).then((list) => {
+    list.forEach(artist => {
+      artist.genres.forEach(genre => {
+        if(genres.includes(genre))
+          return;
+        genres.push(genre);
+      });
+    });
+    return genres;
+  });
+}
+
+function getGenresSaved() {
+  const genres = [];
+  return getAllArtistsSaved().then((list) => {
+    list.forEach(artist => {
+      artist.genres.forEach(genre => {
+        if(genres.includes(genre))
+          return;
+        genres.push(genre);
+      });
+    });
+    return genres;
+  });
 }
 
 /* Search */
@@ -247,7 +274,6 @@ async function generalAPI(endpoint, method="GET", body=null) {
         body:body
       });
       
-      //console.log("Response from fetch: ", response);
       if (response.ok) {
         if(method === "GET" || method === "POST")
           return await response.json();
@@ -339,4 +365,4 @@ function apiToEndpoint(url) { // Removes start when retrieving next url from Spo
   return url.replace("https://api.spotify.com/v1", '');
 }
 
-export {getProfile, getSavedTracks, getPlaylistID, getTracks, getAllTracks, getTracksPlaylist, getTrackParams, getTracksParams, getAllTracksParams, getGenres, getArtistsPlaylist, getArtistsSaved, getAllArtistsPlaylist, getAllArtistsSaved, searchArtist, playTracks, createPlaylist, addTracks, addAllTracks, changePlaylistName, removeTrack};
+export {getProfile, getSavedTracks, getPlaylistID, getTracks, getAllTracks, getTracksPlaylist, getTrackParams, getTracksParams, getAllTracksParams, getGenres, getArtistsPlaylist, getArtistsSaved, getAllArtistsPlaylist, getAllArtistsSaved, getGenresPlaylist, getGenresSaved, searchArtist, playTracks, createPlaylist, addTracks, addAllTracks, changePlaylistName, removeTrack};

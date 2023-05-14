@@ -1,15 +1,12 @@
 import FilterView from "../views/filterView.js";
 import SearchView from "../views/searchView.js";
 import GenreResultView from "../views/genreResultView.js";
-import { getGenres } from "../spotifySource.js";
+import { getGenresSaved, getGenresPlaylist } from "../spotifySource.js";
 import { useEffect, useState } from "react";
 import promiseNoData from "../views/promiseNoData.js";
 import resolvePromise from "../resolvePromise.js";
-import React from "react";
 
 function Genres(props) {
-    // debug
-    // props.model.debugModelState("/genre init");
 
     // add observer for notifications for state changes
     useEffect(addObserverOnCreatedACB, []);
@@ -27,9 +24,7 @@ function Genres(props) {
     // rerender on state change
     function notifyACB() {
         forceReRender({});
-        //props.model.debugModelState("/genre rerender");
     }
-
 
     //state for list of generes
     const [promiseState, setState] = useState({});
@@ -41,9 +36,13 @@ function Genres(props) {
     useEffect(()=>{    
         async function getGenreACB() {
             // Get all genres from Spotify
-            resolvePromise(getGenres(), promiseState, setState);
+            const playlist = props.model.source;
+            if(!playlist) {
+                resolvePromise(getGenresSaved(), promiseState, setState);
+            } else {
+                resolvePromise(getGenresPlaylist(playlist), promiseState, setState);
+            }
         }
-
         getGenreACB();
     }, []);
     
@@ -54,15 +53,15 @@ function Genres(props) {
             let genreList = promiseState.data.map(x => {return {genre: x, checked: false}})
             genreList.forEach(element => {
                 if(props.model.genres.includes(element.genre))
-                    element.checked = true;
-                })
-
+                element.checked = true;
+            })
+            
             // transfer results from genreList into filteredState and genreListState
             setFilteredState(genreList);
             setGenreListState(genreList);
             
         }
-    }, [promiseState, setState])
+    }, [promiseState, setState]);
 
     function filterGenre(searchTerm) {
         // filter and include everything that matches the searchTerm from the list of genres
