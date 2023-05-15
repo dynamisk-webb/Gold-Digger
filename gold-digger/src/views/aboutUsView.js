@@ -15,8 +15,8 @@ function AboutUsView(props){
         {
             image: jessica,
             name: "Jessica Gorwat",
-            songName: "Song: Wii Sports Theme (From \"Nintendo Wii\")",
-            link: "https://open.spotify.com/track/0hl8k492sfcfLQudNctEiR?si=4373ca3a353f4e75"
+            songName: "Song: Plantasia - Mort Garson",
+            link: "https://open.spotify.com/track/2XV5CUyw7gPVi18d718D4f?si=95d23ebc511d4420"
         },
         {
             image: julia,
